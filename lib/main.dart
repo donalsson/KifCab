@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kifcab/constant.dart';
+import 'package:kifcab/locale/app_localization.dart';
+import 'package:kifcab/screens/index.dart';
+import 'package:kifcab/screens/register_screen.dart';
+
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -7,7 +12,11 @@ void main() {
 
 class MyApp extends StatelessWidget {
   bool _dartMode = false;
+  AppLocalizationDelegate _localeOverrideDelegate = AppLocalizationDelegate(DEFAULT_LOCALE);
+
   // This widget is the root of your application.
+  //        Navigator.pushReplacementNamed(context, '/home', arguments: {'conversation': conversation});
+
   ThemeData getTheme({bool darkMode: false}) {
     if (darkMode) {
       return ThemeData(primarySwatch: Colors.blue, visualDensity: VisualDensity.adaptivePlatformDensity, brightness: Brightness.dark, fontFamily: DEFAULT_FONT_FAMILY);
@@ -22,7 +31,16 @@ class MyApp extends StatelessWidget {
       title: 'Kifcab',
       darkTheme: ThemeData.dark(),
       theme: getTheme(darkMode: _dartMode),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: MyHomePage(title: 'Flutter Demo Home Page'),
+      localizationsDelegates: [GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, _localeOverrideDelegate],
+      supportedLocales: SUPPORTED_LOCALES,
+      initialRoute: '/register',
+      routes: {
+        // When navigating to the "/plash" route, build the SecondScreen widget.
+        '/register': (context) => RegisterScreen(
+              registerBloc: RegisterBloc(UnRegisterState()),
+            ),
+      },
     );
   }
 }
