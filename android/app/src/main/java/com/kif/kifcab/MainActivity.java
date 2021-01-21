@@ -1,4 +1,4 @@
-package com.kif.kifcab;
+package com.kif.mykifcab;
 
 import io.flutter.embedding.android.FlutterActivity;
 

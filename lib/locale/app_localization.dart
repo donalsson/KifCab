@@ -32,7 +32,25 @@ class AppLocalization {
       }
     }
   }
+  String get hintName {
+    return Intl.message("Nom[Obligatoire]", name: 'hintName');
+  }
+  String get hintEmail {
+    return Intl.message("Email[Obligatoire]", name: 'hintEmail');
+  }
+  String get hintPhone {
+    return Intl.message("Téléphone[Obligatoire]", name: 'hintPhone');
+  }
+  String get hintLocalization {
+    return Intl.message("Localisation", name: 'hintLocalization');
+  }
+  String get save {
+    return Intl.message("Enregistrer", name: 'save');
+  }
 
+  String get alreadyHaveAccount {
+    return Intl.message("Déjà un compte?", name: 'alreadyHaveAccount');
+  }
   String get waitAfewMoments {
     return Intl.message("Patientez quelques instants...", name: 'waitAfewMoments');
   }

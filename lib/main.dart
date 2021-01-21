@@ -37,9 +37,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/register',
       routes: {
         // When navigating to the "/plash" route, build the SecondScreen widget.
-        '/register': (context) => RegisterScreen(
-              registerBloc: RegisterBloc(UnRegisterState()),
-            ),
+        '/register': (context) => RegisterScreen( ),
+
+        '/home': (context) => MyHomePage(title: "Bonjour le monde",),
       },
     );
   }
