@@ -10,5 +10,5 @@ List<Locale> SUPPORTED_LOCALES = [const Locale('fr', 'FR'), const Locale('en', '
 
 String DEFAULT_THEME = "dark";
 String DEFAULT_FONT_FAMILY = "Poppins";
-String APP_PACKAGE = "com.kif.kifcab";
+String APP_PACKAGE = "com.kif.mykifcab";
 String USER_AVATAR = "assets/images/avatar.png";

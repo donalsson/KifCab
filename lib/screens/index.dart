@@ -5,6 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
+//Fichier pouvant etre supprimé
+
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc(RegisterState initialState) : super(initialState);
 
@@ -36,10 +38,12 @@ class UnRegisterEvent extends RegisterEvent {
 class LoadRegisterEvent extends RegisterEvent {
   @override
   Stream<RegisterState> applyAsync({RegisterState currentState, RegisterBloc bloc}) async* {
+
+
     try {
       yield UnRegisterState();
       await Future.delayed(Duration(seconds: 1));
-      yield InRegisterState('Hello world');
+      yield InRegisterState('Hello world123');
     } catch (_, stackTrace) {
       developer.log('$_', name: 'LoadRegisterEvent', error: _, stackTrace: stackTrace);
       yield ErrorRegisterState(_?.toString());
