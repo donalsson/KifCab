@@ -32,6 +32,15 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^1.8.1
+  # flutter packages pub run build_runner build
+  #copy models folder to this project //media/httc/PROJECTS/Mira/testprojects/installpackage
+  # and exec command: flutter packages pub run build_runner build  -v
+
+  intl_translation: "^0.17.1"
+  json_serializable: "^3.1.0"
+  hive_generator: ^0.7.1
+  #analyzer: 0.38.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -74,3 +83,51 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: fonts/poppins/Poppins-Thin.ttf
+          weight: 100
+        - asset: fonts/poppins/Poppins-ThinItalic.ttf
+          weight: 100
+          style: italic
+        - asset: fonts/poppins/Poppins-ExtraLight.ttf
+          weight: 200
+        - asset: fonts/poppins/Poppins-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+        - asset: fonts/poppins/Poppins-Light.ttf
+          weight: 300
+        - asset: fonts/poppins/Poppins-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: fonts/poppins/Poppins-Regular.ttf
+          weight: 400
+        - asset: fonts/poppins/Poppins-Italic.ttf
+          weight: 400
+          style: italic
+        - asset: fonts/poppins/Poppins-Medium.ttf
+          weight: 500
+        - asset: fonts/poppins/Poppins-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: fonts/poppins/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: fonts/poppins/Poppins-SemiBoldItalic.ttf
+          style: italic
+          weight: 600
+        - asset: fonts/poppins/Poppins-Bold.ttf
+          weight: 700
+        - asset: fonts/poppins/Poppins-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: fonts/poppins/Poppins-ExtraBold.ttf
+          weight: 800
+        - asset: fonts/poppins/Poppins-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: fonts/poppins/Poppins-Black.ttf
+          weight: 900
+        - asset: fonts/poppins/Poppins-BlackItalic.ttf
+          weight: 900
+          style: italic

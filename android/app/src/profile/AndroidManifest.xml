@@ -1,7 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.kifcab">
+    package="com.kif.kifcab">
     <!-- Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:label="KifCab"
+        android:icon="@mipmap/ic_launcher">
+    </application>
 </manifest>
