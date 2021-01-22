@@ -79,14 +79,14 @@ class RegisterScreenState extends State<RegisterScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 CircleAvatar(
                   radius: 40,
                   backgroundImage: AssetImage("assets/login.png"),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 FormBuilder(
                     key: _formKey,
@@ -100,6 +100,10 @@ class RegisterScreenState extends State<RegisterScreen> {
                             decoration: Utils.getInputDecoration(
                                 AppLocalization.of(context).hintName,
                                 Icons.person),
+                            style: TextStyle(
+                                color: Color.fromRGBO(200, 200, 200, 1)),
+                            //TextFormField title background color change
+
                             //onChanged: _onChanged,
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
@@ -116,6 +120,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 AppLocalization.of(context).hintEmail,
                                 Icons.mail_outline),
                             //onChanged: _onChanged,
+                            style: TextStyle(
+                                color: Color.fromRGBO(200, 200, 200, 1)),
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(context),
@@ -131,6 +137,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 AppLocalization.of(context).hintPhone,
                                 Icons.phone),
                             //onChanged: _onChanged,
+                            style: TextStyle(
+                                color: Color.fromRGBO(200, 200, 200, 1)),
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(context),
@@ -146,6 +154,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 AppLocalization.of(context).hintLocalization,
                                 Icons.room),
                             //onChanged: _onChanged,
+                            style: TextStyle(
+                                color: Color.fromRGBO(200, 200, 200, 1)),
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(context),
@@ -156,7 +166,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       ),
                     )),
                 SizedBox(
-                  height: 40,
+                  height: 20,
                 ),
                 Row(
                   children: <Widget>[
