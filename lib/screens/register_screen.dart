@@ -35,7 +35,9 @@ class RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: MyTheme.navBar,
       appBar: AppBar(
-        leading: GestureDetector(onTap: () {}, child: Icon(Icons.arrow_back)),
+        leading: GestureDetector(onTap: () {
+          Navigator.pushReplacementNamed(context, '/welcome', arguments: <String, dynamic>{});
+        }, child: Icon(Icons.arrow_back)),
         elevation: 0.0,
         bottomOpacity: 0.0,
         backgroundColor: MyTheme.navBar,
@@ -43,7 +45,9 @@ class RegisterScreenState extends State<RegisterScreen> {
           Padding(
               padding: EdgeInsets.only(right: 20.0, top: 15.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+
+                },
                 child: Text(
                   "En",
                   style: Theme.of(context).textTheme.headline6.copyWith(
@@ -215,16 +219,15 @@ class RegisterScreenState extends State<RegisterScreen> {
                   height: 20,
                 ),
                 Container(
-                  padding: const EdgeInsets.only(left: 30, right: 30),
+                  padding: const EdgeInsets.only(left: 70, right: 30),
                   child: RichText(
                     text: TextSpan(
                       text: AppLocalization.of(context).alreadyHaveAccount,
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => print('click'),
-                      style: Theme.of(context).textTheme.bodyText2.copyWith(
-                          color: MyTheme.primaryColor,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400),
+                        ..onTap = () => Navigator.pushReplacementNamed(context, '/login', arguments: <String, dynamic>{}),
+                      style:Theme.of(context).textTheme.bodyText2.copyWith(color: MyTheme.primaryColor, fontSize: 13, fontWeight: FontWeight.w400),
+
+
                     ),
                   ),
                 )

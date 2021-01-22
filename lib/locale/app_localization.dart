@@ -55,6 +55,36 @@ class AppLocalization {
     return Intl.message("Patientez quelques instants...", name: 'waitAfewMoments');
   }
 
+  String get login {
+    return Intl.message("Se connecter", name: 'login');
+  }
+  String get createAnAccount {
+    return Intl.message("Créer un compte", name: 'createAnAccount');
+  }
+
+  String get welcomeMessage {
+    return Intl.message("Commande simple et rapide de véhicules ...", name: 'welcomeMessage');
+  }
+
+  String get next {
+    return Intl.message("Suivant", name: 'next');
+  }
+
+  String get noAccount {
+    return Intl.message("Pas de compte?", name: 'noAccount');
+  }
+  changeLanguage(language) => Intl.message("Changer langue($language)", name: 'changeLanguage', args: [language]);
+
+  String get hintPhoneLogin {
+    return Intl.message("Téléphone", name: 'hintPhoneLogin');
+  }
+
+  String get enterYourPhone {
+    return Intl.message("Entrer votre Téléphone", name: 'enterYourPhone');
+  }
+  String get examplePhoneNumber {
+    return Intl.message("Example: 666999777", name: 'examplePhoneNumber');
+  }
   displayIn(language) => Intl.message("Display in, $language!", name: 'displayIn', args: [language]);
 }
 
