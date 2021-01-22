@@ -4,6 +4,7 @@ import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/gestures.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({
     Key key,
@@ -28,8 +29,6 @@ class RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -84,14 +83,14 @@ class RegisterScreenState extends State<RegisterScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 64,
+                  height: 10,
                 ),
                 CircleAvatar(
                   radius: 40,
                   backgroundImage: AssetImage("assets/login.png"),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 FormBuilder(
                     key: _formKey,
@@ -102,7 +101,13 @@ class RegisterScreenState extends State<RegisterScreen> {
                         children: <Widget>[
                           FormBuilderTextField(
                             name: 'name',
-                            decoration: Utils.getInputDecoration(AppLocalization.of(context).hintName, Icons.person),
+                            decoration: Utils.getInputDecoration(
+                                AppLocalization.of(context).hintName,
+                                Icons.person),
+                            style: TextStyle(
+                                color: Color.fromRGBO(200, 200, 200, 1)),
+                            //TextFormField title background color change
+
                             //onChanged: _onChanged,
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
@@ -111,12 +116,16 @@ class RegisterScreenState extends State<RegisterScreen> {
                             keyboardType: TextInputType.text,
                           ),
                           SizedBox(
-                            height: 15,
+                            height: 5,
                           ),
                           FormBuilderTextField(
                             name: 'email',
-                            decoration: Utils.getInputDecoration(AppLocalization.of(context).hintEmail, Icons.mail_outline),
+                            decoration: Utils.getInputDecoration(
+                                AppLocalization.of(context).hintEmail,
+                                Icons.mail_outline),
                             //onChanged: _onChanged,
+                            style: TextStyle(
+                                color: Color.fromRGBO(200, 200, 200, 1)),
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(context),
@@ -124,12 +133,16 @@ class RegisterScreenState extends State<RegisterScreen> {
                             keyboardType: TextInputType.emailAddress,
                           ),
                           SizedBox(
-                            height: 15,
+                            height: 5,
                           ),
                           FormBuilderTextField(
                             name: 'phone',
-                            decoration: Utils.getInputDecoration(AppLocalization.of(context).hintPhone, Icons.phone),
+                            decoration: Utils.getInputDecoration(
+                                AppLocalization.of(context).hintPhone,
+                                Icons.phone),
                             //onChanged: _onChanged,
+                            style: TextStyle(
+                                color: Color.fromRGBO(200, 200, 200, 1)),
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(context),
@@ -137,12 +150,16 @@ class RegisterScreenState extends State<RegisterScreen> {
                             keyboardType: TextInputType.phone,
                           ),
                           SizedBox(
-                            height: 15,
+                            height: 5,
                           ),
                           FormBuilderTextField(
                             name: 'address',
-                            decoration: Utils.getInputDecoration(AppLocalization.of(context).hintLocalization, Icons.room),
+                            decoration: Utils.getInputDecoration(
+                                AppLocalization.of(context).hintLocalization,
+                                Icons.room),
                             //onChanged: _onChanged,
+                            style: TextStyle(
+                                color: Color.fromRGBO(200, 200, 200, 1)),
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(context),
@@ -153,52 +170,49 @@ class RegisterScreenState extends State<RegisterScreen> {
                       ),
                     )),
                 SizedBox(
-                  height: 40,
+                  height: 20,
                 ),
-
                 Row(
                   children: <Widget>[
                     Expanded(
                         child: Container(
-                          padding: const EdgeInsets.only(left: 30, right: 30),
-
-                          child:RaisedButton(
-                            onPressed: () {},
-                            color: MyTheme.button,
-                            padding: EdgeInsets.fromLTRB(0,0,0,0),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0,0,0,0),
-                              child: Row(
-                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    //color: Color.fromRGBO(229, 188, 1, 1),
-                                    color: Color.fromRGBO(208, 171, 4, 1),
-                                    width: 40,
-                                    height: 40,
-                                    child:  Icon(
-                                      Icons.arrow_forward,
+                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      child: RaisedButton(
+                        onPressed: () {},
+                        color: MyTheme.button,
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                //color: Color.fromRGBO(229, 188, 1, 1),
+                                color: Color.fromRGBO(208, 171, 4, 1),
+                                width: 40,
+                                height: 40,
+                                child: Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    AppLocalization.of(context).save,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
                                       color: Colors.black,
-                                      size: 20,
                                     ),
                                   ),
-                                  Expanded(
-
-                                    child: Center(
-                                    child:  Text(
-                                      AppLocalization.of(context).save,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),)
-
-                                ],
-                              ),
-                            ),
+                                ),
+                              )
+                            ],
                           ),
-                        )),
+                        ),
+                      ),
+                    )),
                   ],
                 ),
                 SizedBox(
@@ -208,10 +222,11 @@ class RegisterScreenState extends State<RegisterScreen> {
                   padding: const EdgeInsets.only(left: 70, right: 30),
                   child: RichText(
                     text: TextSpan(
-                      text:AppLocalization.of(context).alreadyHaveAccount,
+                      text: AppLocalization.of(context).alreadyHaveAccount,
                       recognizer: TapGestureRecognizer()
                         ..onTap = () => Navigator.pushReplacementNamed(context, '/login', arguments: <String, dynamic>{}),
                       style:Theme.of(context).textTheme.bodyText2.copyWith(color: MyTheme.primaryColor, fontSize: 13, fontWeight: FontWeight.w400),
+
 
                     ),
                   ),
