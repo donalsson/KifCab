@@ -14,16 +14,25 @@ void main() {
 
 class MyApp extends StatelessWidget {
   bool _dartMode = false;
-  AppLocalizationDelegate _localeOverrideDelegate = AppLocalizationDelegate(DEFAULT_LOCALE);
+  AppLocalizationDelegate _localeOverrideDelegate =
+      AppLocalizationDelegate(DEFAULT_LOCALE);
 
   // This widget is the root of your application.
   //        Navigator.pushReplacementNamed(context, '/home', arguments: {'conversation': conversation});
 
   ThemeData getTheme({bool darkMode: false}) {
     if (darkMode) {
-      return ThemeData(primarySwatch: Colors.blue, visualDensity: VisualDensity.adaptivePlatformDensity, brightness: Brightness.dark, fontFamily: DEFAULT_FONT_FAMILY);
+      return ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          brightness: Brightness.dark,
+          fontFamily: DEFAULT_FONT_FAMILY);
     } else {
-      return ThemeData(primarySwatch: Colors.blue, visualDensity: VisualDensity.adaptivePlatformDensity, brightness: Brightness.light, fontFamily: DEFAULT_FONT_FAMILY);
+      return ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          brightness: Brightness.light,
+          fontFamily: DEFAULT_FONT_FAMILY);
     }
   }
 
@@ -34,15 +43,21 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       theme: getTheme(darkMode: _dartMode),
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
-      localizationsDelegates: [GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, _localeOverrideDelegate],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        _localeOverrideDelegate
+      ],
       supportedLocales: SUPPORTED_LOCALES,
       initialRoute: '/welcome',
       routes: {
         // When navigating to the "/plash" route, build the SecondScreen widget.
-        '/register': (context) => RegisterScreen( ),
-        '/login': (context) => LoginScreen( ),
-        '/welcome': (context) => WelcomeScreen( ),
-        '/home': (context) => MyHomePage(title: "Bonjour le monde",),
+        '/register': (context) => RegisterScreen(),
+        '/login': (context) => LoginScreen(),
+        '/welcome': (context) => WelcomeScreen(),
+        '/home': (context) => MyHomePage(
+              title: "Bonjour le monde",
+            ),
       },
     );
   }
