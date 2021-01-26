@@ -4,6 +4,7 @@ import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/gestures.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
     Key key,
@@ -29,16 +30,17 @@ class LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyTheme.navBar,
       appBar: AppBar(
-        leading: GestureDetector(onTap: () {
-          Navigator.pushReplacementNamed(context, '/welcome', arguments: <String, dynamic>{});
-        }, child: Icon(Icons.arrow_back)),
+        leading: GestureDetector(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/welcome',
+                  arguments: <String, dynamic>{});
+            },
+            child: Icon(Icons.arrow_back)),
         elevation: 0.0,
         bottomOpacity: 0.0,
         backgroundColor: MyTheme.navBar,
@@ -46,9 +48,7 @@ class LoginScreenState extends State<LoginScreen> {
           Padding(
               padding: EdgeInsets.only(right: 20.0, top: 15.0),
               child: GestureDetector(
-                onTap: () {
-
-                },
+                onTap: () {},
                 child: Text(
                   "En",
                   style: Theme.of(context).textTheme.headline6.copyWith(
@@ -93,11 +93,17 @@ class LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                Text(AppLocalization.of(context).enterYourPhone.toUpperCase(), style: Theme.of(context).textTheme.bodyText2.copyWith( fontWeight: FontWeight.w300)),
+                Text(AppLocalization.of(context).enterYourPhone.toUpperCase(),
+                    style: Theme.of(context).textTheme.bodyText2.copyWith(
+                          fontWeight: FontWeight.w300,
+                          color: Colors.white,
+                        )),
                 SizedBox(
                   height: 10,
                 ),
-                Text(AppLocalization.of(context).examplePhoneNumber, style: Theme.of(context).textTheme.subtitle2.copyWith( fontWeight: FontWeight.w200)),
+                Text(AppLocalization.of(context).examplePhoneNumber,
+                    style: Theme.of(context).textTheme.subtitle2.copyWith(
+                        fontWeight: FontWeight.w200, color: Colors.white)),
                 SizedBox(
                   height: 75,
                 ),
@@ -108,10 +114,13 @@ class LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.only(left: 30, right: 30),
                       child: Column(
                         children: <Widget>[
-
                           FormBuilderTextField(
                             name: 'phone',
-                            decoration: Utils.getInputDecoration(AppLocalization.of(context).hintPhoneLogin, Icons.phone),
+                            style: TextStyle(
+                                color: Color.fromRGBO(200, 200, 200, 1)),
+                            decoration: Utils.getInputDecoration(
+                                AppLocalization.of(context).hintPhoneLogin,
+                                Icons.phone),
                             //onChanged: _onChanged,
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
@@ -119,7 +128,6 @@ class LoginScreenState extends State<LoginScreen> {
                             ]),
                             keyboardType: TextInputType.phone,
                           ),
-
                         ],
                       ),
                     )),
@@ -130,107 +138,111 @@ class LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     Expanded(
                         child: Container(
-                          padding: const EdgeInsets.only(left: 30, right: 30, top: 0, bottom: 0),
-                          child: RaisedButton(
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/login', arguments: <String, dynamic>{});
-
-                            },
-                            color: MyTheme.button,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all( Radius.circular(0.0),),),
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Row(
-                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    //color: Color.fromRGBO(229, 188, 1, 1),
-                                    color: Color.fromRGBO(208, 171, 4, 1),
-                                    width: 40,
-                                    height: 40,
-                                    child: Icon(
-                                      Icons.person,
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, top: 0, bottom: 0),
+                      child: RaisedButton(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/login',
+                              arguments: <String, dynamic>{});
+                        },
+                        color: MyTheme.button,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(0.0),
+                          ),
+                        ),
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                //color: Color.fromRGBO(229, 188, 1, 1),
+                                color: Color.fromRGBO(208, 171, 4, 1),
+                                width: 40,
+                                height: 40,
+                                child: Icon(
+                                  Icons.person,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    AppLocalization.of(context).next,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
                                       color: Colors.black,
-                                      size: 20,
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        AppLocalization.of(context).next,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                                ),
+                              )
+                            ],
                           ),
-                        )),
+                        ),
+                      ),
+                    )),
                   ],
-                ),
-
-                SizedBox(
-                  height: 30,
                 ),
                 Row(
                   children: <Widget>[
                     Expanded(
                         child: Container(
-                          padding: const EdgeInsets.only(left: 30, right: 30, top: 0, bottom: 0),
-                          child: RaisedButton(
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/register', arguments: <String, dynamic>{});
-                            },
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all( Radius.circular(0.0),),side: BorderSide(color: MyTheme.button, width: 2)),
-                            color: MyTheme.background,
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Row(
-                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    //color: Color.fromRGBO(229, 188, 1, 1),
-                                    color: Color.fromRGBO(40, 39, 44, 1),
-                                    width: 40,
-                                    height: 40,
-                                    child: Icon(
-                                      Icons.add,
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, top: 0, bottom: 0),
+                      child: RaisedButton(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/register',
+                              arguments: <String, dynamic>{});
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(0.0),
+                            ),
+                            side: BorderSide(color: MyTheme.button, width: 2)),
+                        color: MyTheme.background,
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                //color: Color.fromRGBO(229, 188, 1, 1),
+                                color: Color.fromRGBO(40, 39, 44, 1),
+                                width: 40,
+                                height: 40,
+                                child: Icon(
+                                  Icons.add,
+                                  color: MyTheme.primaryColor,
+                                  size: 20,
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    AppLocalization.of(context).noAccount,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
                                       color: MyTheme.primaryColor,
-                                      size: 20,
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        AppLocalization.of(context).noAccount,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          color: MyTheme.primaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                                ),
+                              )
+                            ],
                           ),
-                        )),
+                        ),
+                      ),
+                    )),
                   ],
                 ),
-
-
                 SizedBox(
                   height: 20,
                 ),
-
               ],
             ),
           ),

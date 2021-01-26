@@ -35,9 +35,12 @@ class RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: MyTheme.navBar,
       appBar: AppBar(
-        leading: GestureDetector(onTap: () {
-          Navigator.pushReplacementNamed(context, '/welcome', arguments: <String, dynamic>{});
-        }, child: Icon(Icons.arrow_back)),
+        leading: GestureDetector(
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/welcome',
+                  arguments: <String, dynamic>{});
+            },
+            child: Icon(Icons.arrow_back)),
         elevation: 0.0,
         bottomOpacity: 0.0,
         backgroundColor: MyTheme.navBar,
@@ -45,9 +48,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           Padding(
               padding: EdgeInsets.only(right: 20.0, top: 15.0),
               child: GestureDetector(
-                onTap: () {
-
-                },
+                onTap: () {},
                 child: Text(
                   "En",
                   style: Theme.of(context).textTheme.headline6.copyWith(
@@ -60,8 +61,8 @@ class RegisterScreenState extends State<RegisterScreen> {
       ),
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
-        child: Container(
-          color: MyTheme.navBar,
+        child: SafeArea(
+          //color: MyTheme.navBar,
           child: Center(
             // Center is a layout widget. It takes a single child and positions it
             // in the middle of the parent.
@@ -83,14 +84,14 @@ class RegisterScreenState extends State<RegisterScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 CircleAvatar(
                   radius: 40,
                   backgroundImage: AssetImage("assets/login.png"),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 40,
                 ),
                 FormBuilder(
                     key: _formKey,
@@ -116,7 +117,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             keyboardType: TextInputType.text,
                           ),
                           SizedBox(
-                            height: 5,
+                            height: 15,
                           ),
                           FormBuilderTextField(
                             name: 'email',
@@ -133,7 +134,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             keyboardType: TextInputType.emailAddress,
                           ),
                           SizedBox(
-                            height: 5,
+                            height: 15,
                           ),
                           FormBuilderTextField(
                             name: 'phone',
@@ -150,7 +151,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             keyboardType: TextInputType.phone,
                           ),
                           SizedBox(
-                            height: 5,
+                            height: 15,
                           ),
                           FormBuilderTextField(
                             name: 'address',
@@ -170,7 +171,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       ),
                     )),
                 SizedBox(
-                  height: 20,
+                  height: 40,
                 ),
                 Row(
                   children: <Widget>[
@@ -215,21 +216,59 @@ class RegisterScreenState extends State<RegisterScreen> {
                     )),
                   ],
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 70, right: 30),
-                  child: RichText(
-                    text: TextSpan(
-                      text: AppLocalization.of(context).alreadyHaveAccount,
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => Navigator.pushReplacementNamed(context, '/login', arguments: <String, dynamic>{}),
-                      style:Theme.of(context).textTheme.bodyText2.copyWith(color: MyTheme.primaryColor, fontSize: 13, fontWeight: FontWeight.w400),
-
-
-                    ),
-                  ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Container(
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, top: 0, bottom: 20),
+                      child: RaisedButton(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/login',
+                              arguments: <String, dynamic>{});
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(0.0),
+                            ),
+                            side: BorderSide(color: MyTheme.button, width: 2)),
+                        color: MyTheme.background,
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                //color: Color.fromRGBO(229, 188, 1, 1),
+                                color: Color.fromRGBO(40, 39, 44, 1),
+                                width: 40,
+                                height: 40,
+                                child: Icon(
+                                  Icons.add,
+                                  color: MyTheme.primaryColor,
+                                  size: 20,
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    AppLocalization.of(context)
+                                        .alreadyHaveAccount,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      color: MyTheme.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    )),
+                  ],
                 )
               ],
             ),

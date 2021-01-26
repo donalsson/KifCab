@@ -86,15 +86,18 @@ class WelcomeScreenState extends State<WelcomeScreen> {
                   height: 130,
                 ),
                 Image.asset(
-                  "assets/pages-logo-light.png",
+                  "assets/pages-logo-light2.png",
                   width: 150,
                   height: 100,
-
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Text(AppLocalization.of(context).welcomeMessage, style: Theme.of(context).textTheme.bodyText2.copyWith( fontWeight: FontWeight.w400, fontSize: 12)),
+                Text(AppLocalization.of(context).welcomeMessage,
+                    style: Theme.of(context).textTheme.bodyText2.copyWith(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12,
+                        color: Colors.white)),
                 SizedBox(
                   height: 65,
                 ),
@@ -102,15 +105,20 @@ class WelcomeScreenState extends State<WelcomeScreen> {
                   children: <Widget>[
                     Expanded(
                         child: Container(
-                          padding: const EdgeInsets.only(left: 30, right: 30, top: 0, bottom: 0),
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, top: 0, bottom: 0),
                       child: RaisedButton(
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/login', arguments: <String, dynamic>{});
-
+                          Navigator.pushReplacementNamed(context, '/login',
+                              arguments: <String, dynamic>{});
                         },
                         color: MyTheme.button,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all( Radius.circular(0.0),),),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(0.0),
+                          ),
+                        ),
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -150,47 +158,53 @@ class WelcomeScreenState extends State<WelcomeScreen> {
                   children: <Widget>[
                     Expanded(
                         child: Container(
-                          padding: const EdgeInsets.only(left: 30, right: 30, top: 0, bottom: 0),
-                          child: RaisedButton(
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/register', arguments: <String, dynamic>{});
-                            },
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all( Radius.circular(0.0),),side: BorderSide(color: MyTheme.button, width: 2)),
-                            color: MyTheme.background,
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Row(
-                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    //color: Color.fromRGBO(229, 188, 1, 1),
-                                    color: Color.fromRGBO(40, 39, 44, 1),
-                                    width: 40,
-                                    height: 40,
-                                    child: Icon(
-                                      Icons.add,
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, top: 0, bottom: 0),
+                      child: RaisedButton(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/register',
+                              arguments: <String, dynamic>{});
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(0.0),
+                            ),
+                            side: BorderSide(color: MyTheme.button, width: 2)),
+                        color: MyTheme.background,
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                //color: Color.fromRGBO(229, 188, 1, 1),
+                                color: Color.fromRGBO(40, 39, 44, 1),
+                                width: 40,
+                                height: 40,
+                                child: Icon(
+                                  Icons.add,
+                                  color: MyTheme.primaryColor,
+                                  size: 20,
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    AppLocalization.of(context).createAnAccount,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
                                       color: MyTheme.primaryColor,
-                                      size: 20,
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        AppLocalization.of(context).createAnAccount,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          color: MyTheme.primaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                                ),
+                              )
+                            ],
                           ),
-                        )),
+                        ),
+                      ),
+                    )),
                   ],
                 ),
                 SizedBox(
@@ -201,8 +215,12 @@ class WelcomeScreenState extends State<WelcomeScreen> {
                   child: RichText(
                     text: TextSpan(
                       text: AppLocalization.of(context).changeLanguage("En"),
-                      recognizer: TapGestureRecognizer()..onTap = () =>  AppLocalization.load(new Locale("en")),
-                      style: Theme.of(context).textTheme.bodyText2.copyWith(color: MyTheme.primaryColor, fontSize: 13, fontWeight: FontWeight.w400),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => AppLocalization.load(new Locale("en")),
+                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                          color: MyTheme.primaryColor,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400),
                     ),
                   ),
                 )

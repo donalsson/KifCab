@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:kifcab/utils/colors.dart';
 
-class Utils{
-    static InputDecoration getInputDecoration(String hint, IconData prefix) {
+class Utils {
+  static InputDecoration getInputDecoration(String hint, IconData prefix) {
     return InputDecoration(
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+            color: MyTheme.inputBorderColor,
+            width: 1.5,
+            style: BorderStyle.solid),
+      ),
       hintStyle: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
@@ -25,7 +31,11 @@ class Utils{
       contentPadding: EdgeInsets.all(15),
       hintText: hint,
       //suffixIcon: Icon(Icons.check, color: MyTheme.suffixPrefixIcon),
-      prefixIcon: Icon(prefix, color: MyTheme.suffixPrefixIcon, size: 15,),
+      prefixIcon: Icon(
+        prefix,
+        color: MyTheme.suffixPrefixIcon,
+        size: 15,
+      ),
     );
   }
 }
