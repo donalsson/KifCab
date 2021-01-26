@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
+import 'package:kifcab/screens/home_screen.dart';
 import 'package:kifcab/screens/index.dart';
 import 'package:kifcab/screens/login_screen.dart';
 import 'package:kifcab/screens/register_screen.dart';
@@ -36,13 +37,13 @@ class MyApp extends StatelessWidget {
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
       localizationsDelegates: [GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, _localeOverrideDelegate],
       supportedLocales: SUPPORTED_LOCALES,
-      initialRoute: '/welcome',
+      initialRoute: '/home',
       routes: {
         // When navigating to the "/plash" route, build the SecondScreen widget.
         '/register': (context) => RegisterScreen( ),
         '/login': (context) => LoginScreen( ),
         '/welcome': (context) => WelcomeScreen( ),
-        '/home': (context) => MyHomePage(title: "Bonjour le monde",),
+        '/home': (context) => HomeScreen(),
       },
     );
   }
