@@ -85,6 +85,43 @@ class AppLocalization {
   String get examplePhoneNumber {
     return Intl.message("Example: 666999777", name: 'examplePhoneNumber');
   }
+
+  String get deposit {
+    return Intl.message("Dépot", name: 'deposit');
+  }
+
+  String get course {
+    return Intl.message("Course", name: 'course');
+  }
+
+  String get location {
+    return Intl.message("Location", name: 'location');
+  }
+
+  String get chooseOfCommandType {
+    return Intl.message("Choix du type de commande", name: 'chooseOfCommandType');
+  }
+
+  String get home {
+    return Intl.message("Accueil", name: 'home');
+  }
+
+  String get history {
+    return Intl.message("Historiques", name: 'history');
+  }
+  String get settings {
+    return Intl.message("Paramètres", name: 'settings');
+  }
+  String get help {
+    return Intl.message("Aide", name: 'help');
+  }
+  String get aboutApp {
+    return Intl.message("A propos de Kifcab", name: 'aboutApp');
+  }
+  String get privacyPolicies {
+    return Intl.message("Politiques de confidentialités", name: 'privacyPolicies');
+  }
+  copyrightMessage(year) => Intl.message("Copyright $year.Tous droits reservés", name: 'copyrightMessage', args: [year]);
   displayIn(language) => Intl.message("Display in, $language!", name: 'displayIn', args: [language]);
 }
 
