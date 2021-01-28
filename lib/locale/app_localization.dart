@@ -122,6 +122,16 @@ class AppLocalization {
     return Intl.message("Politiques de confidentialités", name: 'privacyPolicies');
   }
   copyrightMessage(year) => Intl.message("Copyright $year.Tous droits reservés", name: 'copyrightMessage', args: [year]);
+
+
+
+  String get needASecureCar {
+    return Intl.message("Besoin d'une voiture sécurisée?", name: 'needASecureCar');
+  }
+  String get takeADeposit {
+    return Intl.message("Prenez un dépot", name: 'takeADeposit');
+  }
+
   displayIn(language) => Intl.message("Display in, $language!", name: 'displayIn', args: [language]);
 }
 

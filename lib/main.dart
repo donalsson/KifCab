@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
+import 'package:kifcab/screens/depot_screen.dart';
 import 'package:kifcab/screens/home_screen.dart';
 import 'package:kifcab/screens/index.dart';
 import 'package:kifcab/screens/login_screen.dart';
@@ -57,7 +58,10 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen( ),
         '/welcome': (context) => WelcomeScreen( ),
         '/home': (context) => HomeScreen(),
-        
+        '/depot': (context) => DepotScreen(),
+        '/course': (context) => DepotScreen(),
+        '/location': (context) => DepotScreen(),
+
       },
     );
   }

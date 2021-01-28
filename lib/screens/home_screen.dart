@@ -102,7 +102,7 @@ class HomeScreenState extends State<HomeScreen> {
                       child: RaisedButton(
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/login', arguments: <String, dynamic>{});
+                          Navigator.pushReplacementNamed(context, '/depot', arguments: <String, dynamic>{});
 
                         },
                         color: MyTheme.button,
@@ -156,7 +156,7 @@ class HomeScreenState extends State<HomeScreen> {
                           child: RaisedButton(
                             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/login', arguments: <String, dynamic>{});
+                              Navigator.pushReplacementNamed(context, '/course', arguments: <String, dynamic>{});
 
                             },
                             color: MyTheme.button,
@@ -210,7 +210,7 @@ class HomeScreenState extends State<HomeScreen> {
                           child: RaisedButton(
                             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/login', arguments: <String, dynamic>{});
+                              Navigator.pushReplacementNamed(context, '/location', arguments: <String, dynamic>{});
 
                             },
                             color: MyTheme.button,
