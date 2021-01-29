@@ -16,5 +16,5 @@ class MyTheme {
   static const Color navBar = Color.fromRGBO(33, 32, 37, 1);
   static const Color button = Color.fromRGBO(241, 196, 15, 1);
   static const Color suffixPrefixIcon = Color.fromRGBO(200, 200, 200, 1);
-  static const Color stripColor = Color.fromRGBO(255,255,255, 0.2);
+  static const Color stripColor = Color(0xFF4c4c4c);
 }

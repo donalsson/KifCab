@@ -9,6 +9,7 @@ import Flutter
   ) -> Bool {
     var flutter_native_splash = 1
     UIApplication.shared.isStatusBarHidden = false
+    GMSServices.provideAPIKey("AIzaSyDRn0mlxRwnXRJZI4cNqFOgsGNssI5APRo")
 
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
