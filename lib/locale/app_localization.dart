@@ -174,10 +174,46 @@ class AppLocalization {
         name: 'privacyPolicies');
   }
 
+  copyrightMessage(year) => Intl.message("Copyright $year.Tous droits reservés", name: 'copyrightMessage', args: [year]);
+
+
+
+  String get needASecureCar {
+    return Intl.message("Besoin d'une voiture sécurisée?", name: 'needASecureCar');
+  }
+  String get takeADeposit {
+    return Intl.message("Prenez un dépot", name: 'takeADeposit');
+  }
+
+  String get previous {
+    return Intl.message("Précédent", name: 'previous');
+  }
+
+
+  String get startingPoint {
+    return Intl.message("Point de départ", name: 'startingPoint');
+  }
+  String get arrivalPoint {
+    return Intl.message("Point d'arrivée", name: 'arrivalPoint');
+  }
+  String get required {
+    return Intl.message("*Obligatoire", name: 'required');
+  }
+
+  String get enterTheStartingPoint {
+    return Intl.message("Entrer le point de départ", name: 'enterTheStartingPoint');
+  }
+  String get enterTheArrivalPoint {
+    return Intl.message("Entrer le point d'arrivée", name: 'enterTheArrivalPoint');
+  }
+  displayIn(language) => Intl.message("Display in, $language!", name: 'displayIn', args: [language]);
+
+
   copyrightMessage(year) => Intl.message("Copyright $year.Tous droits reservés",
       name: 'copyrightMessage', args: [year]);
   displayIn(language) => Intl.message("Display in, $language!",
       name: 'displayIn', args: [language]);
+
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalization> {

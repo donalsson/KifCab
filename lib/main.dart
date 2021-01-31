@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
+import 'package:kifcab/screens/depot_screen.dart';
 import 'package:kifcab/screens/home_screen.dart';
 import 'package:kifcab/screens/index.dart';
 import 'package:kifcab/screens/login_screen.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return GlobalLoaderOverlay(
       overlayWidget: Center(
         child: Align(
@@ -62,10 +64,13 @@ class MyApp extends StatelessWidget {
         initialRoute: '/welcome',
         routes: {
           // When navigating to the "/plash" route, build the SecondScreen widget.
-          '/register': (context) => RegisterScreen(),
-          '/login': (context) => LoginScreen(),
-          '/welcome': (context) => WelcomeScreen(),
-          '/home': (context) => HomeScreen(),
+          '/register': (context) => RegisterScreen( ),
+        '/login': (context) => LoginScreen( ),
+        '/welcome': (context) => WelcomeScreen( ),
+        '/home': (context) => HomeScreen(),
+        '/depot': (context) => DepotScreen(),
+        '/course': (context) => DepotScreen(),
+        '/location': (context) => DepotScreen(),
         },
       ),
     );

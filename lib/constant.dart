@@ -12,3 +12,4 @@ String DEFAULT_THEME = "dark";
 String DEFAULT_FONT_FAMILY = "Poppins";
 String APP_PACKAGE = "com.kif.mykifcab";
 String USER_AVATAR = "assets/images/avatar.png";
+String GOOGLE_API_KEY = "AIzaSyDRn0mlxRwnXRJZI4cNqFOgsGNssI5APRo";
