@@ -207,8 +207,18 @@ class AppLocalization {
         name: 'enterTheStartingPoint');
   }
 
+  String get valenterTheStartingPoint {
+    return Intl.message("Veuillez renseigner le point de départ",
+        name: 'enterTheStartingPoint');
+  }
+
   String get enterTheArrivalPoint {
     return Intl.message("Entrer le point d'arrivée",
+        name: 'enterTheArrivalPoint');
+  }
+
+  String get valenterTheArrivalPoint {
+    return Intl.message("Veuillez renseigner le point d'arrivée",
         name: 'enterTheArrivalPoint');
   }
 
