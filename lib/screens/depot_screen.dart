@@ -167,7 +167,8 @@ class DepotScreenState extends State<DepotScreen> {
                       height: 30,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                       child: Column(
                         children: [
                           Row(
@@ -203,12 +204,13 @@ class DepotScreenState extends State<DepotScreen> {
                           TextField(
                             controller: _textControllerFrom,
                             cursorColor: MyTheme.primaryColor,
-                            onTap: (){
+                            onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => PlacePicker(
-                                    apiKey: kGoogleApiKey,   // Put YOUR OWN KEY here.
+                                    apiKey:
+                                        kGoogleApiKey, // Put YOUR OWN KEY here.
                                     onPlacePicked: (result) {
                                       _textControllerFrom.text = result.name;
                                       print(result.adrAddress);
@@ -222,13 +224,26 @@ class DepotScreenState extends State<DepotScreen> {
                                 ),
                               );
                             },
-                            style: TextStyle(color: MyTheme.navBar, fontWeight: FontWeight.w400),
+                            style: TextStyle(
+                                color: MyTheme.navBar,
+                                fontWeight: FontWeight.w400),
                             decoration: new InputDecoration(
-                                prefixIcon: Icon(Icons.room, color: MyTheme.navBar, size: 18,),
-                                suffixIcon: _showClearButtonInputFrom? IconButton(
-                                  onPressed: () => _textControllerFrom.clear(),
-                                  icon: Icon(Icons.clear, color: MyTheme.navBar, size: 16,),
-                                ):null,
+                                prefixIcon: Icon(
+                                  Icons.room,
+                                  color: MyTheme.navBar,
+                                  size: 18,
+                                ),
+                                suffixIcon: _showClearButtonInputFrom
+                                    ? IconButton(
+                                        onPressed: () =>
+                                            _textControllerFrom.clear(),
+                                        icon: Icon(
+                                          Icons.clear,
+                                          color: MyTheme.navBar,
+                                          size: 16,
+                                        ),
+                                      )
+                                    : null,
                                 contentPadding: const EdgeInsets.symmetric(
                                     vertical: 0.0, horizontal: 10),
                                 focusedBorder: OutlineInputBorder(
@@ -246,7 +261,6 @@ class DepotScreenState extends State<DepotScreen> {
                                   borderSide: BorderSide(
                                       color: MyTheme.navBar, width: 1),
                                 ),
-
                                 hintText: AppLocalization.of(context)
                                     .enterTheStartingPoint,
                                 hintStyle: TextStyle(
@@ -258,7 +272,8 @@ class DepotScreenState extends State<DepotScreen> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                       child: Column(
                         children: [
                           Row(
@@ -294,12 +309,13 @@ class DepotScreenState extends State<DepotScreen> {
                           TextField(
                             controller: _textControllerTo,
                             cursorColor: MyTheme.primaryColor,
-                            onTap: (){
+                            onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => PlacePicker(
-                                    apiKey: kGoogleApiKey,   // Put YOUR OWN KEY here.
+                                    apiKey:
+                                        kGoogleApiKey, // Put YOUR OWN KEY here.
                                     onPlacePicked: (result) {
                                       _textControllerTo.text = result.name;
                                       print(result.adrAddress);
@@ -313,13 +329,26 @@ class DepotScreenState extends State<DepotScreen> {
                                 ),
                               );
                             },
-                            style: TextStyle(color: MyTheme.navBar, fontWeight: FontWeight.w400),
+                            style: TextStyle(
+                                color: MyTheme.navBar,
+                                fontWeight: FontWeight.w400),
                             decoration: new InputDecoration(
-                                prefixIcon: Icon(Icons.room, color: MyTheme.navBar, size: 18,),
-                                suffixIcon: _showClearButtonInputTo? IconButton(
-                                  onPressed: () => _textControllerTo.clear(),
-                                  icon: Icon(Icons.clear, color: MyTheme.navBar, size: 16,),
-                                ):null,
+                                prefixIcon: Icon(
+                                  Icons.room,
+                                  color: MyTheme.navBar,
+                                  size: 18,
+                                ),
+                                suffixIcon: _showClearButtonInputTo
+                                    ? IconButton(
+                                        onPressed: () =>
+                                            _textControllerTo.clear(),
+                                        icon: Icon(
+                                          Icons.clear,
+                                          color: MyTheme.navBar,
+                                          size: 16,
+                                        ),
+                                      )
+                                    : null,
                                 contentPadding: const EdgeInsets.symmetric(
                                     vertical: 0.0, horizontal: 10),
                                 focusedBorder: OutlineInputBorder(
@@ -337,7 +366,6 @@ class DepotScreenState extends State<DepotScreen> {
                                   borderSide: BorderSide(
                                       color: MyTheme.navBar, width: 1),
                                 ),
-
                                 hintText: AppLocalization.of(context)
                                     .enterTheArrivalPoint,
                                 hintStyle: TextStyle(

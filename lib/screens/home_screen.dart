@@ -52,7 +52,6 @@ class HomeScreenState extends State<HomeScreen> {
               )),
         ],
       ),
-
       drawer: navigationDrawer(),
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
@@ -85,12 +84,15 @@ class HomeScreenState extends State<HomeScreen> {
                   "assets/pages-logo-light.png",
                   width: 130,
                   height: 75,
-
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Text(AppLocalization.of(context).chooseOfCommandType, style: Theme.of(context).textTheme.bodyText2.copyWith( fontWeight: FontWeight.w300, fontSize: 15)),
+                Text(AppLocalization.of(context).chooseOfCommandType,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .copyWith(fontWeight: FontWeight.w300, fontSize: 15)),
                 SizedBox(
                   height: 50,
                 ),
@@ -98,15 +100,20 @@ class HomeScreenState extends State<HomeScreen> {
                   children: <Widget>[
                     Expanded(
                         child: Container(
-                          padding: const EdgeInsets.only(left: 30, right: 30, top: 0, bottom: 0),
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, top: 0, bottom: 0),
                       child: RaisedButton(
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/depot', arguments: <String, dynamic>{});
-
+                          Navigator.pushReplacementNamed(context, '/depot',
+                              arguments: <String, dynamic>{});
                         },
                         color: MyTheme.button,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all( Radius.circular(0.0),),),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(0.0),
+                          ),
+                        ),
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -130,10 +137,9 @@ class HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     AppLocalization.of(context).deposit,
                                     style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.black,
-                                        fontSize: 16
-                                    ),
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.black,
+                                        fontSize: 16),
                                   ),
                                 ),
                               )
@@ -147,112 +153,117 @@ class HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   height: 20,
                 ),
-
                 Row(
                   children: <Widget>[
                     Expanded(
                         child: Container(
-                          padding: const EdgeInsets.only(left: 30, right: 30, top: 0, bottom: 0),
-                          child: RaisedButton(
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/course', arguments: <String, dynamic>{});
-
-                            },
-                            color: MyTheme.button,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all( Radius.circular(0.0),),),
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Row(
-                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    //color: Color.fromRGBO(229, 188, 1, 1),
-                                    color: Color.fromRGBO(208, 171, 4, 1),
-                                    width: 50,
-                                    height: 50,
-                                    child: Icon(
-                                      Icons.local_taxi,
-                                      color: Colors.black,
-                                      size: 25,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                      child: Text(
-                                        AppLocalization.of(context).course,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                          color: Colors.black,
-                                            fontSize: 16
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, top: 0, bottom: 0),
+                      child: RaisedButton(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/course',
+                              arguments: <String, dynamic>{});
+                        },
+                        color: MyTheme.button,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(0.0),
                           ),
-                        )),
+                        ),
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                //color: Color.fromRGBO(229, 188, 1, 1),
+                                color: Color.fromRGBO(208, 171, 4, 1),
+                                width: 50,
+                                height: 50,
+                                child: Icon(
+                                  Icons.local_taxi,
+                                  color: Colors.black,
+                                  size: 25,
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Text(
+                                    AppLocalization.of(context).course,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.black,
+                                        fontSize: 16),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    )),
                   ],
                 ),
                 SizedBox(
                   height: 20,
                 ),
-
                 Row(
                   children: <Widget>[
                     Expanded(
                         child: Container(
-                          padding: const EdgeInsets.only(left: 30, right: 30, top: 0, bottom: 0),
-                          child: RaisedButton(
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/location', arguments: <String, dynamic>{});
-
-                            },
-                            color: MyTheme.button,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all( Radius.circular(0.0),),),
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Row(
-                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    //color: Color.fromRGBO(229, 188, 1, 1),
-                                    color: Color.fromRGBO(208, 171, 4, 1),
-                                    width: 50,
-                                    height: 50,
-                                    child: Icon(
-                                      Icons.directions_bus,
-                                      color: Colors.black,
-                                      size: 25,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                      child: Text(
-                                        AppLocalization.of(context).location,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                          color: Colors.black,
-                                          fontSize: 16
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, top: 0, bottom: 0),
+                      child: RaisedButton(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/location',
+                              arguments: <String, dynamic>{});
+                        },
+                        color: MyTheme.button,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(0.0),
                           ),
-                        )),
+                        ),
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                //color: Color.fromRGBO(229, 188, 1, 1),
+                                color: Color.fromRGBO(208, 171, 4, 1),
+                                width: 50,
+                                height: 50,
+                                child: Icon(
+                                  Icons.directions_bus,
+                                  color: Colors.black,
+                                  size: 25,
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Text(
+                                    AppLocalization.of(context).location,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.black,
+                                        fontSize: 16),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    )),
                   ],
                 ),
-
               ],
             ),
           ),

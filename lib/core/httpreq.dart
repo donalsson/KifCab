@@ -5,6 +5,8 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.Dart' as http;
 import 'package:http/io_client.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kifcab/core/preference.dart';
 
 class HttpPostRequest {
   static Future<String> login_request(phone) async {
@@ -20,14 +22,19 @@ class HttpPostRequest {
         'https://149.202.47.143/index.php/webservice/login',
         body: {"telephone": phone});
     if (response.statusCode == 200) {
-      // print(response.body);
       var myresponse = jsonDecode(response.body);
+      print(response.body);
+      print(jsonEncode(myresponse["user"]));
       var error = myresponse["error"];
       print("token");
       if (error.toString() == "true") {
         print(error.toString());
         return "error";
       } else {
+        SharedPreferencesClass.save(
+            "userinfos", "[" + jsonEncode(myresponse["user"]) + "]");
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        //   prefs.setString("userinfos", myresponse["user"]);
         return myresponse["user"]["mot_de_passe"];
       }
     } else {
