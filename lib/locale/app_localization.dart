@@ -92,6 +92,10 @@ class AppLocalization {
     return Intl.message("Téléphone", name: 'hintPhoneLogin');
   }
 
+  String get forgetcode {
+    return Intl.message("Code oublier ?", name: 'forgetcode');
+  }
+
   String get succeswelcome {
     return Intl.message("Nous sommes Heureux de vous revoir",
         name: 'succeswelcome');
@@ -107,6 +111,10 @@ class AppLocalization {
 
   String get deposit {
     return Intl.message("Dépot", name: 'deposit');
+  }
+
+  String get activationcode {
+    return Intl.message("Code d'activation", name: 'activationcode');
   }
 
   String get course {
@@ -129,6 +137,24 @@ class AppLocalization {
   String get checkphonenumber {
     return Intl.message("Numéro de téléphone incorrect",
         name: 'checkphonenumber');
+  }
+
+  String get checkcodenumber {
+    return Intl.message("Verifier votre code", name: 'checkcodenumber');
+  }
+
+  String get sendacticode {
+    return Intl.message(
+        "Nous avons envoyer votre nouveau code d'activation au ",
+        name: 'sendacticode');
+  }
+
+  String get sendnewcode {
+    return Intl.message("Envoi du code au ", name: 'sendacticode');
+  }
+
+  String get incorectphon {
+    return Intl.message("Numéro incorect ?", name: 'sendacticode');
   }
 
   String get wait {
