@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -10,29 +8,22 @@ import 'package:kifcab/navigationDrawer/navigation_button.dart';
 import 'package:kifcab/navigationDrawer/navigation_drawer.dart';
 import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
-import '../core/global.dart' as globals;
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter/gestures.dart';
+import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_webservice/places.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
-
-GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
-const kGoogleApiKey = "AIzaSyDRn0mlxRwnXRJZI4cNqFOgsGNssI5APRo";
 
 class DepotScreen extends StatefulWidget {
-  double longitude, latitude;
-
-  DepotScreen({
-    this.longitude,
-    this.latitude,
+  const DepotScreen({
     Key key,
   }) : super(key: key);
 
   @override
-  _DepotScreenState createState() => _DepotScreenState();
+  DepotScreenState createState() {
+    return DepotScreenState();
+  }
 }
 
-final homeScaffoldKey = GlobalKey<ScaffoldState>();
-final searchScaffoldKey = GlobalKey<ScaffoldState>();
 String departName;
 double deplat;
 double deln;
@@ -41,17 +32,17 @@ String arrivName;
 double arriplat;
 double arriln;
 
-class _DepotScreenState extends State<DepotScreen> {
-  // DepotScreenState();
+class DepotScreenState extends State<DepotScreen> {
+  DepotScreenState();
   bool _autoValidate = false;
-  Mode _mode = Mode.overlay;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String kGoogleApiKey = GOOGLE_API_KEY;
   final TextEditingController _textControllerFrom = new TextEditingController();
   final TextEditingController _textControllerTo = new TextEditingController();
   bool _showClearButtonInputFrom = false;
   bool _showClearButtonInputTo = false;
-  static final kInitialPosition = LatLng(4.024394577478441, 9.705471602732858);
+  static final kInitialPosition = LatLng(-33.8567844, 151.213108);
 // Light Theme
   final ThemeData lightTheme = ThemeData.light().copyWith(
     // Background color of the FloatingCard
@@ -94,36 +85,8 @@ class _DepotScreenState extends State<DepotScreen> {
     super.dispose();
   }
 
-  displayPrediction(Prediction p, ScaffoldState scaffold, String types,
-      BuildContext context) async {
-    if (p != null) {
-      // get detail (lat/lng)
-      PlacesDetailsResponse detail =
-          await _places.getDetailsByPlaceId(p.placeId);
-
-      final lat = detail.result.geometry.location.lat;
-      final lng = detail.result.geometry.location.lng;
-
-      Navigator.pop(context, [p.description.toString(), lng, lat, types]);
-      print(types);
-      // Navigator.of(context).pop();
-      //  scaffold.showSnackBar(
-      // SnackBar(content: Text("${p.description} - $lat/$lng")),
-      print("${p.description} - $lat/$lng");
-
-      // );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    /*
-    Location location = new Location(widget.longitude, widget.latitude);
-    print("widget.latitude");
-    print(widget.latitude);
-    globals.location = location;
-
-    */
     return Scaffold(
       backgroundColor: MyTheme.stripColor,
       appBar: AppBar(
@@ -259,37 +222,10 @@ class _DepotScreenState extends State<DepotScreen> {
                               controller: _textControllerFrom,
                               validator: validatedep,
                               cursorColor: MyTheme.primaryColor,
-                              onTap: () async {
-                                print("depart");
-                                /* Navigator.of(context).push(PageRouteBuilder(
-                                    opaque: false,
-                                    pageBuilder: (_, __, ___) =>
-                                        new CustomSearchScaffold()));*/
-/*
-                                Prediction p = await PlacesAutocomplete.show(
-                                    context: context,
-                                    apiKey: kGoogleApiKey,
-                                    mode: Mode.overlay, // Mode.fullscreen
-                                    language: "fr",
-                                    components: [
-                                      new Component(Component.country, "fr")
-                                    ]);
-*/
-                                final result = await Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                        opaque: false,
-                                        pageBuilder: (_, __, ___) =>
-                                            new CustomSearchScaffold()));
+                              onTap: () {
+                                log("depart");
 
-                                setState(() {
-                                  print(result[3]);
-
-                                  _textControllerFrom.text = result[0];
-                                  departName = result[0];
-                                  deln = result[1];
-                                  deplat = result[2];
-                                });
-                                /* Navigator.push(
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => PlacePicker(
@@ -314,7 +250,7 @@ class _DepotScreenState extends State<DepotScreen> {
                                             ", " +
                                             result
                                                 .addressComponents[2].longName;
-                                        print(result.name.toString());
+                                        log(result.name.toString());
                                         print(jsonDecode(result.toString()));
                                         print(result
                                                 .addressComponents[0].longName +
@@ -333,7 +269,7 @@ class _DepotScreenState extends State<DepotScreen> {
                                       initialMapType: MapType.terrain,
                                     ),
                                   ),
-                                );*/
+                                );
                               },
                               onSaved: (String val) {
                                 departName = val;
@@ -425,24 +361,9 @@ class _DepotScreenState extends State<DepotScreen> {
                               controller: _textControllerTo,
                               cursorColor: MyTheme.primaryColor,
                               validator: validatearr,
-                              onTap: () async {
-                                print("arriver");
-
-                                final result = await Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                        opaque: false,
-                                        pageBuilder: (_, __, ___) =>
-                                            new CustomSearchScaffold1()));
-                                setState(() {
-                                  print(result[3]);
-
-                                  _textControllerTo.text = result[0];
-                                  arrivName = result[0];
-                                  arriln = result[1];
-                                  arriplat = result[2];
-                                });
-
-                                /*  Navigator.push(
+                              onTap: () {
+                                log("arriver");
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => PlacePicker(
@@ -467,7 +388,7 @@ class _DepotScreenState extends State<DepotScreen> {
                                             ", " +
                                             result
                                                 .addressComponents[2].longName;
-                                        print(result
+                                        log(result
                                                 .addressComponents[0].longName +
                                             ", " +
                                             result
@@ -479,15 +400,11 @@ class _DepotScreenState extends State<DepotScreen> {
                                       },
                                       useCurrentLocation: true,
                                       initialPosition: kInitialPosition,
-                                      forceAndroidLocationManager: true,
-                                      selectInitialPosition: false,
-                                      initialMapType: MapType.hybrid,
-                                      autocompleteRadius: 200,
-                                      autocompleteLanguage: "fr",
-                                      searchingText: "dsdsd",
+                                      selectInitialPosition: true,
+                                      initialMapType: MapType.terrain,
                                     ),
                                   ),
-                                );*/
+                                );
                               },
                               style: TextStyle(
                                   color: MyTheme.navBar,
@@ -595,160 +512,6 @@ class _DepotScreenState extends State<DepotScreen> {
     else
       return null;
   }
-}
-
-class CustomSearchScaffold extends PlacesAutocompleteWidget {
-  String qualite;
-  CustomSearchScaffold({this.qualite})
-      : super(
-          apiKey: kGoogleApiKey,
-          mode: Mode.overlay,
-          strictbounds: true,
-          location: Uuid().generateLocation(),
-          radius: 200,
-          hint: "Recherchez",
-          sessionToken: Uuid().generateV4(),
-          language: "fr",
-          components: [Component(Component.country, "cmr")],
-        );
-
-  @override
-  _CustomSearchScaffoldState createState() => _CustomSearchScaffoldState();
-}
-
-class _CustomSearchScaffoldState extends PlacesAutocompleteState {
-  final DepotScreen = new _DepotScreenState();
-  @override
-  Widget build(BuildContext context) {
-    final appBar = AppBar(
-      title: AppBarPlacesAutoCompleteTextField(),
-      backgroundColor: Colors.black54,
-    );
-    final body = PlacesAutocompleteResult(
-      onTap: (p) {
-        DepotScreen.displayPrediction(
-            p, searchScaffoldKey.currentState, "depart", context);
-      },
-      logo: Row(),
-    );
-    return Scaffold(
-      key: searchScaffoldKey,
-      appBar: appBar,
-      body: body,
-      backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
-    );
-  }
-
-  @override
-  void onResponseError(PlacesAutocompleteResponse response) {
-    super.onResponseError(response);
-    /*searchScaffoldKey.currentState.showSnackBar(
-        // SnackBar(content: Text(response.errorMessage)),
-        );*/
-  }
-
-  @override
-  void onResponse(PlacesAutocompleteResponse response) {
-    super.onResponse(response);
-    if (response != null && response.predictions.isNotEmpty) {
-      /*  searchScaffoldKey.currentState.showSnackBar(
-          // SnackBar(content: Text("Got answer")),
-          );*/
-    }
-  }
-}
-
-void getLocation() {}
-
-class CustomSearchScaffold1 extends PlacesAutocompleteWidget {
-  CustomSearchScaffold1()
-      : super(
-          apiKey: kGoogleApiKey,
-          mode: Mode.overlay,
-          strictbounds: true,
-          location: Uuid().generateLocation(),
-          radius: 20000,
-          hint: "Recherche",
-          sessionToken: Uuid().generateV4(),
-          language: "fr",
-          components: [Component(Component.country, "cmr")],
-        );
-
-  @override
-  _CustomSearchScaffoldState1 createState() => _CustomSearchScaffoldState1();
-}
-
-class _CustomSearchScaffoldState1 extends PlacesAutocompleteState {
-  final DepotScreen = new _DepotScreenState();
-
-  @override
-  Widget build(BuildContext context) {
-    final appBar = AppBar(
-      title: AppBarPlacesAutoCompleteTextField(),
-      backgroundColor: Colors.black54,
-    );
-    final body = PlacesAutocompleteResult(
-      onTap: (p) {
-        DepotScreen.displayPrediction(
-            p, searchScaffoldKey.currentState, "arriver", context);
-      },
-      logo: Row(),
-    );
-    return Scaffold(
-      key: searchScaffoldKey,
-      appBar: appBar,
-      body: body,
-      backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
-    );
-  }
-
-  @override
-  void onResponseError(PlacesAutocompleteResponse response) {
-    super.onResponseError(response);
-    /*searchScaffoldKey.currentState.showSnackBar(
-        // SnackBar(content: Text(response.errorMessage)),
-        );*/
-  }
-
-  @override
-  void onResponse(PlacesAutocompleteResponse response) {
-    super.onResponse(response);
-    if (response != null && response.predictions.isNotEmpty) {
-      /*  searchScaffoldKey.currentState.showSnackBar(
-          // SnackBar(content: Text("Got answer")),
-          );*/
-    }
-  }
-}
-
-class Uuid {
-  final Random _random = Random();
-
-  String generateV4() {
-    // Generate xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx / 8-4-4-4-12.
-    final int special = 8 + _random.nextInt(4);
-
-    return '${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}-'
-        '${_bitsDigits(16, 4)}-'
-        '4${_bitsDigits(12, 3)}-'
-        '${_printDigits(special, 1)}${_bitsDigits(12, 3)}-'
-        '${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}';
-  }
-
-  Location generateLocation() {
-    // Generate xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx / 8-4-4-4-12.
-    final int special = 8 + _random.nextInt(4);
-    print(globals.latitude);
-    return new Location(globals.latitude, globals.longitude);
-  }
-
-  String _bitsDigits(int bitCount, int digitCount) =>
-      _printDigits(_generateBits(bitCount), digitCount);
-
-  int _generateBits(int bitCount) => _random.nextInt(1 << bitCount);
-
-  String _printDigits(int value, int count) =>
-      value.toRadixString(16).padLeft(count, '0');
 }
 
 Widget getButton() {

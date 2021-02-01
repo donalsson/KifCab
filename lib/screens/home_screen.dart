@@ -1,10 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:kifcab/locale/app_localization.dart';
 import 'package:kifcab/navigationDrawer/navigation_drawer.dart';
 import 'package:kifcab/utils/Utils.dart';
+
+import 'package:geolocator/geolocator.dart';
+import '../core/global.dart' as globals;
+import 'package:kifcab/screens/depot_screen.dart';
 import 'package:kifcab/utils/colors.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/gestures.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -17,13 +24,31 @@ class HomeScreen extends StatefulWidget {
   }
 }
 
+double longitude;
+double latitude;
+
 class HomeScreenState extends State<HomeScreen> {
   HomeScreenState();
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
   void initState() {
+    initSaveData();
     super.initState();
+  }
+
+  void initSaveData() async {
+    await Geolocator.getCurrentPosition().then((value) => {
+          setState(() {
+            longitude = value.longitude;
+            latitude = value.latitude;
+            globals.longitude = value.longitude;
+            globals.latitude = value.latitude;
+          })
+
+          /*     _positionItems.add(_PositionItem(
+                            _PositionItemType.position, value.toString()))*/
+        });
   }
 
   @override
@@ -89,10 +114,10 @@ class HomeScreenState extends State<HomeScreen> {
                   height: 10,
                 ),
                 Text(AppLocalization.of(context).chooseOfCommandType,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .copyWith(fontWeight: FontWeight.w300, fontSize: 15)),
+                    style: Theme.of(context).textTheme.bodyText2.copyWith(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 15,
+                        color: Colors.white70)),
                 SizedBox(
                   height: 50,
                 ),
@@ -105,8 +130,13 @@ class HomeScreenState extends State<HomeScreen> {
                       child: RaisedButton(
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/depot',
-                              arguments: <String, dynamic>{});
+                          /*  Navigator.pushReplacementNamed(context, '/depot',
+                              arguments: <String, dynamic>{});*/
+                          Navigator.of(context).push(PageRouteBuilder(
+                              pageBuilder: (_, __, ___) => new DepotScreen(
+                                    longitude: longitude,
+                                    latitude: latitude,
+                                  )));
                         },
                         color: MyTheme.button,
                         shape: RoundedRectangleBorder(

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-
+import 'core/global.dart' as global;
 import 'package:flutter/material.dart';
 import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
@@ -16,6 +16,7 @@ import 'package:kifcab/screens/welcome_screen.dart';
 import 'core/preference.dart';
 import 'models/UserMod.dart';
 
+import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -26,7 +27,6 @@ void main() async {
   await SharedPreferencesClass.restoreuser("userinfos").then((value) {
     var userinfos = new List<UserMod>();
     log("valuee");
-
     if (value != "") {
       compteU = true;
       Iterable list0 = jsonDecode(value);
@@ -53,19 +53,19 @@ class MyApp extends StatelessWidget {
   //        Navigator.pushReplacementNamed(context, '/home', arguments: {'conversation': conversation});
 
   ThemeData getTheme({bool darkMode: false}) {
-    if (darkMode) {
-      return ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          brightness: Brightness.dark,
-          fontFamily: DEFAULT_FONT_FAMILY);
-    } else {
+    // if (darkMode) {
+    return ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        brightness: Brightness.dark,
+        fontFamily: DEFAULT_FONT_FAMILY);
+    /*  } else {
       return ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           brightness: Brightness.light,
           fontFamily: DEFAULT_FONT_FAMILY);
-    }
+    }*/
   }
 
   @override

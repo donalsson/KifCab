@@ -39,7 +39,8 @@ dependencies:
   flutter_overlay_loader: ^0.0.2
   flutter_sms_inbox: ^0.1.1+1
   flutter_launcher_icons: "^0.8.0"
-  #flutter_google_places: ^0.2.6
+  geolocator: ^6.1.14
+  flutter_google_places: ^0.2.6
   google_maps_place_picker: ^1.0.1
 
 
