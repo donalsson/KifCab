@@ -7,7 +7,8 @@ import '../l10n/messages_all.dart';
 
 class AppLocalization {
   static Future<AppLocalization> load(Locale locale) {
-    final String name = locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
+    final String name =
+        locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -19,7 +20,8 @@ class AppLocalization {
     return Localizations.of<AppLocalization>(context, AppLocalization);
   }
 
-  static String _loadStaticMessage(String key, String locale, Map<String, dynamic> args) {
+  static String _loadStaticMessage(
+      String key, String locale, Map<String, dynamic> args) {
     if (locale == 'en') {
       switch (key) {
         case "reset":
@@ -32,18 +34,23 @@ class AppLocalization {
       }
     }
   }
+
   String get hintName {
     return Intl.message("Nom[Obligatoire]", name: 'hintName');
   }
+
   String get hintEmail {
     return Intl.message("Email[Obligatoire]", name: 'hintEmail');
   }
+
   String get hintPhone {
     return Intl.message("Téléphone[Obligatoire]", name: 'hintPhone');
   }
+
   String get hintLocalization {
     return Intl.message("Localisation", name: 'hintLocalization');
   }
+
   String get save {
     return Intl.message("Enregistrer", name: 'save');
   }
@@ -51,19 +58,23 @@ class AppLocalization {
   String get alreadyHaveAccount {
     return Intl.message("Déjà un compte?", name: 'alreadyHaveAccount');
   }
+
   String get waitAfewMoments {
-    return Intl.message("Patientez quelques instants...", name: 'waitAfewMoments');
+    return Intl.message("Patientez quelques instants...",
+        name: 'waitAfewMoments');
   }
 
   String get login {
     return Intl.message("Se connecter", name: 'login');
   }
+
   String get createAnAccount {
     return Intl.message("Créer un compte", name: 'createAnAccount');
   }
 
   String get welcomeMessage {
-    return Intl.message("Commande simple et rapide de véhicules ...", name: 'welcomeMessage');
+    return Intl.message("Commande simple et rapide de véhicules ...",
+        name: 'welcomeMessage');
   }
 
   String get next {
@@ -73,15 +84,23 @@ class AppLocalization {
   String get noAccount {
     return Intl.message("Pas de compte?", name: 'noAccount');
   }
-  changeLanguage(language) => Intl.message("Changer langue($language)", name: 'changeLanguage', args: [language]);
+
+  changeLanguage(language) => Intl.message("Changer langue($language)",
+      name: 'changeLanguage', args: [language]);
 
   String get hintPhoneLogin {
     return Intl.message("Téléphone", name: 'hintPhoneLogin');
   }
 
+  String get succeswelcome {
+    return Intl.message("Nous sommes Heureux de vous revoir",
+        name: 'succeswelcome');
+  }
+
   String get enterYourPhone {
     return Intl.message("Entrer votre Téléphone", name: 'enterYourPhone');
   }
+
   String get examplePhoneNumber {
     return Intl.message("Example: 666999777", name: 'examplePhoneNumber');
   }
@@ -99,28 +118,62 @@ class AppLocalization {
   }
 
   String get chooseOfCommandType {
-    return Intl.message("Choix du type de commande", name: 'chooseOfCommandType');
+    return Intl.message("Choix du type de commande",
+        name: 'chooseOfCommandType');
   }
 
   String get home {
     return Intl.message("Accueil", name: 'home');
   }
 
+  String get checkphonenumber {
+    return Intl.message("Numéro de téléphone incorrect",
+        name: 'checkphonenumber');
+  }
+
+  String get wait {
+    return Intl.message("Veuillez Patienter", name: 'wait');
+  }
+
   String get history {
     return Intl.message("Historiques", name: 'history');
   }
+
+  String get validEmail {
+    return Intl.message("Vérifier votre Email", name: 'validEmail');
+  }
+
+  String get validname {
+    return Intl.message("Vérifier votre Nom", name: 'validname');
+  }
+
+  String get validville {
+    return Intl.message("Vérifier votre Ville", name: 'validville');
+  }
+
+  String get errorcomptenotexist {
+    return Intl.message(
+        "Désolé mais ce numéro ne correspond a aucun utilisateur",
+        name: 'history');
+  }
+
   String get settings {
     return Intl.message("Paramètres", name: 'settings');
   }
+
   String get help {
     return Intl.message("Aide", name: 'help');
   }
+
   String get aboutApp {
     return Intl.message("A propos de Kifcab", name: 'aboutApp');
   }
+
   String get privacyPolicies {
-    return Intl.message("Politiques de confidentialités", name: 'privacyPolicies');
+    return Intl.message("Politiques de confidentialités",
+        name: 'privacyPolicies');
   }
+
   copyrightMessage(year) => Intl.message("Copyright $year.Tous droits reservés", name: 'copyrightMessage', args: [year]);
 
 
@@ -164,6 +217,13 @@ class AppLocalization {
   }
 
   displayIn(language) => Intl.message("Display in, $language!", name: 'displayIn', args: [language]);
+
+
+  copyrightMessage(year) => Intl.message("Copyright $year.Tous droits reservés",
+      name: 'copyrightMessage', args: [year]);
+  displayIn(language) => Intl.message("Display in, $language!",
+      name: 'displayIn', args: [language]);
+
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalization> {
@@ -172,7 +232,8 @@ class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalization> {
   const AppLocalizationDelegate(this.overriddenLocale);
 
   @override
-  bool isSupported(Locale locale) => SUPPORTED_LANGUAGES.contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      SUPPORTED_LANGUAGES.contains(locale.languageCode);
 
   @override
   Future<AppLocalization> load(Locale locale) => AppLocalization.load(locale);

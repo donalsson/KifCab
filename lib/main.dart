@@ -8,7 +8,8 @@ import 'package:kifcab/screens/index.dart';
 import 'package:kifcab/screens/location_screen.dart';
 import 'package:kifcab/screens/login_screen.dart';
 import 'package:kifcab/screens/register_screen.dart';
-
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kifcab/screens/welcome_screen.dart';
 
@@ -42,21 +43,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Kifcab',
-      darkTheme: ThemeData.dark(),
-      theme: getTheme(darkMode: _dartMode),
-      //home: MyHomePage(title: 'Flutter Demo Home Page'),
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        _localeOverrideDelegate
-      ],
-      supportedLocales: SUPPORTED_LOCALES,
-      initialRoute: '/home',
-      routes: {
-        // When navigating to the "/plash" route, build the SecondScreen widget.
-        '/register': (context) => RegisterScreen( ),
+
+    return GlobalLoaderOverlay(
+      overlayWidget: Center(
+        child: Align(
+          alignment: Alignment.center,
+          child: Image.asset('assets/load.gif', height: 35),
+        ),
+      ),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Kifcab',
+        darkTheme: ThemeData.dark(),
+        theme: getTheme(darkMode: _dartMode),
+        //home: MyHomePage(title: 'Flutter Demo Home Page'),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          _localeOverrideDelegate
+        ],
+        supportedLocales: SUPPORTED_LOCALES,
+        initialRoute: '/welcome',
+        routes: {
+          // When navigating to the "/plash" route, build the SecondScreen widget.
+          '/register': (context) => RegisterScreen( ),
         '/login': (context) => LoginScreen( ),
         '/welcome': (context) => WelcomeScreen( ),
         '/home': (context) => HomeScreen(),

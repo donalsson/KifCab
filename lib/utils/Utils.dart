@@ -38,6 +38,22 @@ class Utils {
       ),
     );
   }
+
+  static InputDecoration getPhoneInputDecoration(String hint, IconData prefix) {
+    return InputDecoration(
+      /* focusedBorder: UnderlineInputBorder(
+        //borderRadius: BorderRadius.circular(28),
+        borderSide: BorderSide(
+          color: MyTheme.primaryColor,
+          width: 1.5,
+        ),
+      ),*/
+
+      contentPadding: EdgeInsets.all(15),
+
+      //suffixIcon: Icon(Icons.check, color: MyTheme.suffixPrefixIcon),
+    );
+  }
 }
 
 
