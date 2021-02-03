@@ -157,10 +157,7 @@ class DepotScreenState extends State<DepotScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(AppLocalization.of(context).needASecureCar,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .copyWith(
+                                    style: Theme.of(context).textTheme.bodyText1.copyWith(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 17,
                                           color: Colors.white,
@@ -168,13 +165,7 @@ class DepotScreenState extends State<DepotScreen> {
                                 SizedBox(
                                   height: 07,
                                 ),
-                                Text(AppLocalization.of(context).takeADeposit,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2
-                                        .copyWith(
-                                            fontWeight: FontWeight.w300,
-                                            color: Colors.white)),
+                                Text(AppLocalization.of(context).takeADeposit, style: Theme.of(context).textTheme.subtitle2.copyWith(fontWeight: FontWeight.w300, color: Colors.white)),
                               ],
                             ),
                           ),
@@ -213,8 +204,7 @@ class DepotScreenState extends State<DepotScreen> {
 
                       //_step1
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                         child: Column(
                           children: [
                             Row(
@@ -222,10 +212,7 @@ class DepotScreenState extends State<DepotScreen> {
                               children: [
                                 Text(
                                   AppLocalization.of(context).startingPoint,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(
+                                  style: Theme.of(context).textTheme.bodyText2.copyWith(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         color: MyTheme.navBar,
@@ -233,10 +220,7 @@ class DepotScreenState extends State<DepotScreen> {
                                 ),
                                 Text(
                                   AppLocalization.of(context).required,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(
+                                  style: Theme.of(context).textTheme.bodyText2.copyWith(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w300,
                                         color: MyTheme.navBar,
@@ -261,13 +245,11 @@ class DepotScreenState extends State<DepotScreen> {
                                         // Put YOUR OWN KEY here.
                                         onPlacePicked: (result) {
                                           setState(() {
-                                            _fromLocation =
-                                                result.geometry.location;
+                                            _fromLocation = result.geometry.location;
                                           });
                                           print(result.geometry.location.lat);
                                           print(result.geometry.location.lng);
-                                          _textControllerFrom.text =
-                                              result.formattedAddress;
+                                          _textControllerFrom.text = result.formattedAddress;
                                           Navigator.of(context).pop();
                                         },
                                         autocompleteLanguage: "fr",
@@ -276,8 +258,7 @@ class DepotScreenState extends State<DepotScreen> {
                                         initialMapType: MapType.normal,
                                         selectInitialPosition: true,
                                         searchingText: "Recherche en cours....",
-                                        hintText:
-                                            "Rechercher un emplacement...",
+                                        hintText: "Rechercher un emplacement...",
                                       ),
                                     ),
                                   );
@@ -285,9 +266,7 @@ class DepotScreenState extends State<DepotScreen> {
                               },
                               autofocus: false,
                               readOnly: true,
-                              style: TextStyle(
-                                  color: MyTheme.navBar,
-                                  fontWeight: FontWeight.w400),
+                              style: TextStyle(color: MyTheme.navBar, fontWeight: FontWeight.w400),
                               decoration: new InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.room,
@@ -298,8 +277,7 @@ class DepotScreenState extends State<DepotScreen> {
                                       ? IconButton(
                                           onPressed: () {
                                             __textFieldFromFocusNode.unfocus();
-                                            __textFieldFromFocusNode
-                                                .canRequestFocus = false;
+                                            __textFieldFromFocusNode.canRequestFocus = false;
                                             _textControllerFrom.clear();
                                             _fromLocation = null;
                                           },
@@ -310,38 +288,26 @@ class DepotScreenState extends State<DepotScreen> {
                                           ),
                                         )
                                       : null,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 0.0, horizontal: 10),
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.primaryColor,
-                                        width: 1.2),
+                                    borderSide: BorderSide(color: MyTheme.primaryColor, width: 1.2),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.navBar, width: 1),
+                                    borderSide: BorderSide(color: MyTheme.navBar, width: 1),
                                   ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.navBar, width: 1),
+                                    borderSide: BorderSide(color: MyTheme.navBar, width: 1),
                                   ),
-                                  hintText: AppLocalization.of(context)
-                                      .enterTheStartingPoint,
-                                  hintStyle: TextStyle(
-                                      color: MyTheme.navBar,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 14)),
+                                  hintText: AppLocalization.of(context).enterTheStartingPoint,
+                                  hintStyle: TextStyle(color: MyTheme.navBar, fontWeight: FontWeight.w300, fontSize: 14)),
                             ),
                             if (_fromLocation != null)
                               Text(
                                 _fromLocation.toString(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    .copyWith(
+                                style: Theme.of(context).textTheme.bodyText2.copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w300,
                                       color: MyTheme.navBar,
@@ -351,8 +317,7 @@ class DepotScreenState extends State<DepotScreen> {
                         ),
                       ),
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                         child: Column(
                           children: [
                             Row(
@@ -360,10 +325,7 @@ class DepotScreenState extends State<DepotScreen> {
                               children: [
                                 Text(
                                   AppLocalization.of(context).arrivalPoint,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(
+                                  style: Theme.of(context).textTheme.bodyText2.copyWith(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         color: MyTheme.navBar,
@@ -371,10 +333,7 @@ class DepotScreenState extends State<DepotScreen> {
                                 ),
                                 Text(
                                   AppLocalization.of(context).required,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(
+                                  style: Theme.of(context).textTheme.bodyText2.copyWith(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w300,
                                         color: MyTheme.navBar,
@@ -395,24 +354,18 @@ class DepotScreenState extends State<DepotScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => PlacePicker(
-                                        apiKey:
-                                            _kGoogleApiKey, // Put YOUR OWN KEY here.
+                                        apiKey: _kGoogleApiKey, // Put YOUR OWN KEY here.
                                         onPlacePicked: (result) {
                                           setState(() {
-                                            _toLocation =
-                                                result.geometry.location;
+                                            _toLocation = result.geometry.location;
                                           });
                                           print(result.geometry.location.lat);
                                           print(result.geometry.location.lng);
-                                          _textControllerTo.text =
-                                              result.formattedAddress;
+                                          _textControllerTo.text = result.formattedAddress;
                                           Navigator.of(context).pop();
                                         },
                                         useCurrentLocation: true,
-                                        initialPosition: _toLocation != null
-                                            ? LatLng(_toLocation.lat,
-                                                _toLocation.lng)
-                                            : kInitialPosition,
+                                        initialPosition: _toLocation != null ? LatLng(_toLocation.lat, _toLocation.lng) : kInitialPosition,
                                         initialMapType: MapType.normal,
                                         selectInitialPosition: true,
                                       ),
@@ -422,9 +375,7 @@ class DepotScreenState extends State<DepotScreen> {
                               },
                               autofocus: false,
                               readOnly: true,
-                              style: TextStyle(
-                                  color: MyTheme.navBar,
-                                  fontWeight: FontWeight.w400),
+                              style: TextStyle(color: MyTheme.navBar, fontWeight: FontWeight.w400),
                               decoration: new InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.room,
@@ -435,8 +386,7 @@ class DepotScreenState extends State<DepotScreen> {
                                       ? IconButton(
                                           onPressed: () {
                                             _textFieldToFocusNode.unfocus();
-                                            _textFieldToFocusNode
-                                                .canRequestFocus = false;
+                                            _textFieldToFocusNode.canRequestFocus = false;
                                             _textControllerTo.clear();
                                             _toLocation = null;
                                           },
@@ -447,38 +397,26 @@ class DepotScreenState extends State<DepotScreen> {
                                           ),
                                         )
                                       : null,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 0.0, horizontal: 10),
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.primaryColor,
-                                        width: 1.2),
+                                    borderSide: BorderSide(color: MyTheme.primaryColor, width: 1.2),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.navBar, width: 1),
+                                    borderSide: BorderSide(color: MyTheme.navBar, width: 1),
                                   ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.navBar, width: 1),
+                                    borderSide: BorderSide(color: MyTheme.navBar, width: 1),
                                   ),
-                                  hintText: AppLocalization.of(context)
-                                      .enterTheArrivalPoint,
-                                  hintStyle: TextStyle(
-                                      color: MyTheme.navBar,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 14)),
+                                  hintText: AppLocalization.of(context).enterTheArrivalPoint,
+                                  hintStyle: TextStyle(color: MyTheme.navBar, fontWeight: FontWeight.w300, fontSize: 14)),
                             ),
                             if (_toLocation != null)
                               Text(
                                 _toLocation.toString(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    .copyWith(
+                                style: Theme.of(context).textTheme.bodyText2.copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w300,
                                       color: MyTheme.navBar,
@@ -509,8 +447,7 @@ class DepotScreenState extends State<DepotScreen> {
                     initialCameraPosition: _kGooglePlex,
 
                     onMapCreated: (GoogleMapController controller) {
-                      if (!_controllerMap.isCompleted)
-                        _controllerMap.complete(controller);
+                      if (!_controllerMap.isCompleted) _controllerMap.complete(controller);
                     },
                   ),
                 ),
@@ -521,26 +458,18 @@ class DepotScreenState extends State<DepotScreen> {
                       children: [
                         Container(
                           color: Colors.black,
-                          padding:
-                              EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                          padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                           child: Text(
                             AppLocalization.of(context).deposit,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600),
+                            style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600),
                           ),
                         ),
                         Container(
                           color: Colors.white,
-                          padding:
-                              EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                          padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                           child: Text(
                             "/",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600),
+                            style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w600),
                           ),
                         )
                       ],
@@ -600,33 +529,23 @@ class DepotScreenState extends State<DepotScreen> {
                               minLines: 2,
                               maxLines: 5,
                               keyboardType: TextInputType.multiline,
-                              style: TextStyle(
-                                  color: MyTheme.navBar,
-                                  fontWeight: FontWeight.w400),
+                              style: TextStyle(color: MyTheme.navBar, fontWeight: FontWeight.w400),
                               decoration: new InputDecoration(
-                                  contentPadding: const EdgeInsets.only(
-                                      top: 20.0, left: 15, right: 10),
+                                  contentPadding: const EdgeInsets.only(top: 20.0, left: 15, right: 10),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent, width: 1.2),
+                                    borderSide: BorderSide(color: Colors.transparent, width: 1.2),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent, width: 1),
+                                    borderSide: BorderSide(color: Colors.transparent, width: 1),
                                   ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent, width: 1),
+                                    borderSide: BorderSide(color: Colors.transparent, width: 1),
                                   ),
-                                  hintText: AppLocalization.of(context)
-                                      .messageToSendToTheDriver,
-                                  hintStyle: TextStyle(
-                                      color: MyTheme.navBar,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 14)),
+                                  hintText: AppLocalization.of(context).messageToSendToTheDriver,
+                                  hintStyle: TextStyle(color: MyTheme.navBar, fontWeight: FontWeight.w300, fontSize: 14)),
                             ),
                           ),
                           Container(
@@ -634,87 +553,98 @@ class DepotScreenState extends State<DepotScreen> {
                             //color:Color(0xFFF1F1F1),
                             padding: EdgeInsets.all(0),
                             child: ContainedTabBarView(
-                              tabs: [
-                                Text(AppLocalization.of(context).ranges,
-                                    style: TextStyle(
-                                        color: MyTheme.navBar,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14)),
-                                Text(AppLocalization.of(context).payment,
-                                    style: TextStyle(
-                                        color: MyTheme.navBar,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14))
-                              ],
-                              tabBarProperties: TabBarProperties(
-                                  height: 32.0,
-                                  indicatorColor: MyTheme.primaryColor,
-                                  indicatorWeight: 2.5,
-                                  labelColor: Colors.black,
-                                  indicatorSize: TabBarIndicatorSize.tab,
-                                  unselectedLabelColor: Colors.grey[400]),
+                              tabs: [Text(AppLocalization.of(context).ranges, style: TextStyle(color: MyTheme.navBar, fontWeight: FontWeight.w500, fontSize: 14)), Text(AppLocalization.of(context).payment, style: TextStyle(color: MyTheme.navBar, fontWeight: FontWeight.w500, fontSize: 14))],
+                              tabBarProperties: TabBarProperties(height: 32.0, indicatorColor: MyTheme.primaryColor, indicatorWeight: 2.5, labelColor: Colors.black, indicatorSize: TabBarIndicatorSize.tab, unselectedLabelColor: Colors.grey[400]),
                               views: [
                                 Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                   color: Colors.transparent,
                                   child: Wrap(
                                     direction: Axis.horizontal,
                                     children: <Widget>[
-                                      CardButton(index: 0, selectedIndex: _selectedRange,imageUrl: 'assets/2.png',isAsset: true,text: "Classe Bronze",onTap: (){
-                                        print("Tap elemen");
-                                        setState(() {
-                                          _selectedRange = 0;
-                                        });
-                                      },),
+                                      CardButton(
+                                        index: 0,
+                                        selectedIndex: _selectedRange,
+                                        imageUrl: 'assets/2.png',
+                                        isAsset: true,
+                                        text: "Classe Bronze",
+                                        onTap: () {
+                                          print("Tap elemen");
+                                          setState(() {
+                                            _selectedRange = 0;
+                                          });
+                                        },
+                                      ),
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      CardButton(index: 1, selectedIndex: _selectedRange,imageUrl: 'assets/3.png',isAsset: true,text: "Classe Argent",onTap: (){
-                                        print("Tap elemen");
-                                        setState(() {
-                                          _selectedRange = 1;
-                                        });
-                                      },),
-
+                                      CardButton(
+                                        index: 1,
+                                        selectedIndex: _selectedRange,
+                                        imageUrl: 'assets/3.png',
+                                        isAsset: true,
+                                        text: "Classe Argent",
+                                        onTap: () {
+                                          print("Tap elemen");
+                                          setState(() {
+                                            _selectedRange = 1;
+                                          });
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                   color: Colors.transparent,
                                   child: Wrap(
                                     direction: Axis.horizontal,
                                     children: <Widget>[
-
-                                      CardButton(index: 0, selectedIndex: _selectedPayment,imageUrl: 'assets/cash.png',isAsset: true,text: "Cash",onTap: (){
-                                        print("Tap elemen");
-                                        setState(() {
-                                          _selectedPayment = 0;
-                                        });
-                                      },),
-
+                                      CardButton(
+                                        index: 0,
+                                        selectedIndex: _selectedPayment,
+                                        imageUrl: 'assets/cash.png',
+                                        isAsset: true,
+                                        text: "Cash",
+                                        onTap: () {
+                                          print("Tap elemen");
+                                          setState(() {
+                                            _selectedPayment = 0;
+                                          });
+                                        },
+                                      ),
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      CardButton(index: 1, selectedIndex: _selectedPayment,imageUrl: 'assets/om.jpg',isAsset: true,text: "Orange",onTap: (){
-                                        print("Tap elemen");
-                                        setState(() {
-                                          _selectedPayment = 1;
-                                        });
-                                      },),
-
+                                      CardButton(
+                                        index: 1,
+                                        selectedIndex: _selectedPayment,
+                                        imageUrl: 'assets/om.jpg',
+                                        isAsset: true,
+                                        text: "Orange",
+                                        onTap: () {
+                                          print("Tap elemen");
+                                          setState(() {
+                                            _selectedPayment = 1;
+                                          });
+                                        },
+                                      ),
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      CardButton(index: 2, selectedIndex: _selectedPayment,imageUrl: 'assets/mo.jpg',isAsset: true,text: "MTN",onTap: (){
-                                        print("Tap elemen");
-                                        setState(() {
-                                          _selectedPayment = 2;
-                                        });
-                                      },),
-
+                                      CardButton(
+                                        index: 2,
+                                        selectedIndex: _selectedPayment,
+                                        imageUrl: 'assets/mo.jpg',
+                                        isAsset: true,
+                                        text: "MTN",
+                                        onTap: () {
+                                          print("Tap elemen");
+                                          setState(() {
+                                            _selectedPayment = 2;
+                                          });
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -733,8 +663,7 @@ class DepotScreenState extends State<DepotScreen> {
                 text: AppLocalization.of(context).previous,
                 onTap: () {
                   if (_step == 0) {
-                    Navigator.pushReplacementNamed(context, '/home',
-                        arguments: <String, dynamic>{});
+                    Navigator.pushReplacementNamed(context, '/home', arguments: <String, dynamic>{});
                   } else {
                     this.setState(() {
                       _step--;
@@ -745,8 +674,8 @@ class DepotScreenState extends State<DepotScreen> {
               NavigationButton(
                 backColor: MyTheme.primaryColor,
                 textColor: Colors.black,
-                icon: (_step == 1)?Icons.check:Icons.chevron_right,
-                text: (_step == 1)? AppLocalization.of(context).save: AppLocalization.of(context).next,
+                icon: (_step == 1) ? Icons.check : Icons.chevron_right,
+                text: (_step == 1) ? AppLocalization.of(context).save : AppLocalization.of(context).next,
                 onTap: () {
                   if (_step == 1) {
                     print("Valider");

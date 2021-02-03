@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:kifcab/locale/app_localization.dart';
 import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
+import 'package:flutter/gestures.dart';
 import 'package:kifcab/library/loader.dart';
 import 'package:kifcab/core/httpreq.dart';
 import 'package:flutter/foundation.dart';
@@ -35,6 +36,7 @@ class LoginScreenState extends State<LoginScreen> {
   SmsQuery query = new SmsQuery();
   int code;
   int code0;
+  String codeval;
   var texttt = TextEditingController();
   bool _autoValidate = false;
   bool visible = false;
@@ -236,10 +238,28 @@ class LoginScreenState extends State<LoginScreen> {
                             //onChanged: _onChanged,
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: validateMobile,
+                            onChanged: (String val) {
+                              phoneNumber = val;
+                            },
                             onSaved: (String val) {
                               phoneNumber = val;
                             },
                             keyboardType: TextInputType.phone,
+                          ),
+                          TextFormField(
+                            style: TextStyle(
+                                color: Color.fromRGBO(200, 200, 200, 1)),
+                            decoration: Utils.getInputDecoration(
+                                AppLocalization.of(context).activationcode,
+                                Icons.lock),
+                            //onChanged: _onChanged,
+                            // valueTransformer: (text) => num.tryParse(text),
+                            validator: validateCode,
+                            obscureText: true,
+                            onSaved: (String val) {
+                              codeval = val;
+                            },
+                            keyboardType: TextInputType.number,
                           ),
                         ],
                       ),
@@ -297,10 +317,13 @@ class LoginScreenState extends State<LoginScreen> {
                                   setState(() {
                                     code0 = int.parse(result);
                                     visible = false;
+                                    _validateInputs10();
                                   });
-
+                                  /*
                                   initPlatformState(result);
                                   _displayDialog(context, phoneNumber);
+
+                                  */
                                 }
                               }
                             });
@@ -410,6 +433,40 @@ class LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 70, right: 30),
+                  child: RichText(
+                    text: TextSpan(
+                      text: AppLocalization.of(context).forgetcode,
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          print("zdsd");
+                          print(phoneNumber);
+                          if (phoneNumber != null && phoneNumber != "") {
+                            //   initPlatformState(result);
+                            _displayDialog(context, phoneNumber);
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: AppLocalization.of(context)
+                                    .checkphonenumber,
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          }
+                        },
+                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                          color: MyTheme.primaryColor,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
+                SizedBox(
                   height: 20,
                 ),
               ],
@@ -427,8 +484,9 @@ class LoginScreenState extends State<LoginScreen> {
         barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
+            backgroundColor: Color.fromRGBO(200, 200, 200, 1),
             title: Text(
-              'Vérifier le ' + phone,
+              AppLocalization.of(context).sendnewcode + phone,
               style: TextStyle(
                   fontSize: 15.5,
                   color: Colors.black,
@@ -437,7 +495,7 @@ class LoginScreenState extends State<LoginScreen> {
               textAlign: TextAlign.center,
             ),
             content: Container(
-                height: 150.0,
+                height: 158.0,
                 width: double.infinity,
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -446,7 +504,7 @@ class LoginScreenState extends State<LoginScreen> {
                         padding: const EdgeInsets.only(
                             left: 0.0, right: 0.0, top: 20.0),
                         child: Text(
-                          "En attente de détection d'un SMS envoyé au ",
+                          AppLocalization.of(context).sendacticode,
                           style: TextStyle(
                               color: Colors.black, fontFamily: "Sofia"),
                           textAlign: TextAlign.center,
@@ -467,14 +525,14 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       InkWell(
                         onTap: () {
-                          _timer.cancel();
+                          // _timer.cancel();
                           Navigator.of(context).pop();
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 0.0, right: 0.0, top: 10.0),
                           child: Text(
-                            "Numéro incorect ?",
+                            AppLocalization.of(context).incorectphon,
                             style: TextStyle(
                                 color: Colors.blue, fontFamily: "Sofia"),
                             textAlign: TextAlign.center,
@@ -487,6 +545,8 @@ class LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           validator: validateName,
                           controller: texttt,
+                          keyboardType: TextInputType.number,
+                          style: TextStyle(color: Colors.black54),
                           onChanged: (text) {
                             print(text.length);
                             if (text.toString() == code0.toString()) {
@@ -496,7 +556,7 @@ class LoginScreenState extends State<LoginScreen> {
                           decoration: InputDecoration(
                               hintText: "Code",
                               hintStyle: TextStyle(
-                                  color: Colors.grey, fontFamily: "sofia")),
+                                  color: Colors.black38, fontFamily: "sofia")),
                           onSaved: (String val) {
                             _name = val;
                           },
@@ -529,6 +589,14 @@ class LoginScreenState extends State<LoginScreen> {
 // Indian Mobile number are of 10 digit only
     if (value.length != 9)
       return AppLocalization.of(context).checkphonenumber;
+    else
+      return null;
+  }
+
+  String validateCode(String value) {
+// Indian Mobile number are of 10 digit only
+    if (value.length != 4)
+      return AppLocalization.of(context).checkcodenumber;
     else
       return null;
   }

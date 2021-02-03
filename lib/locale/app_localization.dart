@@ -7,8 +7,7 @@ import '../l10n/messages_all.dart';
 
 class AppLocalization {
   static Future<AppLocalization> load(Locale locale) {
-    final String name =
-        locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
+    final String name = locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -20,8 +19,7 @@ class AppLocalization {
     return Localizations.of<AppLocalization>(context, AppLocalization);
   }
 
-  static String _loadStaticMessage(
-      String key, String locale, Map<String, dynamic> args) {
+  static String _loadStaticMessage(String key, String locale, Map<String, dynamic> args) {
     if (locale == 'en') {
       switch (key) {
         case "reset":
@@ -60,8 +58,7 @@ class AppLocalization {
   }
 
   String get waitAfewMoments {
-    return Intl.message("Patientez quelques instants...",
-        name: 'waitAfewMoments');
+    return Intl.message("Patientez quelques instants...", name: 'waitAfewMoments');
   }
 
   String get login {
@@ -73,8 +70,7 @@ class AppLocalization {
   }
 
   String get welcomeMessage {
-    return Intl.message("Commande simple et rapide de véhicules ...",
-        name: 'welcomeMessage');
+    return Intl.message("Commande simple et rapide de véhicules ...", name: 'welcomeMessage');
   }
 
   String get next {
@@ -85,16 +81,18 @@ class AppLocalization {
     return Intl.message("Pas de compte?", name: 'noAccount');
   }
 
-  changeLanguage(language) => Intl.message("Changer langue($language)",
-      name: 'changeLanguage', args: [language]);
+  changeLanguage(language) => Intl.message("Changer langue($language)", name: 'changeLanguage', args: [language]);
 
   String get hintPhoneLogin {
     return Intl.message("Téléphone", name: 'hintPhoneLogin');
   }
 
+  String get forgetcode {
+    return Intl.message("Code oublier ?", name: 'forgetcode');
+  }
+
   String get succeswelcome {
-    return Intl.message("Nous sommes Heureux de vous revoir",
-        name: 'succeswelcome');
+    return Intl.message("Nous sommes Heureux de vous revoir", name: 'succeswelcome');
   }
 
   String get enterYourPhone {
@@ -109,6 +107,10 @@ class AppLocalization {
     return Intl.message("Dépot", name: 'deposit');
   }
 
+  String get activationcode {
+    return Intl.message("Code d'activation", name: 'activationcode');
+  }
+
   String get course {
     return Intl.message("Course", name: 'course');
   }
@@ -118,8 +120,7 @@ class AppLocalization {
   }
 
   String get chooseOfCommandType {
-    return Intl.message("Choix du type de commande",
-        name: 'chooseOfCommandType');
+    return Intl.message("Choix du type de commande", name: 'chooseOfCommandType');
   }
 
   String get home {
@@ -127,8 +128,23 @@ class AppLocalization {
   }
 
   String get checkphonenumber {
-    return Intl.message("Numéro de téléphone incorrect",
-        name: 'checkphonenumber');
+    return Intl.message("Numéro de téléphone incorrect", name: 'checkphonenumber');
+  }
+
+  String get checkcodenumber {
+    return Intl.message("Verifier votre code", name: 'checkcodenumber');
+  }
+
+  String get sendacticode {
+    return Intl.message("Nous avons envoyer votre nouveau code d'activation au ", name: 'sendacticode');
+  }
+
+  String get sendnewcode {
+    return Intl.message("Envoi du code au ", name: 'sendacticode');
+  }
+
+  String get incorectphon {
+    return Intl.message("Numéro incorect ?", name: 'sendacticode');
   }
 
   String get wait {
@@ -152,9 +168,7 @@ class AppLocalization {
   }
 
   String get errorcomptenotexist {
-    return Intl.message(
-        "Désolé mais ce numéro ne correspond a aucun utilisateur",
-        name: 'history');
+    return Intl.message("Désolé mais ce numéro ne correspond a aucun utilisateur", name: 'history');
   }
 
   String get settings {
@@ -170,17 +184,15 @@ class AppLocalization {
   }
 
   String get privacyPolicies {
-    return Intl.message("Politiques de confidentialités",
-        name: 'privacyPolicies');
+    return Intl.message("Politiques de confidentialités", name: 'privacyPolicies');
   }
 
   copyrightMessage(year) => Intl.message("Copyright $year.Tous droits reservés", name: 'copyrightMessage', args: [year]);
 
-
-
   String get needASecureCar {
     return Intl.message("Besoin d'une voiture sécurisée?", name: 'needASecureCar');
   }
+
   String get takeADeposit {
     return Intl.message("Prenez un dépot", name: 'takeADeposit');
   }
@@ -189,13 +201,14 @@ class AppLocalization {
     return Intl.message("Précédent", name: 'previous');
   }
 
-
   String get startingPoint {
     return Intl.message("Point de départ", name: 'startingPoint');
   }
+
   String get arrivalPoint {
     return Intl.message("Point d'arrivée", name: 'arrivalPoint');
   }
+
   String get required {
     return Intl.message("*Obligatoire", name: 'required');
   }
@@ -203,22 +216,28 @@ class AppLocalization {
   String get enterTheStartingPoint {
     return Intl.message("Entrer le point de départ", name: 'enterTheStartingPoint');
   }
+
+  String get valenterTheStartingPoint {
+    return Intl.message("Veuillez renseigner le point de départ", name: 'enterTheStartingPoint');
+  }
+
   String get enterTheArrivalPoint {
     return Intl.message("Entrer le point d'arrivée", name: 'enterTheArrivalPoint');
   }
+
   String get messageToSendToTheDriver {
     return Intl.message("Message à transmettre au chauffeur", name: 'messageToSendToTheDriver');
   }
+
   String get ranges {
     return Intl.message("Gammes", name: 'ranges');
   }
+
   String get payment {
     return Intl.message("Paiement", name: 'payment');
   }
 
   displayIn(language) => Intl.message("Display in, $language!", name: 'displayIn', args: [language]);
-
-
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalization> {
@@ -227,8 +246,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalization> {
   const AppLocalizationDelegate(this.overriddenLocale);
 
   @override
-  bool isSupported(Locale locale) =>
-      SUPPORTED_LANGUAGES.contains(locale.languageCode);
+  bool isSupported(Locale locale) => SUPPORTED_LANGUAGES.contains(locale.languageCode);
 
   @override
   Future<AppLocalization> load(Locale locale) => AppLocalization.load(locale);
