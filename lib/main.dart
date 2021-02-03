@@ -66,15 +66,15 @@ class MyApp extends StatelessWidget {
         initialRoute: '/welcome',
         routes: {
           // When navigating to the "/plash" route, build the SecondScreen widget.
-          '/register': (context) => RegisterScreen( ),
-        '/login': (context) => LoginScreen( ),
-        '/welcome': (context) => WelcomeScreen( ),
-        '/home': (context) => HomeScreen(),
-        '/depot': (context) => DepotScreen(),
-        '/course': (context) => CourseScreen(),
-        '/location': (context) => LocationScreen(),
-
-      },
+          '/register': (context) => RegisterScreen(),
+          '/login': (context) => LoginScreen(),
+          '/welcome': (context) => WelcomeScreen(),
+          '/home': (context) => HomeScreen(),
+          '/depot': (context) => DepotScreen(),
+          '/course': (context) => CourseScreen(),
+          '/location': (context) => LocationScreen(),
+        }
+    )
     );
   }
 }

@@ -219,11 +219,6 @@ class AppLocalization {
   displayIn(language) => Intl.message("Display in, $language!", name: 'displayIn', args: [language]);
 
 
-  copyrightMessage(year) => Intl.message("Copyright $year.Tous droits reservés",
-      name: 'copyrightMessage', args: [year]);
-  displayIn(language) => Intl.message("Display in, $language!",
-      name: 'displayIn', args: [language]);
-
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalization> {
