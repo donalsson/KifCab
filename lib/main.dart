@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:kifcab/screens/mapview.dart';
+
 import 'core/global.dart' as global;
 import 'package:flutter/material.dart';
 import 'package:kifcab/constant.dart';
@@ -89,7 +91,7 @@ class MyApp extends StatelessWidget {
           _localeOverrideDelegate
         ],
         supportedLocales: SUPPORTED_LOCALES,
-        initialRoute: compteU == false ? '/welcome' : '/home',
+        initialRoute: compteU == false ? '/welcome' : '/mapview',
         routes: {
           // When navigating to the "/plash" route, build the SecondScreen widget.
           '/register': (context) => RegisterScreen(),
@@ -97,6 +99,7 @@ class MyApp extends StatelessWidget {
           '/welcome': (context) => WelcomeScreen(),
           '/home': (context) => HomeScreen(),
           '/depot': (context) => DepotScreen(),
+          '/mapview': (context) => MapView(),
           '/course': (context) => DepotScreen(),
           '/location': (context) => DepotScreen(),
         },
