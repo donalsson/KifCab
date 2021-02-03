@@ -4,8 +4,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
-import 'package:kifcab/navigationDrawer/navigation_button.dart';
-import 'package:kifcab/navigationDrawer/navigation_drawer.dart';
+import 'package:kifcab/widgets/navigation_button.dart';
+import 'package:kifcab/widgets/navigation_drawer.dart';
 import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -508,7 +508,7 @@ class DepotScreenState extends State<DepotScreen> {
   String validatearr(String value) {
     arrivName = value;
     if (value.length < 3)
-      return AppLocalization.of(context).valenterTheArrivalPoint;
+      return AppLocalization.of(context).valenterTheStartingPoint;
     else
       return null;
   }
