@@ -15,19 +15,19 @@ import 'package:google_maps_webservice/src/core.dart';
 import 'dart:async';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 
-class CourseScreen extends StatefulWidget {
-  const CourseScreen({
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({
     Key key,
   }) : super(key: key);
 
   @override
-  CourseScreenState createState() {
-    return CourseScreenState();
+  LocationScreenState createState() {
+    return LocationScreenState();
   }
 }
 
-class CourseScreenState extends State<CourseScreen> {
-  CourseScreenState();
+class LocationScreenState extends State<LocationScreen> {
+  LocationScreenState();
   final _formKey = GlobalKey<FormBuilderState>();
   String _kGoogleApiKey = GOOGLE_API_KEY;
   final TextEditingController _textControllerFrom = new TextEditingController();

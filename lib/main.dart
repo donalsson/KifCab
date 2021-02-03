@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
+import 'package:kifcab/screens/course_screen.dart';
 import 'package:kifcab/screens/depot_screen.dart';
 import 'package:kifcab/screens/home_screen.dart';
 import 'package:kifcab/screens/index.dart';
+import 'package:kifcab/screens/location_screen.dart';
 import 'package:kifcab/screens/login_screen.dart';
 import 'package:kifcab/screens/register_screen.dart';
 
@@ -59,8 +61,8 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => WelcomeScreen( ),
         '/home': (context) => HomeScreen(),
         '/depot': (context) => DepotScreen(),
-        '/course': (context) => DepotScreen(),
-        '/location': (context) => DepotScreen(),
+        '/course': (context) => CourseScreen(),
+        '/location': (context) => LocationScreen(),
 
       },
     );
@@ -103,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
-    //
+    // 
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 List<String> LANGUAGES = ['en', 'fr'];
-String BASEPAATH = "http://localhost/";
+String BASEPATH = "http://localhost/";
 String DEFAULT_LANGUAGE = "fr";
 String CURRENT_VERSION = "1.0.0";
 List<String> SUPPORTED_LANGUAGES = ['en', 'fr'];

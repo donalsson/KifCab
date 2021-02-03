@@ -11,7 +11,7 @@ class navigationDrawer extends StatelessWidget {
         decoration: BoxDecoration(
             image: DecorationImage(
                 fit: BoxFit.fill,
-                image:  AssetImage('images/bg_header.jpeg'))),
+                image:  AssetImage('assets/bg-old2.png'))),
         child: Container(
           padding: EdgeInsets.all(10),
           color:MyTheme.primaryColor,
