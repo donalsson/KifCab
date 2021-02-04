@@ -11,7 +11,7 @@ class MyTheme {
   static const Color backgroundIcon = Color.fromRGBO(244, 246, 247, 1);
   static const Color inputBorderColor = Color.fromRGBO(238, 238, 238, 1);
   static const Color colorF1F1F1 = Color.fromRGBO(241, 241, 241, 1);
-  static const Color colorText = Colors.blueGrey;
+  static const Color colorText = Color.fromRGBO(100, 100, 100, 1);
   static const Color ripple = Color.fromRGBO(201, 201, 201, 1);
   static const Color navBar = Color.fromRGBO(33, 32, 37, 1);
   static const Color button = Color.fromRGBO(241, 196, 15, 1);

@@ -1,14 +1,21 @@
 import 'dart:convert';
 import 'dart:developer';
+
+import 'package:kifcab/screens/course_screen.dart';
+import 'package:kifcab/screens/drawers/about_screen.dart';
+import 'package:kifcab/screens/drawers/account_screen.dart';
+import 'package:kifcab/screens/drawers/become_driver_screen.dart';
+import 'package:kifcab/screens/drawers/cgi_screen.dart';
+import 'package:kifcab/screens/drawers/help_screen.dart';
+import 'package:kifcab/screens/location_screen.dart';
+
 import 'core/global.dart' as global;
 import 'package:flutter/material.dart';
 import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
-import 'package:kifcab/screens/course_screen.dart';
 import 'package:kifcab/screens/depot_screen.dart';
 import 'package:kifcab/screens/home_screen.dart';
 import 'package:kifcab/screens/index.dart';
-import 'package:kifcab/screens/location_screen.dart';
 import 'package:kifcab/screens/login_screen.dart';
 import 'package:kifcab/screens/register_screen.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -17,11 +24,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kifcab/screens/welcome_screen.dart';
 import 'core/preference.dart';
 import 'models/UserMod.dart';
+import 'package:kifcab/constant.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -82,7 +91,8 @@ class MyApp extends StatelessWidget {
             //home: MyHomePage(title: 'Flutter Demo Home Page'),
             localizationsDelegates: [GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, _localeOverrideDelegate],
             supportedLocales: SUPPORTED_LOCALES,
-            initialRoute: compteU == false ? '/welcome' : '/home',
+            initialRoute: '/home',
+            //initialRoute: compteU == false ? '/welcome' : '/home',
             routes: {
               // When navigating to the "/plash" route, build the SecondScreen widget.
               '/register': (context) => RegisterScreen(),
@@ -92,6 +102,12 @@ class MyApp extends StatelessWidget {
               '/depot': (context) => DepotScreen(),
               '/course': (context) => CourseScreen(),
               '/location': (context) => LocationScreen(),
+              '/help': (context) => HelpScreen(),
+              '/about': (context) => AboutScreen(),
+              '/cgi': (context) => CgiScreen(),
+              '/profile': (context) => BecomeDriverScreen(),
+              '/account': (context) => AccountScreen(),
+              '/become-driver': (context) => BecomeDriverScreen(),
             }));
   }
 }

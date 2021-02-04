@@ -167,4 +167,19 @@ class UserMod {
       (json.decode(hotelhts) as List<dynamic>)
           .map<UserMod>((item) => UserMod.fromJson(item))
           .toList();
+
+  /*UserMod.fill({this.id_compte, this.nom, this.prenom, this.telephone, this.sexe, this.description, this.email, this.profil, this.localisation,this.date_naissance}){
+    this.id_compte = id_compte;
+    this.id_compte = nom;
+    this.prenom = prenom;
+    this.telephone = telephone;
+    this.sexe = sexe;
+    this.description = description;
+    this.email = email;
+    this.profil = profil;
+    this.localisation = localisation;
+    this.date_naissance = date_naissance;
+  }*/
+  UserMod.fill({this.id_compte, this.nom, this.prenom, this.telephone, this.sexe, this.description, this.email, this.profil, this.localisation,this.date_naissance});
+
 }

@@ -130,13 +130,13 @@ class HomeScreenState extends State<HomeScreen> {
                       child: RaisedButton(
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/depot',
-                              arguments: <String, dynamic>{});
-                          /*Navigator.of(context).push(PageRouteBuilder(
+                            /*Navigator.pushReplacementNamed(context, '/depot',
+                              arguments: <String, dynamic>{});*/
+                            Navigator.of(context).push(PageRouteBuilder(
                               pageBuilder: (_, __, ___) => new DepotScreen(
                                     longitude: longitude,
                                     latitude: latitude,
-                                  )));*/
+                                  )));
                         },
                         color: MyTheme.button,
                         shape: RoundedRectangleBorder(

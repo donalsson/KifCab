@@ -220,6 +220,10 @@ class AppLocalization {
   String get valenterTheStartingPoint {
     return Intl.message("Veuillez renseigner le point de départ", name: 'enterTheStartingPoint');
   }
+  String get valenterTheArrivalPoint {
+    return Intl.message("Veuillez renseigner le point d'arrivée",
+        name: 'enterTheArrivalPoint');
+  }
 
   String get enterTheArrivalPoint {
     return Intl.message("Entrer le point d'arrivée", name: 'enterTheArrivalPoint');
@@ -235,6 +239,106 @@ class AppLocalization {
 
   String get payment {
     return Intl.message("Paiement", name: 'payment');
+  }
+
+
+  String get needToHelp {
+    return Intl.message("Besoin d'aide", name: 'needToHelp');
+  }
+
+  String get contactUs {
+    return Intl.message("Nous contacter", name: 'contactUs');
+  }
+  String get contact {
+    return Intl.message("Contact", name: 'contact');
+  }
+
+  String get contactUsMessage {
+    return Intl.message("Pour toutes question concernant les services Kifcab, bien vouloir contacter notre service client au :", name: 'contactUsMessage');
+  }
+
+  helpTel(phone) => Intl.message("Tel -  $phone", name: 'helpTel', args: [phone]);
+  helpWhatsapp(phone) => Intl.message("Whatsapp -  $phone", name: 'helpWhatsapp', args: [phone]);
+
+  String get aboutUs {
+    return Intl.message("A propos de", name: 'aboutUs');
+  }
+  String get aboutUsSubtitle {
+    return Intl.message("Application de commande de voiture ...", name: 'aboutUsSubtitle');
+  }
+
+  String get whoAreUs {
+    return Intl.message("Qui sommes-nous", name: 'whoAreUs');
+  }
+  String get whoAreUsMessage {
+    return Intl.message("Kifcab est une sarl de droit Camerounais crée en 2017 situé à Bonapriso Douala", name: 'whoAreUsMessage');
+  }
+  String get moreAlso {
+    return Intl.message("Plus encore...", name: 'moreAlso');
+  }
+
+  String get moreAlsoMessage1 {
+    return Intl.message("Kifcab est une application mobile permettant de mettre en relation des clients voulant emprunter un taxi sécurisé avec des professionnels du transport répertoriés dans sa base de données pour une course, dépôt ou location.", name: 'moreAlsoMessage1');
+  }
+
+  String get moreAlsoMessage2 {
+    return Intl.message("Ces professionnels de transport font l’objet d’une vérification rigoureuse de leurs papiers administratifs, de la conformité de leurs véhicules ainsi que l’identité et la moralité des chauffeurs. Tous les véhicules Kifcab sont géolocalisés et contrôlés en permanence pour offrir un maximum de sécurité à nos clients.", name: 'moreAlsoMessage2');
+  }
+
+  String get cgi {
+    return Intl.message("Cgi", name: 'cgi');
+  }
+
+  String get profil {
+    return Intl.message("Profil", name: 'profil');
+  }
+  String get myAccount {
+    return Intl.message("Mon compte", name: 'myAccount');
+  }
+  String get becomeDriver {
+    return Intl.message("Devenir chauffeur", name: 'becomeDriver');
+  }
+  String get logout {
+    return Intl.message("Deconnexion", name: 'logout');
+  }
+
+  String get processToFollow {
+    return Intl.message("Procedure à Suivre", name: 'processToFollow');
+  }
+  String get processToFollowMessage {
+    return Intl.message("Signer accord de géolocalisation du véhicule \n Papiers administratifs du véhicule en règle (copies et originaux) \n CNI propriétaire et chauffeurs \n Contactez les numéros", name: 'processToFollowMessage');
+  }
+
+  String get accountInformations {
+    return Intl.message("Informations du compte", name: 'accountInformations');
+  }
+  yourSex(code) => Intl.message("Votre Sexe($code)", name: 'yourSex', args: [code]);
+
+
+  String get enterYourLastName {
+    return Intl.message("Entrer votre nom", name: 'enterYourLastName');
+  }
+  String get enterYourFirstName {
+    return Intl.message("Entrer votre prenom", name: 'enterYourFirstName');
+  }
+  String get enterYourLocalization {
+    return Intl.message("Entrer votre localisation", name: 'enterYourLocalization');
+  }
+  String get enterYourEmail {
+    return Intl.message("Entrer votre email", name: 'enterYourEmail');
+  }
+  String get enterYourBirthdate {
+    return Intl.message("Entrer votre date de naissance", name: 'enterYourBirthdate');
+  }
+  String get tellUsSomethingAboutYou {
+    return Intl.message("Dîtes-nous quelque chose sur vous", name: 'tellUsSomethingAboutYou');
+  }
+  String get male {
+    return Intl.message("Masculin(M)", name: 'male');
+  }
+
+  String get female {
+    return Intl.message("Feminin(F)", name: 'female');
   }
 
   displayIn(language) => Intl.message("Display in, $language!", name: 'displayIn', args: [language]);
