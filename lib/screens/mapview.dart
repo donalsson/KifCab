@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'dart:math' show cos, sqrt, asin;
-
+/*
 const double CAMERA_ZOOM = 13;
 const double CAMERA_TILT = 0;
 const double CAMERA_BEARING = 30;
@@ -65,3 +65,4 @@ class _MapViewState extends State<MapView> {
       onMapCreated: onMapCreated
    );
 }
+*/

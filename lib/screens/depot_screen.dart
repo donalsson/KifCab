@@ -566,6 +566,8 @@ class _DepotScreenState extends State<DepotScreen> {
                   print("tapped next");
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
+                    Navigator.pushNamed(context, '/location',
+                        arguments: <String, dynamic>{});
                   } else {
                     setState(() {
                       _autoValidate = true;

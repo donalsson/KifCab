@@ -248,6 +248,19 @@ class AppLocalization {
         name: 'enterTheArrivalPoint');
   }
 
+  String get messageToSendToTheDriver {
+    return Intl.message("Message à transmettre au chauffeur",
+        name: 'messageToSendToTheDriver');
+  }
+
+  String get ranges {
+    return Intl.message("Gammes", name: 'ranges');
+  }
+
+  String get payment {
+    return Intl.message("Paiement", name: 'payment');
+  }
+
   displayIn(language) => Intl.message("Display in, $language!",
       name: 'displayIn', args: [language]);
 }
