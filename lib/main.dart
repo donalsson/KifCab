@@ -10,6 +10,7 @@ import 'package:kifcab/screens/depot_screen.dart';
 import 'package:kifcab/screens/home_screen.dart';
 import 'package:kifcab/screens/location_screen.dart';
 import 'package:kifcab/screens/login_screen.dart';
+import 'package:kifcab/screens/test.dart';
 import 'package:kifcab/screens/register_screen.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -99,7 +100,7 @@ class MyApp extends StatelessWidget {
           '/welcome': (context) => WelcomeScreen(),
           '/home': (context) => HomeScreen(),
           '/depot': (context) => DepotScreen(),
-          // '/mapview': (context) => MapView(),
+          '/mapview': (context) => MapView(),
           '/course': (context) => DepotScreen(),
           '/location': (context) => LocationScreen(),
         },

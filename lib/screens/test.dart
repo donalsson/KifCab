@@ -1,519 +1,555 @@
-import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
-import 'package:kifcab/constant.dart';
-import 'package:kifcab/locale/app_localization.dart';
-import 'package:kifcab/navigationDrawer/navigation_button.dart';
-import 'package:kifcab/navigationDrawer/navigation_drawer.dart';
-import 'package:kifcab/utils/Utils.dart';
-import 'package:kifcab/utils/colors.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter/gestures.dart';
-import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+import 'package:flutter/material.dart'; // Stores the Google Maps API Key
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class DepotScreen extends StatefulWidget {
-  const DepotScreen({
-    Key key,
-  }) : super(key: key);
+import 'dart:math' show cos, sqrt, asin;
 
+class MapView extends StatefulWidget {
   @override
-  DepotScreenState createState() {
-    return DepotScreenState();
-  }
+  _MapViewState createState() => _MapViewState();
 }
 
-String departName;
-double deplat;
-double deln;
+class _MapViewState extends State<MapView> {
+  CameraPosition _initialLocation = CameraPosition(target: LatLng(0.0, 0.0));
+  GoogleMapController mapController;
 
-String arrivName;
-double arriplat;
-double arriln;
+  Position _currentPosition;
+  String _currentAddress;
 
-class DepotScreenState extends State<DepotScreen> {
-  DepotScreenState();
-  bool _autoValidate = false;
+  final startAddressController = TextEditingController();
+  final destinationAddressController = TextEditingController();
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String kGoogleApiKey = GOOGLE_API_KEY;
-  final TextEditingController _textControllerFrom = new TextEditingController();
-  final TextEditingController _textControllerTo = new TextEditingController();
-  bool _showClearButtonInputFrom = false;
-  bool _showClearButtonInputTo = false;
-  static final kInitialPosition = LatLng(-33.8567844, 151.213108);
-// Light Theme
-  final ThemeData lightTheme = ThemeData.light().copyWith(
-    // Background color of the FloatingCard
-    cardColor: Colors.white,
-    buttonTheme: ButtonThemeData(
-      // Select here's button color
-      buttonColor: Colors.black,
-      textTheme: ButtonTextTheme.primary,
-    ),
-  );
+  final startAddressFocusNode = FocusNode();
+  final desrinationAddressFocusNode = FocusNode();
 
-// Dark Theme
-  final ThemeData darkTheme = ThemeData.dark().copyWith(
-    // Background color of the FloatingCard
-    cardColor: Colors.grey,
-    buttonTheme: ButtonThemeData(
-      // Select here's button color
-      buttonColor: Colors.yellow,
-      textTheme: ButtonTextTheme.primary,
-    ),
-  );
+  String _startAddress = '';
+  String _destinationAddress = '';
+  String _placeDistance;
 
-  @override
-  void initState() {
-    super.initState();
-    _textControllerFrom.addListener(() {
-      setState(() {
-        _showClearButtonInputFrom = _textControllerFrom.text.length > 0;
-      });
-    });
-    _textControllerTo.addListener(() {
-      setState(() {
-        _showClearButtonInputTo = _textControllerTo.text.length > 0;
-      });
-    });
-  }
+  Set<Marker> markers = {};
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  PolylinePoints polylinePoints;
+  Map<PolylineId, Polyline> polylines = {};
+  List<LatLng> polylineCoordinates = [];
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyTheme.stripColor,
-      appBar: AppBar(
-        elevation: 0.0,
-        bottomOpacity: 0.0,
-        backgroundColor: MyTheme.stripColor,
-        actions: <Widget>[
-          Padding(
-              padding: EdgeInsets.only(right: 20.0, top: 15.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(
-                  Icons.radio_button_checked,
-                  color: Colors.red,
-                  size: 20,
-                ),
-              )),
-        ],
-      ),
-      drawer: navigationDrawer(),
-      body: Column(
-        children: [
-          Form(
-            key: _formKey,
-            autovalidate: _autoValidate,
-            child: Expanded(
-              child: Container(
-                color: Colors.white,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: MyTheme.stripColor,
-                        ),
-                        child: Center(
-                          // Center is a layout widget. It takes a single child and positions it
-                          // in the middle of the parent.
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Row(children: <Widget>[
-                                SizedBox(
-                                  width: 25,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                          AppLocalization.of(context)
-                                              .needASecureCar,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1
-                                              .copyWith(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 17,
-                                                color: Colors.white,
-                                              )),
-                                      SizedBox(
-                                        height: 07,
-                                      ),
-                                      Text(
-                                          AppLocalization.of(context)
-                                              .takeADeposit,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2
-                                              .copyWith(
-                                                  fontWeight: FontWeight.w300,
-                                                  color: Colors.white)),
-                                    ],
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.local_taxi,
-                                  color: Color(0xFAFFFFFF),
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 25,
-                                ),
-                              ]),
-                              SizedBox(
-                                height: 30,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  AppLocalization.of(context).startingPoint,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: MyTheme.navBar,
-                                      ),
-                                ),
-                                Text(
-                                  AppLocalization.of(context).required,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w300,
-                                        color: MyTheme.navBar,
-                                      ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextFormField(
-                              controller: _textControllerFrom,
-                              validator: validatedep,
-                              cursorColor: MyTheme.primaryColor,
-                              onTap: () {
-                                log("depart");
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PlacePicker(
-                                      apiKey:
-                                          kGoogleApiKey, // Put YOUR OWN KEY here.
-                                      onPlacePicked: (result) {
-                                        _textControllerFrom.text = result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName;
-                                        deplat = result.geometry.location.lat;
-                                        deln = result.geometry.location.lng;
-                                        departName = result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName;
-                                        log(result.name.toString());
-                                        print(jsonDecode(result.toString()));
-                                        print(result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName);
-                                        Navigator.of(context).pop();
-                                      },
-                                      strictbounds: true,
-                                      useCurrentLocation: true,
-                                      initialPosition: kInitialPosition,
-                                      selectInitialPosition: true,
-                                      initialMapType: MapType.terrain,
-                                    ),
-                                  ),
-                                );
-                              },
-                              onSaved: (String val) {
-                                departName = val;
-                              },
-                              style: TextStyle(
-                                  color: MyTheme.navBar,
-                                  fontWeight: FontWeight.w400),
-                              decoration: new InputDecoration(
-                                  prefixIcon: Icon(
-                                    Icons.room,
-                                    color: MyTheme.navBar,
-                                    size: 18,
-                                  ),
-                                  suffixIcon: _showClearButtonInputFrom
-                                      ? IconButton(
-                                          onPressed: () =>
-                                              _textControllerFrom.clear(),
-                                          icon: Icon(
-                                            Icons.clear,
-                                            color: MyTheme.navBar,
-                                            size: 16,
-                                          ),
-                                        )
-                                      : null,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 0.0, horizontal: 10),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.primaryColor,
-                                        width: 1.2),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.navBar, width: 1),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.navBar, width: 1),
-                                  ),
-                                  hintText: AppLocalization.of(context)
-                                      .enterTheStartingPoint,
-                                  hintStyle: TextStyle(
-                                      color: MyTheme.navBar,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 14)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  AppLocalization.of(context).arrivalPoint,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: MyTheme.navBar,
-                                      ),
-                                ),
-                                Text(
-                                  AppLocalization.of(context).required,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w300,
-                                        color: MyTheme.navBar,
-                                      ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextFormField(
-                              controller: _textControllerTo,
-                              cursorColor: MyTheme.primaryColor,
-                              validator: validatearr,
-                              onTap: () {
-                                log("arriver");
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PlacePicker(
-                                      apiKey:
-                                          kGoogleApiKey, // Put YOUR OWN KEY here.
-                                      onPlacePicked: (result) {
-                                        _textControllerTo.text = result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName;
-                                        arriplat = result.geometry.location.lat;
-                                        arriln = result.geometry.location.lng;
-                                        arrivName = result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName;
-                                        log(result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName);
-                                        Navigator.of(context).pop();
-                                      },
-                                      useCurrentLocation: true,
-                                      initialPosition: kInitialPosition,
-                                      selectInitialPosition: true,
-                                      initialMapType: MapType.terrain,
-                                    ),
-                                  ),
-                                );
-                              },
-                              style: TextStyle(
-                                  color: MyTheme.navBar,
-                                  fontWeight: FontWeight.w400),
-                              decoration: new InputDecoration(
-                                  prefixIcon: Icon(
-                                    Icons.room,
-                                    color: MyTheme.navBar,
-                                    size: 18,
-                                  ),
-                                  suffixIcon: _showClearButtonInputTo
-                                      ? IconButton(
-                                          onPressed: () =>
-                                              _textControllerTo.clear(),
-                                          icon: Icon(
-                                            Icons.clear,
-                                            color: MyTheme.navBar,
-                                            size: 16,
-                                          ),
-                                        )
-                                      : null,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 0.0, horizontal: 10),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.primaryColor,
-                                        width: 1.2),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.navBar, width: 1),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.navBar, width: 1),
-                                  ),
-                                  hintText: AppLocalization.of(context)
-                                      .enterTheArrivalPoint,
-                                  hintStyle: TextStyle(
-                                      color: MyTheme.navBar,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 14)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+  Widget _textField({
+    TextEditingController controller,
+    FocusNode focusNode,
+    String label,
+    String hint,
+    double width,
+    Icon prefixIcon,
+    Widget suffixIcon,
+    Function(String) locationCallback,
+  }) {
+    return Container(
+      width: width * 0.8,
+      child: TextField(
+        onChanged: (value) {
+          locationCallback(value);
+        },
+        controller: controller,
+        focusNode: focusNode,
+        decoration: new InputDecoration(
+          prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
+          labelText: label,
+          filled: true,
+          fillColor: Colors.white,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+            borderSide: BorderSide(
+              color: Colors.grey[400],
+              width: 2,
             ),
           ),
-
-          //Button zone
-          Row(
-            children: [
-              NavigationButton(
-                backColor: Color(0xFA0c1117),
-                textColor: Color(0xFAFFFFFF),
-                icon: Icons.chevron_left,
-                text: AppLocalization.of(context).previous,
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, '/home',
-                      arguments: <String, dynamic>{});
-                },
-              ),
-              NavigationButton(
-                backColor: MyTheme.primaryColor,
-                textColor: Colors.black,
-                icon: Icons.chevron_right,
-                text: AppLocalization.of(context).next,
-                onTap: () {
-                  print("tapped next");
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                  } else {
-                    setState(() {
-                      _autoValidate = true;
-                    });
-                  }
-                },
-              ),
-            ],
-          )
-        ],
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+            borderSide: BorderSide(
+              color: Colors.blue[300],
+              width: 2,
+            ),
+          ),
+          contentPadding: EdgeInsets.all(15),
+          hintText: hint,
+        ),
       ),
     );
   }
 
-  String validatedep(String value) {
-    departName = value;
-    if (value.length < 3)
-      return AppLocalization.of(context).valenterTheStartingPoint;
-    else
-      return null;
+  // Method for retrieving the current location
+  _getCurrentLocation() async {
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) async {
+      setState(() {
+        _currentPosition = position;
+        print('CURRENT POS: $_currentPosition');
+        mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(position.latitude, position.longitude),
+              zoom: 18.0,
+            ),
+          ),
+        );
+      });
+      await _getAddress();
+    }).catchError((e) {
+      print(e);
+    });
   }
 
-  String validatearr(String value) {
-    arrivName = value;
-    if (value.length < 3)
-      return AppLocalization.of(context).valenterTheArrivalPoint;
-    else
-      return null;
-  }
-}
+  // Method for retrieving the address
+  _getAddress() async {
+    try {
+      List<Placemark> p = await placemarkFromCoordinates(
+          _currentPosition.latitude, _currentPosition.longitude);
 
-Widget getButton() {
-  return null;
+      Placemark place = p[0];
+
+      setState(() {
+        _currentAddress =
+            "${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}";
+        startAddressController.text = _currentAddress;
+        _startAddress = _currentAddress;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Method for calculating the distance between two places
+  Future<bool> _calculateDistance() async {
+    try {
+      // Retrieving placemarks from addresses
+      List<Location> startPlacemark = await locationFromAddress(_startAddress);
+      List<Location> destinationPlacemark =
+          await locationFromAddress(_destinationAddress);
+
+      if (startPlacemark != null && destinationPlacemark != null) {
+        // Use the retrieved coordinates of the current position,
+        // instead of the address if the start position is user's
+        // current position, as it results in better accuracy.
+        Position startCoordinates = _startAddress == _currentAddress
+            ? Position(
+                latitude: _currentPosition.latitude,
+                longitude: _currentPosition.longitude)
+            : Position(
+                latitude: startPlacemark[0].latitude,
+                longitude: startPlacemark[0].longitude);
+        Position destinationCoordinates = Position(
+            latitude: destinationPlacemark[0].latitude,
+            longitude: destinationPlacemark[0].longitude);
+
+        // Start Location Marker
+        Marker startMarker = Marker(
+          markerId: MarkerId('$startCoordinates'),
+          position: LatLng(
+            startCoordinates.latitude,
+            startCoordinates.longitude,
+          ),
+          infoWindow: InfoWindow(
+            title: 'Start',
+            snippet: _startAddress,
+          ),
+          icon: BitmapDescriptor.defaultMarker,
+        );
+
+        // Destination Location Marker
+        Marker destinationMarker = Marker(
+          markerId: MarkerId('$destinationCoordinates'),
+          position: LatLng(
+            destinationCoordinates.latitude,
+            destinationCoordinates.longitude,
+          ),
+          infoWindow: InfoWindow(
+            title: 'Destination',
+            snippet: _destinationAddress,
+          ),
+          icon: BitmapDescriptor.defaultMarker,
+        );
+
+        // Adding the markers to the list
+        markers.add(startMarker);
+        markers.add(destinationMarker);
+
+        print('START COORDINATES: $startCoordinates');
+        print('DESTINATION COORDINATES: $destinationCoordinates');
+
+        Position _northeastCoordinates;
+        Position _southwestCoordinates;
+
+        // Calculating to check that the position relative
+        // to the frame, and pan & zoom the camera accordingly.
+        double miny =
+            (startCoordinates.latitude <= destinationCoordinates.latitude)
+                ? startCoordinates.latitude
+                : destinationCoordinates.latitude;
+        double minx =
+            (startCoordinates.longitude <= destinationCoordinates.longitude)
+                ? startCoordinates.longitude
+                : destinationCoordinates.longitude;
+        double maxy =
+            (startCoordinates.latitude <= destinationCoordinates.latitude)
+                ? destinationCoordinates.latitude
+                : startCoordinates.latitude;
+        double maxx =
+            (startCoordinates.longitude <= destinationCoordinates.longitude)
+                ? destinationCoordinates.longitude
+                : startCoordinates.longitude;
+
+        _southwestCoordinates = Position(latitude: miny, longitude: minx);
+        _northeastCoordinates = Position(latitude: maxy, longitude: maxx);
+
+        // Accommodate the two locations within the
+        // camera view of the map
+        mapController.animateCamera(
+          CameraUpdate.newLatLngBounds(
+            LatLngBounds(
+              northeast: LatLng(
+                _northeastCoordinates.latitude,
+                _northeastCoordinates.longitude,
+              ),
+              southwest: LatLng(
+                _southwestCoordinates.latitude,
+                _southwestCoordinates.longitude,
+              ),
+            ),
+            100.0,
+          ),
+        );
+
+        // Calculating the distance between the start and the end positions
+        // with a straight path, without considering any route
+        // double distanceInMeters = await Geolocator().bearingBetween(
+        //   startCoordinates.latitude,
+        //   startCoordinates.longitude,
+        //   destinationCoordinates.latitude,
+        //   destinationCoordinates.longitude,
+        // );
+
+        await _createPolylines(startCoordinates, destinationCoordinates);
+
+        double totalDistance = 0.0;
+
+        // Calculating the total distance by adding the distance
+        // between small segments
+        log("sdsdsd");
+        log(polylineCoordinates.length.toString());
+
+        for (int i = 0; i < polylineCoordinates.length - 1; i++) {
+          totalDistance += _coordinateDistance(
+            polylineCoordinates[i].latitude,
+            polylineCoordinates[i].longitude,
+            polylineCoordinates[i + 1].latitude,
+            polylineCoordinates[i + 1].longitude,
+          );
+        }
+
+        setState(() {
+          _placeDistance = totalDistance.toStringAsFixed(2);
+          print('DISTANCE: $_placeDistance km');
+        });
+
+        return true;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
+  // Formula for calculating distance between two coordinates
+  // https://stackoverflow.com/a/54138876/11910277
+  double _coordinateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
+  }
+
+  // Create the polylines for showing the route between two places
+  _createPolylines(Position start, Position destination) async {
+    polylinePoints = PolylinePoints();
+    log(start.latitude.toString());
+    log(destination.latitude.toString());
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      "AIzaSyDh1FbcHS6frPJrEmdqNv12maPKs7ORABk", // Google Maps API Key
+      PointLatLng(start.latitude, start.longitude),
+      PointLatLng(destination.latitude, destination.longitude),
+      travelMode: TravelMode.driving,
+    );
+    log("result.toString()");
+    log(result.points.toString());
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    }
+
+    PolylineId id = PolylineId('poly');
+    Polyline polyline = Polyline(
+      polylineId: id,
+      color: Colors.red,
+      points: polylineCoordinates,
+      width: 3,
+    );
+    polylines[id] = polyline;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    return Container(
+      height: height,
+      width: width,
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: Stack(
+          children: <Widget>[
+            // Map View
+            GoogleMap(
+              markers: markers != null ? Set<Marker>.from(markers) : null,
+              initialCameraPosition: _initialLocation,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: false,
+              mapType: MapType.normal,
+              zoomGesturesEnabled: true,
+              zoomControlsEnabled: false,
+              polylines: Set<Polyline>.of(polylines.values),
+              onMapCreated: (GoogleMapController controller) {
+                mapController = controller;
+              },
+            ),
+            // Show zoom buttons
+            /* SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ClipOval(
+                      child: Material(
+                        color: Colors.blue[100], // button color
+                        child: InkWell(
+                          splashColor: Colors.blue, // inkwell color
+                          child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: Icon(Icons.add),
+                          ),
+                          onTap: () {
+                            mapController.animateCamera(
+                              CameraUpdate.zoomIn(),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ClipOval(
+                      child: Material(
+                        color: Colors.blue[100], // button color
+                        child: InkWell(
+                          splashColor: Colors.blue, // inkwell color
+                          child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: Icon(Icons.remove),
+                          ),
+                          onTap: () {
+                            mapController.animateCamera(
+                              CameraUpdate.zoomOut(),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),*/
+            // Show the place input fields & button for
+            // showing the route
+            SafeArea(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white70,
+                    ),
+                    width: width,
+                    height: height,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Places',
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                          SizedBox(height: 10),
+                          _textField(
+                              label: 'Start',
+                              hint: 'Choose starting point',
+                              prefixIcon: Icon(Icons.looks_one),
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.my_location),
+                                onPressed: () {
+                                  startAddressController.text = _currentAddress;
+                                  _startAddress = _currentAddress;
+                                },
+                              ),
+                              controller: startAddressController,
+                              focusNode: startAddressFocusNode,
+                              width: width,
+                              locationCallback: (String value) {
+                                setState(() {
+                                  _startAddress = value;
+                                });
+                              }),
+                          SizedBox(height: 10),
+                          _textField(
+                              label: 'Destination',
+                              hint: 'Choose destination',
+                              prefixIcon: Icon(Icons.looks_two),
+                              controller: destinationAddressController,
+                              focusNode: desrinationAddressFocusNode,
+                              width: width,
+                              locationCallback: (String value) {
+                                setState(() {
+                                  _destinationAddress = value;
+                                });
+                              }),
+                          SizedBox(height: 10),
+                          Visibility(
+                            visible: _placeDistance == null ? false : true,
+                            child: Text(
+                              'DISTANCE: $_placeDistance km',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          RaisedButton(
+                            onPressed: (_startAddress != '' &&
+                                    _destinationAddress != '')
+                                ? () async {
+                                    startAddressFocusNode.unfocus();
+                                    desrinationAddressFocusNode.unfocus();
+                                    setState(() {
+                                      if (markers.isNotEmpty) markers.clear();
+                                      if (polylines.isNotEmpty)
+                                        polylines.clear();
+                                      if (polylineCoordinates.isNotEmpty)
+                                        polylineCoordinates.clear();
+                                      _placeDistance = null;
+                                    });
+
+                                    _calculateDistance().then((isCalculated) {
+                                      if (isCalculated) {
+                                        log("Distance Calculated Sucessfully");
+                                        /*  ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text('Distance Calculated Sucessfully'),
+                                          ),
+                                        );*/
+                                      } else {
+                                        log("Error Calculating Distance");
+                                        /*ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text('Error Calculating Distance'),
+                                          ),
+                                        );*/
+                                      }
+                                    });
+                                  }
+                                : null,
+                            color: Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Show Route'.toUpperCase(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // Show current location button
+            /*  SafeArea(
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
+                  child: ClipOval(
+                    child: Material(
+                      color: Colors.orange[100], // button color
+                      child: InkWell(
+                        splashColor: Colors.orange, // inkwell color
+                        child: SizedBox(
+                          width: 56,
+                          height: 56,
+                          child: Icon(Icons.my_location),
+                        ),
+                        onTap: () {
+                          mapController.animateCamera(
+                            CameraUpdate.newCameraPosition(
+                              CameraPosition(
+                                target: LatLng(
+                                  _currentPosition.latitude,
+                                  _currentPosition.longitude,
+                                ),
+                                zoom: 18.0,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            */
+          ],
+        ),
+      ),
+    );
+  }
 }

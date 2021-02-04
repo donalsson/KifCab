@@ -14,6 +14,7 @@ import '../core/global.dart' as globals;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:kifcab/screens/location_screen.dart';
 
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
 const kGoogleApiKey = "AIzaSyDRn0mlxRwnXRJZI4cNqFOgsGNssI5APRo";
@@ -566,8 +567,15 @@ class _DepotScreenState extends State<DepotScreen> {
                   print("tapped next");
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
-                    Navigator.pushNamed(context, '/location',
-                        arguments: <String, dynamic>{});
+                    Navigator.of(context).push(PageRouteBuilder(
+                        pageBuilder: (_, __, ___) => new LocationScreen(
+                              depname: departName,
+                              deplat: deplat,
+                              depln: deln,
+                              arrivname: arrivName,
+                              arrivlat: arriplat,
+                              arrivln: arriln,
+                            )));
                   } else {
                     setState(() {
                       _autoValidate = true;
