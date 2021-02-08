@@ -46,6 +46,29 @@ class HttpPostRequest {
     }
   }
 
+  static Future<String> sendposition_request(lat, lon, idcompte) async {
+    // String urli = 'https://small-pocket.herokuapp.com/api/v1/auth/sign_in';
+    // var url = '${urli}ocr';
+    // var bytes = image.readAsBytesSync();
+
+    final ioc = new HttpClient();
+    ioc.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+    final httpp = new IOClient(ioc);
+    http.Response response = await httpp.post(
+        'https://149.202.47.143/index.php/webservice/SendPosition',
+        body: {"longitude": lat, "latitude": lon, "id_compte": idcompte});
+    if (response.statusCode == 200) {
+      //  var myresponse = jsonDecode(response.body);
+      print(response.body);
+      /* print(jsonEncode(myresponse["user"]));
+      var error = myresponse["error"];
+      print("token");*/
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
   static Future<dynamic> login_recup(phone) async {
     // String urli = 'https://small-pocket.herokuapp.com/api/v1/auth/sign_in';
     // var url = '${urli}ocr';
