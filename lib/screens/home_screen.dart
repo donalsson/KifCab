@@ -12,6 +12,9 @@ import 'package:kifcab/utils/colors.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/gestures.dart';
 
+import 'package:kifcab/utils/tcheckconnection.dart';
+import 'package:kifcab/utils/getandsendpossition.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     Key key,
@@ -57,6 +60,8 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    techkconnection(context);
+    getandsendposition(context);
     return Scaffold(
       backgroundColor: MyTheme.navBar,
       appBar: AppBar(

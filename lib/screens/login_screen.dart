@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+
+import 'dart:convert';
 import 'dart:ui';
 import 'dart:math';
 
@@ -14,6 +16,8 @@ import 'package:kifcab/core/httpreq.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kifcab/core/preference.dart';
+import 'package:kifcab/utils/tcheckconnection.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
@@ -110,6 +114,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    techkconnection(context);
     return Scaffold(
       backgroundColor: MyTheme.navBar,
       /* appBar: AppBar(
@@ -309,21 +314,40 @@ class LoginScreenState extends State<LoginScreen> {
                                     textColor: Colors.white,
                                     fontSize: 16.0);
                               } else {
-                                if (result == "exit") {
+                                if (result == "notallow") {
                                   setState(() {
                                     visible = false;
                                   });
+                                  Fluttertoast.showToast(
+                                      msg: AppLocalization.of(context)
+                                          .errornotallow,
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
                                 } else {
-                                  setState(() {
-                                    code0 = int.parse(result);
-                                    visible = false;
-                                    _validateInputs10();
-                                  });
-                                  /*
-                                  initPlatformState(result);
-                                  _displayDialog(context, phoneNumber);
-
-                                  */
+                                  if (result.toString() != codeval.toString()) {
+                                    setState(() {
+                                      visible = false;
+                                    });
+                                    Fluttertoast.showToast(
+                                        msg: AppLocalization.of(context)
+                                            .erroricorectcode,
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  } else {
+                                    setState(() {
+                                      code0 = int.parse(result);
+                                      visible = false;
+                                      _validateInputs10();
+                                    });
+                                  }
                                 }
                               }
                             });
@@ -446,7 +470,59 @@ class LoginScreenState extends State<LoginScreen> {
                           print(phoneNumber);
                           if (phoneNumber != null && phoneNumber != "") {
                             //   initPlatformState(result);
-                            _displayDialog(context, phoneNumber);
+
+//    If all data are correct then save data to out variables
+                            _formKey.currentState.save();
+                            print("good");
+                            setState(() {
+                              visible = true;
+                            });
+                            //  await Future.delayed(Duration(seconds: 5));
+
+                            /*  setState(() {
+                            visible = false;
+                          });*/
+                            HttpPostRequest.login_recup(phoneNumber)
+                                .then((dynamic result) async {
+                              //  await Future.delayed(Duration(seconds: 5));
+                              print("result");
+                              print(result);
+
+                              if (result == "error") {
+                                setState(() {
+                                  visible = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: AppLocalization.of(context)
+                                        .errorcomptenotexist,
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else {
+                                if (result == "notallow") {
+                                  setState(() {
+                                    visible = false;
+                                  });
+                                  Fluttertoast.showToast(
+                                      msg: AppLocalization.of(context)
+                                          .errornotallow,
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                } else {
+                                  setState(() {
+                                    visible = false;
+                                  });
+                                  _displayDialog(context, phoneNumber, result);
+                                }
+                              }
+                            });
                           } else {
                             Fluttertoast.showToast(
                                 msg: AppLocalization.of(context)
@@ -478,7 +554,7 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  _displayDialog(BuildContext context, phone) async {
+  _displayDialog(BuildContext context, phone, user) async {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -549,7 +625,10 @@ class LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(color: Colors.black54),
                           onChanged: (text) {
                             print(text.length);
-                            if (text.toString() == code0.toString()) {
+                            if (text.toString() ==
+                                user["mot_de_passe"].toString()) {
+                              SharedPreferencesClass.save(
+                                  "userinfos", "[" + jsonEncode(user) + "]");
                               _validateInputs10();
                             }
                           },
@@ -595,7 +674,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   String validateCode(String value) {
 // Indian Mobile number are of 10 digit only
-    if (value.length != 4)
+    if (value.length != 6)
       return AppLocalization.of(context).checkcodenumber;
     else
       return null;

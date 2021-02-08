@@ -35,6 +35,7 @@ void main() async {
       Iterable list0 = jsonDecode(value);
       userinfos = list0.map((model) => UserMod.fromJson(model)).toList();
       log(userinfos[0].telephone.toString());
+      global.userinfos = userinfos[0];
       runApp(MyApp(compteU));
     } else {
       log("not conected");

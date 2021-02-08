@@ -16,6 +16,8 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:kifcab/screens/location_screen.dart';
 
+import 'package:kifcab/utils/tcheckconnection.dart';
+
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
 const kGoogleApiKey = "AIzaSyDRn0mlxRwnXRJZI4cNqFOgsGNssI5APRo";
 
@@ -125,6 +127,7 @@ class _DepotScreenState extends State<DepotScreen> {
     globals.location = location;
 
     */
+    techkconnection(context);
     return Scaffold(
       backgroundColor: MyTheme.stripColor,
       appBar: AppBar(

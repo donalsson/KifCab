@@ -4,6 +4,7 @@ import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/gestures.dart';
+import 'package:kifcab/utils/tcheckconnection.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({
@@ -32,6 +33,7 @@ class WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    techkconnection(context);
     return Scaffold(
       backgroundColor: MyTheme.navBar,
       /*appBar: AppBar(

@@ -216,8 +216,23 @@ class AppLocalization {
     return Intl.message("Précédent", name: 'previous');
   }
 
+  String get notinternet {
+    return Intl.message("Vérifier votre connexion internet",
+        name: 'notinternet');
+  }
+
   String get startingPoint {
     return Intl.message("Point de départ", name: 'startingPoint');
+  }
+
+  String get erroricorectcode {
+    return Intl.message("Désolé ce code est incorect",
+        name: 'erroricorectcode');
+  }
+
+  String get errornotallow {
+    return Intl.message("Vous n'etes pas autorité a utiliser c'est application",
+        name: 'errornotallow');
   }
 
   String get arrivalPoint {

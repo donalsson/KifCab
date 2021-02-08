@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:http/http.Dart' as http;
+import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kifcab/core/preference.dart';
@@ -31,11 +31,47 @@ class HttpPostRequest {
         print(error.toString());
         return "error";
       } else {
-        SharedPreferencesClass.save(
-            "userinfos", "[" + jsonEncode(myresponse["user"]) + "]");
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        //   prefs.setString("userinfos", myresponse["user"]);
-        return myresponse["user"]["mot_de_passe"];
+        if (myresponse["user"]["type"] == "1") {
+          return "notallow";
+        } else {
+          SharedPreferencesClass.save(
+              "userinfos", "[" + jsonEncode(myresponse["user"]) + "]");
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          //   prefs.setString("userinfos", myresponse["user"]);
+          return myresponse["user"]["mot_de_passe"];
+        }
+      }
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  static Future<dynamic> login_recup(phone) async {
+    // String urli = 'https://small-pocket.herokuapp.com/api/v1/auth/sign_in';
+    // var url = '${urli}ocr';
+    // var bytes = image.readAsBytesSync();
+
+    final ioc = new HttpClient();
+    ioc.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+    final httpp = new IOClient(ioc);
+    http.Response response = await httpp.post(
+        'https://149.202.47.143/index.php/webservice/loginrecup',
+        body: {"telephone": phone});
+    if (response.statusCode == 200) {
+      print(response.body);
+      var myresponse = jsonDecode(response.body);
+      var error = myresponse["error"];
+      print("token");
+      if (error.toString() == "true") {
+        print(error.toString());
+        return "error";
+      } else {
+        if (myresponse["user"]["type"] == "1") {
+          return "notallow";
+        } else {
+          return myresponse["user"];
+        }
       }
     } else {
       throw Exception('Failed to load album');

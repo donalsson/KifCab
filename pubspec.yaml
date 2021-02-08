@@ -26,7 +26,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_bloc: ^6.1.1
-  shared_preferences: ^0.5.2
+  shared_preferences: ^0.5.2  
+  data_connection_checker: ^0.3.4
+  cached_network_image: ^2.5.0
   equatable: ^1.2.5
   flutter_form_builder: ^4.2.0
   flutter_native_splash: ^0.2.7

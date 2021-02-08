@@ -6,6 +6,8 @@ import 'package:kifcab/utils/colors.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/gestures.dart';
 
+import 'package:kifcab/utils/tcheckconnection.dart';
+
 class DepotScreen extends StatefulWidget {
   const DepotScreen({
     Key key,
@@ -33,6 +35,7 @@ class DepotScreenState extends State<DepotScreen> {
 
   @override
   Widget build(BuildContext context) {
+    techkconnection(context);
     return Scaffold(
       backgroundColor: MyTheme.stripColor,
       appBar: AppBar(
@@ -61,7 +64,6 @@ class DepotScreenState extends State<DepotScreen> {
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
-
                   decoration: BoxDecoration(
                     color: MyTheme.stripColor,
                   ),
@@ -120,9 +122,6 @@ class DepotScreenState extends State<DepotScreen> {
               ),
             ),
           ),
-
-
-
 
           //Button zone
           Row(

@@ -15,6 +15,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kifcab/library/loader.dart';
 
+import 'package:kifcab/utils/tcheckconnection.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({
     Key key,
@@ -85,6 +87,7 @@ class RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    techkconnection(context);
     return Scaffold(
       backgroundColor: MyTheme.navBar,
       /*   appBar: AppBar(
