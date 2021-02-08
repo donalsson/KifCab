@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:kifcab/screens/mapview.dart';
+
 
 import 'package:kifcab/screens/course_screen.dart';
 import 'package:kifcab/screens/drawers/about_screen.dart';
@@ -108,6 +110,8 @@ class MyApp extends StatelessWidget {
               '/profile': (context) => BecomeDriverScreen(),
               '/account': (context) => AccountScreen(),
               '/become-driver': (context) => BecomeDriverScreen(),
+              //'/mapview': (context) => MapView(),
+
             }));
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
 import 'package:kifcab/widgets/navigation_button.dart';
@@ -17,22 +16,23 @@ import 'dart:async';
 import 'dart:developer';
 
 import '../core/global.dart' as globals;
+import 'package:flutter_google_maps/flutter_google_maps.dart';
 
 
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
 const kGoogleApiKey = GOOGLE_API_KEY;
 
-class CourseScreen extends StatefulWidget {
+class DepotScreen extends StatefulWidget {
   double longitude, latitude;
-  CourseScreen({
+  DepotScreen({
     this.longitude,
     this.latitude,
     Key key,
   }) : super(key: key);
 
   @override
-  CourseScreenState createState() {
-    return CourseScreenState();
+  DepotScreenState createState() {
+    return DepotScreenState();
   }
 }
 
@@ -46,8 +46,8 @@ String arrivName;
 double arriplat;
 double arriln;
 
-class CourseScreenState extends State<CourseScreen> {
-  CourseScreenState();
+class DepotScreenState extends State<DepotScreen> {
+  DepotScreenState();
   String _kGoogleApiKey = GOOGLE_API_KEY;
   final TextEditingController _textControllerFrom = new TextEditingController();
   final TextEditingController _textControllerTo = new TextEditingController();
@@ -429,16 +429,16 @@ class CourseScreenState extends State<CourseScreen> {
                                       new CustomSearchScaffold1()));
 
                                   setState(() {
-                                    if(result!=null){
-                                      print(result[3]);
+                                   if(result!=null){
+                                     print(result[3]);
 
-                                      _textControllerTo.text = result[0];
-                                      departName = result[0];
-                                      deln = result[1];
-                                      deplat = result[2];
-                                      _toLocation =
-                                          Location(result[2], result[1]);
-                                    }
+                                     _textControllerTo.text = result[0];
+                                     departName = result[0];
+                                     deln = result[1];
+                                     deplat = result[2];
+                                     _toLocation =
+                                         Location(result[2], result[1]);
+                                   }
                                   });
                                 }
                               },
@@ -845,7 +845,7 @@ class CustomSearchScaffold extends PlacesAutocompleteWidget {
 }
 
 class _CustomSearchScaffoldState extends PlacesAutocompleteState {
-  final DepotScreen = new CourseScreenState();
+  final DepotScreen = new DepotScreenState();
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
@@ -907,7 +907,7 @@ class CustomSearchScaffold1 extends PlacesAutocompleteWidget {
 }
 
 class _CustomSearchScaffoldState1 extends PlacesAutocompleteState {
-  final DepotScreen = new CourseScreenState();
+  final DepotScreen = new DepotScreenState();
 
   @override
   Widget build(BuildContext context) {
