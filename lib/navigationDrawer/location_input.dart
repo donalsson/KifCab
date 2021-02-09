@@ -37,7 +37,7 @@ class NavigationButton extends StatelessWidget {
                   Icon(
                     this.icon,
                     color: this.textColor,
-                    size: 25,
+                    size: 20,
                   ),
                   Text(this.text,
                       style: Theme.of(context)
@@ -45,7 +45,7 @@ class NavigationButton extends StatelessWidget {
                           .bodyText2
                           .copyWith(
                           fontSize: 13,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w300,
                           color: this.textColor,))
                 ],
               ),
@@ -57,5 +57,3 @@ class NavigationButton extends StatelessWidget {
     );
   }
 }
-
-

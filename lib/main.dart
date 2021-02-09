@@ -2,6 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:kifcab/screens/mapview.dart';
 
+import 'package:kifcab/screens/drawers/about_screen.dart';
+import 'package:kifcab/screens/drawers/account_screen.dart';
+import 'package:kifcab/screens/drawers/become_driver_screen.dart';
+import 'package:kifcab/screens/drawers/cgi_screen.dart';
+import 'package:kifcab/screens/drawers/help_screen.dart';
+
 import 'core/global.dart' as global;
 import 'package:flutter/material.dart';
 import 'package:kifcab/constant.dart';
@@ -104,6 +110,12 @@ class MyApp extends StatelessWidget {
           '/mapview': (context) => MapView(),
           '/course': (context) => DepotScreen(),
           '/location': (context) => LocationScreen(),
+          '/help': (context) => HelpScreen(),
+          '/about': (context) => AboutScreen(),
+          '/cgi': (context) => CgiScreen(),
+          '/profile': (context) => BecomeDriverScreen(),
+          '/account': (context) => AccountScreen(),
+          '/become-driver': (context) => BecomeDriverScreen(),
         },
       ),
     );
