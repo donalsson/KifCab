@@ -143,6 +143,11 @@ class AppLocalization {
     return Intl.message("Verifier votre code", name: 'checkcodenumber');
   }
 
+  String get checkmessagech {
+    return Intl.message("Veuillez renseigner le message",
+        name: 'checkmessagech');
+  }
+
   String get sendacticode {
     return Intl.message(
         "Nous avons envoyer votre nouveau code d'activation au ",

@@ -12,7 +12,7 @@ const List<Locale> SUPPORTED_LOCALES = [
 ];
 const String DEFAULT_THEME = "dark";
 const String DEFAULT_FONT_FAMILY = "Poppins";
-const String APP_PACKAGE = "com.kif.mykifcab";
+const String APP_PACKAGE = "com.kif.kifcab";
 const String USER_AVATAR = "assets/images/avatar.png";
 const String GOOGLE_API_KEY = "AIzaSyDRn0mlxRwnXRJZI4cNqFOgsGNssI5APRo";
 const String PHONE1 = "(+237) 699 244 455";

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "948656451964",
+    "project_id": "kifcabtest",
+    "storage_bucket": "kifcabtest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948656451964:android:cf7180e42439dd2de9f4f9",
+        "android_client_info": {
+          "package_name": "com.kif.kifcab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "948656451964-s71c0qqhf16opkmvde2g7teti6jpb7l7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByKXv2D2AutexRCm4pTAnJ-NSjpDK-3Bo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "948656451964-s71c0qqhf16opkmvde2g7teti6jpb7l7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

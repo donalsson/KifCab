@@ -46,6 +46,56 @@ class HttpPostRequest {
     }
   }
 
+  static Future<dynamic> saveoperations_request(type, iduser, cout, depart,
+      arriver, gamme, deplon, deplat, arrivlon, arrivlat, distance) async {
+    // String urli = 'https://small-pocket.herokuapp.com/api/v1/auth/sign_in';
+    // var url = '${urli}ocr';
+    // var bytes = image.readAsBytesSync();
+
+    final ioc = new HttpClient();
+    ioc.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+    final httpp = new IOClient(ioc);
+    http.Response response = await httpp.post(
+        'https://149.202.47.143/index.php/webservice/saveOperation',
+        body: {
+          "type": type,
+          "compte": iduser,
+          "cout": cout,
+          "depart": depart,
+          "arrive": arriver,
+          "gamme": gamme,
+          "long_d": deplon,
+          "lat_d": deplat,
+          "long_a": arrivlon,
+          "lat_a": arrivlat,
+          "distance": distance
+        });
+    if (response.statusCode == 200) {
+      var myresponse = jsonDecode(response.body);
+      print(response.body);
+      /* print(jsonEncode(myresponse["user"]));
+      var error = myresponse["error"];
+      print("token");
+      if (error.toString() == "true") {
+        print(error.toString());
+        return "error";
+      } else {
+        if (myresponse["user"]["type"] == "1") {
+          return "notallow";
+        } else {
+          SharedPreferencesClass.save(
+              "userinfos", "[" + jsonEncode(myresponse["user"]) + "]");
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          //   prefs.setString("userinfos", myresponse["user"]);
+          return myresponse["user"]["mot_de_passe"];
+        }
+      }*/
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
   static Future<String> sendposition_request(lat, lon, idcompte) async {
     final ioc = new HttpClient();
     ioc.badCertificateCallback =

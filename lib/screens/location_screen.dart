@@ -22,6 +22,8 @@ import 'dart:async';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'dart:math' show cos, sqrt, asin;
 
+import 'package:kifcab/core/httpreq.dart';
+
 class LocationScreen extends StatefulWidget {
   String depname, arrivname;
   double depln, deplat, arrivlat, arrivln;
@@ -49,6 +51,9 @@ class LocationScreenState extends State<LocationScreen> {
   double distance;
   Position _currentPosition;
   String _currentAddress;
+  String messagech = "";
+  int prix = 0;
+  String gammes = "Bronse";
   int i = 0;
   final startAddressController = TextEditingController();
   final destinationAddressController = TextEditingController();
@@ -62,6 +67,8 @@ class LocationScreenState extends State<LocationScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   PolylinePoints polylinePoints;
   Map<PolylineId, Polyline> polylines = {};
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _autoValidate = false;
   List<LatLng> polylineCoordinates = [];
   int _selectedRange = 0;
   int _selectedPayment = 0;
@@ -260,6 +267,10 @@ class LocationScreenState extends State<LocationScreen> {
     double r2;
     r1 = distance * c;
     r2 = r1 / p;
+    setState(() {
+      // _selectedRange = 0;
+      prix = (distance + _timess + 1000).round() as int;
+    });
     return (r1 / p).round();
   }
 
@@ -285,7 +296,7 @@ class LocationScreenState extends State<LocationScreen> {
     PolylineId id = PolylineId('poly');
     Polyline polyline = Polyline(
       polylineId: id,
-      color: Colors.red,
+      color: Colors.blue,
       points: polylineCoordinates,
       width: 3,
     );
@@ -363,7 +374,9 @@ class LocationScreenState extends State<LocationScreen> {
                           _placeDistance +
                               " km / " +
                               _timess.toString() +
-                              " minutes",
+                              " minutes / " +
+                              prix.toString() +
+                              " Fcfa",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 14,
@@ -420,39 +433,49 @@ class LocationScreenState extends State<LocationScreen> {
                   child: SingleChildScrollView(
                       physics: AlwaysScrollableScrollPhysics(),
                       child: Column(children: [
-                        SizedBox(
-                          height: 130,
-                          child: TextFormField(
-                            minLines: 2,
-                            maxLines: 5,
-                            keyboardType: TextInputType.multiline,
-                            style: TextStyle(
-                                color: MyTheme.navBar,
-                                fontWeight: FontWeight.w400),
-                            decoration: new InputDecoration(
-                                contentPadding: const EdgeInsets.only(
-                                    top: 30.0, left: 15, right: 10),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.zero),
-                                  borderSide: BorderSide(
-                                      color: Colors.transparent, width: 1.2),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.zero),
-                                  borderSide: BorderSide(
-                                      color: Colors.transparent, width: 1),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.zero),
-                                  borderSide: BorderSide(
-                                      color: Colors.transparent, width: 1),
-                                ),
-                                hintText: AppLocalization.of(context)
-                                    .messageToSendToTheDriver,
-                                hintStyle: TextStyle(
-                                    color: MyTheme.navBar,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 14)),
+                        new Form(
+                          key: _formKey,
+                          autovalidate: _autoValidate,
+                          child: SizedBox(
+                            height: 130,
+                            child: TextFormField(
+                              minLines: 2,
+                              maxLines: 5,
+                              keyboardType: TextInputType.multiline,
+                              validator: validateMessach,
+                              onChanged: (String val) {
+                                setState(() {
+                                  messagech = val;
+                                });
+                              },
+                              style: TextStyle(
+                                  color: MyTheme.navBar,
+                                  fontWeight: FontWeight.w400),
+                              decoration: new InputDecoration(
+                                  contentPadding: const EdgeInsets.only(
+                                      top: 30.0, left: 15, right: 10),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: Colors.transparent, width: 1.2),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: Colors.transparent, width: 1),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: Colors.transparent, width: 1),
+                                  ),
+                                  hintText: AppLocalization.of(context)
+                                      .messageToSendToTheDriver,
+                                  hintStyle: TextStyle(
+                                      color: MyTheme.navBar,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 14)),
+                            ),
                           ),
                         ),
                         Container(
@@ -497,6 +520,9 @@ class LocationScreenState extends State<LocationScreen> {
                                         print("Tap elemen");
                                         setState(() {
                                           _selectedRange = 0;
+                                          gammes = "Bronse";
+                                          prix = (distance + _timess + 1000)
+                                              .round() as int;
                                         });
                                       },
                                     ),
@@ -513,6 +539,9 @@ class LocationScreenState extends State<LocationScreen> {
                                         print("Tap elemen");
                                         setState(() {
                                           _selectedRange = 1;
+                                          gammes = "Argent";
+                                          prix = (distance + _timess + 2000)
+                                              .round() as int;
                                         });
                                       },
                                     ),
@@ -594,16 +623,44 @@ class LocationScreenState extends State<LocationScreen> {
               NavigationButton(
                 backColor: MyTheme.primaryColor,
                 textColor: Colors.black,
-                icon: Icons.chevron_right,
-                text: AppLocalization.of(context).next,
+                icon: Icons.save,
+                text: AppLocalization.of(context).save,
                 onTap: () {
                   print("Valider");
+                  print(prix);
+                  print(messagech);
+                  String type = "RESERVATION";
+                  print(globals.userinfos.id_compte);
+                  if (_formKey.currentState.validate()) {
+                    HttpPostRequest.saveoperations_request(
+                            type,
+                            globals.userinfos.id_compte.toString(),
+                            prix.toString(),
+                            widget.depname,
+                            widget.arrivname,
+                            gammes,
+                            widget.depln.toString(),
+                            widget.deplat.toString(),
+                            widget.arrivln.toString(),
+                            widget.arrivlat.toString(),
+                            distance.toString())
+                        .then((dynamic result) async {
+                      //  await Future.delayed(Duration(seconds: 5));
+                      print("result");
+                      print(result);
+                    });
+                  } else {
+                    setState(() {
+                      _autoValidate = true;
+                    });
+                  }
+
                   // _calculateDistance();
                   /*  mapController.animateCamera(CameraUpdate.newLatLngZoom(
                       LatLng(widget.deplat, widget.depln), 11000.0));*/
 
-                  Navigator.of(context).push(PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => new MapView()));
+                  /* Navigator.of(context).push(PageRouteBuilder(
+                      pageBuilder: (_, __, ___) => new MapView()));*/
                 },
               ),
             ],
@@ -612,6 +669,15 @@ class LocationScreenState extends State<LocationScreen> {
       ),
     );
     _calculateDistance();
+  }
+
+  String validateMessach(String value) {
+// Indian Mobile number are of 10 digit only
+    log("eee");
+    if (value == "")
+      return AppLocalization.of(context).checkmessagech;
+    else
+      return null;
   }
 }
 

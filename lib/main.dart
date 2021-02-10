@@ -25,13 +25,18 @@ import 'package:kifcab/screens/welcome_screen.dart';
 import 'core/preference.dart';
 import 'models/UserMod.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  final FirebaseMessaging _fcm = FirebaseMessaging();
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  _fcm.getToken().then((val) async {
+    global.fcmtoken = val;
+    print('Token: ' + val);
+  });
   bool compteU = false;
   await SharedPreferencesClass.restoreuser("userinfos").then((value) {
     var userinfos = new List<UserMod>();

@@ -9,6 +9,7 @@ import '../models/UserMod.dart';
 // set default values for the initial run
 double longitude = 5.1;
 double latitude = 9.0;
+String fcmtoken = "";
 UserMod userinfos;
 Location location = new Location(4.024394577478441, 9.705471602732858);
 String pass = '';
