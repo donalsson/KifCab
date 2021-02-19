@@ -1,31 +1,112 @@
+import 'dart:convert';
+import 'dart:math';
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart' hide Mode;
+import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
+import 'package:kifcab/models/CourseDuration.dart';
+import 'package:kifcab/navigationDrawer/navigation_button.dart';
 import 'package:kifcab/navigationDrawer/navigation_drawer.dart';
 import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter/gestures.dart';
+import '../core/global.dart' as globals;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:kifcab/screens/location_screen.dart';
 
 import 'package:kifcab/utils/tcheckconnection.dart';
 
-class DepotScreen extends StatefulWidget {
-  const DepotScreen({
+GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
+const kGoogleApiKey = "AIzaSyDRn0mlxRwnXRJZI4cNqFOgsGNssI5APRo";
+
+class CourseScreen extends StatefulWidget {
+  double longitude, latitude;
+
+  CourseScreen({
+    this.longitude,
+    this.latitude,
     Key key,
   }) : super(key: key);
 
   @override
-  DepotScreenState createState() {
-    return DepotScreenState();
-  }
+  _CourseScreenState createState() => _CourseScreenState();
 }
 
-class DepotScreenState extends State<DepotScreen> {
-  DepotScreenState();
-  final _formKey = GlobalKey<FormBuilderState>();
+final homeScaffoldKey = GlobalKey<ScaffoldState>();
+final searchScaffoldKey = GlobalKey<ScaffoldState>();
+String departName;
+double deplat;
+double deln;
+
+String arrivName;
+double arriplat;
+double arriln;
+
+class _CourseScreenState extends State<CourseScreen> {
+  // DepotScreenState();
+  bool _autoValidate = false;
+  Mode _mode = Mode.overlay;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String kGoogleApiKey = GOOGLE_API_KEY;
+  final TextEditingController _textControllerFrom = new TextEditingController();
+  final TextEditingController _textControllerTo = new TextEditingController();
+  bool _showClearButtonInputFrom = false;
+  bool _showClearButtonInputTo = false;
+  static final kInitialPosition = LatLng(4.024394577478441, 9.705471602732858);
+// Light Theme
+  final ThemeData lightTheme = ThemeData.light().copyWith(
+    // Background color of the FloatingCard
+    cardColor: Colors.white,
+    buttonTheme: ButtonThemeData(
+      // Select here's button color
+      buttonColor: Colors.black,
+      textTheme: ButtonTextTheme.primary,
+    ),
+  );
+  List<CourseDuration> _durations = [CourseDuration.fill(id: "", name:"")];
+  List<CourseDuration> buildDurationList(BuildContext context){
+    List<CourseDuration> durations = [];
+    durations.add(CourseDuration.fill(id: "", name:AppLocalization.of(context).selectADuration));
+    for(int i = 1; i<=12; i++){
+      durations.add(CourseDuration.fill(id: "1", name:AppLocalization.of(context).durationFor(i)));
+    }
+    setState(() {
+      _durations =  durations;
+    });
+  }
+
+// Dark Theme
+  final ThemeData darkTheme = ThemeData.dark().copyWith(
+    // Background color of the FloatingCard
+    cardColor: Colors.grey,
+    buttonTheme: ButtonThemeData(
+      // Select here's button color
+      buttonColor: Colors.yellow,
+      textTheme: ButtonTextTheme.primary,
+    ),
+  );
 
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration(seconds: 0),(){
+      this.buildDurationList(context);
+
+    });
+    _textControllerFrom.addListener(() {
+      setState(() {
+        _showClearButtonInputFrom = _textControllerFrom.text.length > 0;
+      });
+    });
+    _textControllerTo.addListener(() {
+      setState(() {
+        _showClearButtonInputTo = _textControllerTo.text.length > 0;
+      });
+    });
   }
 
   @override
@@ -33,8 +114,37 @@ class DepotScreenState extends State<DepotScreen> {
     super.dispose();
   }
 
+  displayPrediction(Prediction p, ScaffoldState scaffold, String types,
+      BuildContext context) async {
+    if (p != null) {
+      // get detail (lat/lng)
+      PlacesDetailsResponse detail =
+      await _places.getDetailsByPlaceId(p.placeId);
+
+      final lat = detail.result.geometry.location.lat;
+      final lng = detail.result.geometry.location.lng;
+
+      Navigator.pop(context, [p.description.toString(), lng, lat, types]);
+      print(types);
+      // Navigator.of(context).pop();
+      //  scaffold.showSnackBar(
+      // SnackBar(content: Text("${p.description} - $lat/$lng")),
+      print("${p.description} - $lat/$lng");
+
+      // );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    /*
+    Location location = new Location(widget.longitude, widget.latitude);
+    print("widget.latitude");
+    print(widget.latitude);
+    globals.location = location;
+
+    */
+
     techkconnection(context);
     return Scaffold(
       backgroundColor: MyTheme.stripColor,
@@ -58,65 +168,295 @@ class DepotScreenState extends State<DepotScreen> {
       drawer: navigationDrawer(),
       body: Column(
         children: [
-          Expanded(
-            child: Container(
-              color: Colors.white,
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: MyTheme.stripColor,
-                  ),
-                  child: Center(
-                    // Center is a layout widget. It takes a single child and positions it
-                    // in the middle of the parent.
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Row(children: <Widget>[
-                          SizedBox(
-                            width: 25,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(AppLocalization.of(context).needASecureCar,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .copyWith(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 17,
-                                          color: Colors.white,
-                                        )),
+          Form(
+            key: _formKey,
+            autovalidate: _autoValidate,
+            child: Expanded(
+              child: Container(
+                color: Colors.white,
+                child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: MyTheme.stripColor,
+                        ),
+                        child: Center(
+                          // Center is a layout widget. It takes a single child and positions it
+                          // in the middle of the parent.
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Row(children: <Widget>[
                                 SizedBox(
-                                  height: 07,
+                                  width: 25,
                                 ),
-                                Text(AppLocalization.of(context).takeADeposit,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2
-                                        .copyWith(
-                                            fontWeight: FontWeight.w300,
-                                            color: Colors.white)),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                          AppLocalization.of(context)
+                                              .needACarForAPeriod,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              .copyWith(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          )),
+                                      SizedBox(
+                                        height: 07,
+                                      ),
+                                      Text(
+                                          AppLocalization.of(context)
+                                              .makeForCourses,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2
+                                              .copyWith(
+                                              fontWeight: FontWeight.w300,
+                                              color: Colors.white)),
+                                    ],
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.local_taxi,
+                                  color: Color(0xFAFFFFFF),
+                                  size: 40,
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                              ]),
+                              SizedBox(
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Container(
+                        padding:
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  AppLocalization.of(context).startingPoint,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: MyTheme.navBar,
+                                  ),
+                                ),
+                                Text(
+                                  AppLocalization.of(context).required,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w300,
+                                    color: MyTheme.navBar,
+                                  ),
+                                )
                               ],
                             ),
-                          ),
-                          Icon(
-                            Icons.local_taxi,
-                            color: Color(0xFAFFFFFF),
-                            size: 40,
-                          ),
-                          SizedBox(
-                            width: 25,
-                          ),
-                        ]),
-                        SizedBox(
-                          height: 30,
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _textControllerFrom,
+                              validator: validatedep,
+                              cursorColor: MyTheme.primaryColor,
+                              onTap: () async {
+                                print("depart");
+
+                                final result = await Navigator.of(context).push(
+                                    PageRouteBuilder(
+                                        opaque: false,
+                                        pageBuilder: (_, __, ___) =>
+                                        new CustomSearchScaffold()));
+
+                                setState(() {
+                                  print(result[3]);
+
+                                  _textControllerFrom.text = result[0];
+                                  departName = result[0];
+                                  deln = result[1];
+                                  deplat = result[2];
+                                });
+                              },
+                              onSaved: (String val) {
+                                departName = val;
+                              },
+                              style: TextStyle(
+                                  color: MyTheme.navBar,
+                                  fontWeight: FontWeight.w400),
+                              decoration: new InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.room,
+                                    color: MyTheme.navBar,
+                                    size: 18,
+                                  ),
+                                  suffixIcon: _showClearButtonInputFrom
+                                      ? IconButton(
+                                    onPressed: () =>
+                                        _textControllerFrom.clear(),
+                                    icon: Icon(
+                                      Icons.clear,
+                                      color: MyTheme.navBar,
+                                      size: 16,
+                                    ),
+                                  )
+                                      : null,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 0.0, horizontal: 10),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: MyTheme.primaryColor,
+                                        width: 1.2),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: MyTheme.navBar, width: 1),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: MyTheme.navBar, width: 1),
+                                  ),
+                                  hintText: AppLocalization.of(context)
+                                      .enterTheStartingPoint,
+                                  hintStyle: TextStyle(
+                                      color: MyTheme.navBar,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 14)),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Container(
+                        padding:
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  AppLocalization.of(context).duration,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: MyTheme.navBar,
+                                  ),
+                                ),
+                                Text(
+                                  AppLocalization.of(context).required,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w300,
+                                    color: MyTheme.navBar,
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+
+                            if(_durations!=null && _durations.length>0) FormBuilderDropdown(
+                              //controller: _textControllerTo,
+                              //cursorColor: MyTheme.primaryColor,
+                              //validator: validatearr,
+                              validator: FormBuilderValidators.compose(
+                                  [FormBuilderValidators.required(context)]),
+                              items: _durations
+                                  .map((duration) => DropdownMenuItem(
+
+                                value: duration,
+                                child: Text('${duration.name}', style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    .copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w300,
+                                  color: Color(0xFF888888),
+                                ),),
+                              ))
+                                  .toList(),
+
+                              onTap: () async {
+                                print("arriver");
+                              },
+                              //initialValue: _durations!=null && _durations.length>0? _durations.elementAt(0):null ,
+
+                              style: TextStyle(
+                                  color: MyTheme.navBar,
+                                  fontWeight: FontWeight.w400),
+                              decoration: new InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.alarm,
+                                    color: MyTheme.navBar,
+                                    size: 18,
+                                  ),
+
+                                  suffixIcon: Icon(
+                                    Icons.arrow_drop_down,
+                                    color: MyTheme.navBar,
+                                    size: 22,
+                                  ),
+
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 0.0, horizontal: 10),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: MyTheme.primaryColor,
+                                        width: 1.2),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: MyTheme.navBar, width: 1),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: MyTheme.navBar, width: 1),
+                                  ),
+                                  hintText: AppLocalization.of(context)
+                                      .selectADuration,
+                                  hintStyle: TextStyle(
+                                      color: MyTheme.navBar,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 14)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -126,99 +466,40 @@ class DepotScreenState extends State<DepotScreen> {
           //Button zone
           Row(
             children: [
-              Expanded(
-                child: new Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xFA0c1117),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFA0c1117),
-                        spreadRadius: 1,
-                        blurRadius: 7,
-                        offset: Offset(3, 0), // changes position of shadow
-                      ),
-                    ],
-                    /*boxShadow: [
-                      BoxShadow(
-                        color: Colors.black,
-                        offset: Offset(3.0, 40.0),
-                        blurRadius: 10,
-                        spreadRadius: 5.0,
-                      ),
-                    ],*/
-                  ),
-                  child: new Material(
-                    child: new InkWell(
-                      onTap: () {
-                        print("tapped");
-                      },
-                      child: new Container(
-                        padding: const EdgeInsets.all(08),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.chevron_left,
-                              color: Color(0xFAFFFFFF),
-                              size: 20,
-                            ),
-                            Text(AppLocalization.of(context).previous,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    .copyWith(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.white))
-                          ],
-                        ),
-                      ),
-                    ),
-                    color: Colors.transparent,
-                  ),
-                ),
+              NavigationButton(
+                backColor: Color(0xFA0c1117),
+                textColor: Color(0xFAFFFFFF),
+                icon: Icons.chevron_left,
+                text: AppLocalization.of(context).previous,
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/home',
+                      arguments: <String, dynamic>{});
+                },
               ),
-              Expanded(
-                child: new Container(
-                  decoration: BoxDecoration(
-                    color: MyTheme.primaryColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: MyTheme.primaryColor,
-                        spreadRadius: 1,
-                        blurRadius: 7,
-                        offset: Offset(3, 0), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: new Material(
-                    child: new InkWell(
-                      onTap: () {
-                        print("tapped");
-                      },
-                      child: new Container(
-                        padding: const EdgeInsets.all(08),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.chevron_right,
-                              color: Colors.black,
-                              size: 20,
-                            ),
-                            Text(AppLocalization.of(context).next,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    .copyWith(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.black))
-                          ],
-                        ),
-                      ),
-                    ),
-                    color: Colors.transparent,
-                  ),
-                ),
+              NavigationButton(
+                backColor: MyTheme.primaryColor,
+                textColor: Colors.black,
+                icon: Icons.chevron_right,
+                text: AppLocalization.of(context).next,
+                onTap: () {
+                  print("tapped next");
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
+                    Navigator.of(context).push(PageRouteBuilder(
+                        pageBuilder: (_, __, ___) => new LocationScreen(
+                          depname: departName,
+                          deplat: deplat,
+                          depln: deln,
+                          arrivname: arrivName,
+                          arrivlat: arriplat,
+                          arrivln: arriln,
+                        )));
+                  } else {
+                    setState(() {
+                      _autoValidate = true;
+                    });
+                  }
+                },
               ),
             ],
           )
@@ -226,6 +507,176 @@ class DepotScreenState extends State<DepotScreen> {
       ),
     );
   }
+
+  String validatedep(String value) {
+    departName = value;
+    if (value.length < 3)
+      return AppLocalization.of(context).valenterTheStartingPoint;
+    else
+      return null;
+  }
+
+  String validatearr(String value) {
+    arrivName = value;
+    if (value.length < 3)
+      return AppLocalization.of(context).valenterTheArrivalPoint;
+    else
+      return null;
+  }
+}
+
+class CustomSearchScaffold extends PlacesAutocompleteWidget {
+  String qualite;
+  CustomSearchScaffold({this.qualite})
+      : super(
+    apiKey: kGoogleApiKey,
+    mode: Mode.overlay,
+    strictbounds: true,
+    location: Uuid().generateLocation(),
+    radius: 200,
+    hint: "Recherchez",
+    sessionToken: Uuid().generateV4(),
+    language: "fr",
+    components: [Component(Component.country, "cmr")],
+  );
+
+  @override
+  _CustomSearchScaffoldState createState() => _CustomSearchScaffoldState();
+}
+
+class _CustomSearchScaffoldState extends PlacesAutocompleteState {
+  final DepotScreen = new _CourseScreenState();
+  @override
+  Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: AppBarPlacesAutoCompleteTextField(),
+      backgroundColor: Colors.black54,
+    );
+    final body = PlacesAutocompleteResult(
+      onTap: (p) {
+        DepotScreen.displayPrediction(
+            p, searchScaffoldKey.currentState, "depart", context);
+      },
+      logo: Row(),
+    );
+    return Scaffold(
+      key: searchScaffoldKey,
+      appBar: appBar,
+      body: body,
+      backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
+    );
+  }
+
+  @override
+  void onResponseError(PlacesAutocompleteResponse response) {
+    super.onResponseError(response);
+    /*searchScaffoldKey.currentState.showSnackBar(
+        // SnackBar(content: Text(response.errorMessage)),
+        );*/
+  }
+
+  @override
+  void onResponse(PlacesAutocompleteResponse response) {
+    super.onResponse(response);
+    if (response != null && response.predictions.isNotEmpty) {
+      /*  searchScaffoldKey.currentState.showSnackBar(
+          // SnackBar(content: Text("Got answer")),
+          );*/
+    }
+  }
+}
+
+void getLocation() {}
+
+class CustomSearchScaffold1 extends PlacesAutocompleteWidget {
+  CustomSearchScaffold1()
+      : super(
+    apiKey: kGoogleApiKey,
+    mode: Mode.overlay,
+    strictbounds: true,
+    location: Uuid().generateLocation(),
+    radius: 20000,
+    hint: "Recherche",
+    sessionToken: Uuid().generateV4(),
+    language: "fr",
+    components: [Component(Component.country, "cmr")],
+  );
+
+  @override
+  _CustomSearchScaffoldState1 createState() => _CustomSearchScaffoldState1();
+}
+
+class _CustomSearchScaffoldState1 extends PlacesAutocompleteState {
+  final DepotScreen = new _CourseScreenState();
+
+  @override
+  Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: AppBarPlacesAutoCompleteTextField(),
+      backgroundColor: Colors.black54,
+    );
+    final body = PlacesAutocompleteResult(
+      onTap: (p) {
+        DepotScreen.displayPrediction(
+            p, searchScaffoldKey.currentState, "arriver", context);
+      },
+      logo: Row(),
+    );
+    return Scaffold(
+      key: searchScaffoldKey,
+      appBar: appBar,
+      body: body,
+      backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
+    );
+  }
+
+  @override
+  void onResponseError(PlacesAutocompleteResponse response) {
+    super.onResponseError(response);
+    /*searchScaffoldKey.currentState.showSnackBar(
+        // SnackBar(content: Text(response.errorMessage)),
+        );*/
+  }
+
+  @override
+  void onResponse(PlacesAutocompleteResponse response) {
+    super.onResponse(response);
+    if (response != null && response.predictions.isNotEmpty) {
+      /*  searchScaffoldKey.currentState.showSnackBar(
+          // SnackBar(content: Text("Got answer")),
+          );*/
+    }
+  }
+}
+
+class Uuid {
+  final Random _random = Random();
+
+  String generateV4() {
+    // Generate xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx / 8-4-4-4-12.
+    final int special = 8 + _random.nextInt(4);
+
+    return '${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}-'
+        '${_bitsDigits(16, 4)}-'
+        '4${_bitsDigits(12, 3)}-'
+        '${_printDigits(special, 1)}${_bitsDigits(12, 3)}-'
+        '${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}';
+  }
+
+  Location generateLocation() {
+    // Generate xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx / 8-4-4-4-12.
+    final int special = 8 + _random.nextInt(4);
+    print(globals.latitude);
+    return new Location(globals.latitude, globals.longitude);
+  }
+
+  String _bitsDigits(int bitCount, int digitCount) =>
+      _printDigits(_generateBits(bitCount), digitCount);
+
+  int _generateBits(int bitCount) => _random.nextInt(1 << bitCount);
+
+  String _printDigits(int value, int count) =>
+      value.toRadixString(16).padLeft(count, '0');
 }
 
 Widget getButton() {

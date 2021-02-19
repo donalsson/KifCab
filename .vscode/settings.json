@@ -1,0 +1,16 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "dart.allowAnalytics": false,
+    "dart.analysisServerFolding": false,
+    "dart.analyzeAngularTemplates": false,
+    "dart.checkForSdkUpdates": false,
+    "[dart]": {
+
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.suggest.insertMode": "replace"
+    },
+    "dart.devToolsLogFile": null,
+    "maven.view": "flat"
+}
