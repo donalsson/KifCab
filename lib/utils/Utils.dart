@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kifcab/locale/app_localization.dart';
 import 'package:kifcab/utils/colors.dart';
 
 class Utils {

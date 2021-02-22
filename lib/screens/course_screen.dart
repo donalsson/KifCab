@@ -8,10 +8,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart' hide Mode;
 import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
 import 'package:kifcab/models/CourseDuration.dart';
-import 'package:kifcab/navigationDrawer/navigation_button.dart';
-import 'package:kifcab/navigationDrawer/navigation_drawer.dart';
 import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
+import 'package:kifcab/widgets/location_input.dart';
+import 'package:kifcab/widgets/navigation_drawer.dart';
 import '../core/global.dart' as globals;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -165,7 +165,7 @@ class _CourseScreenState extends State<CourseScreen> {
               )),
         ],
       ),
-      drawer: navigationDrawer(),
+      drawer: NavigationDrawer(),
       body: Column(
         children: [
           Form(

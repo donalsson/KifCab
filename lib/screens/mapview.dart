@@ -896,7 +896,7 @@ class _MapViewState extends State<MapView> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: MyTheme.stripColor,
-      drawer: navigationDrawer(),
+      drawer: NavigationDrawer(),
       body: Column(
         children: [
           Stack(

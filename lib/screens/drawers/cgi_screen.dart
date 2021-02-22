@@ -83,7 +83,7 @@ The navigation delegate is set to block navigation to the youtube website.
         ),
         preferredSize: Size(0.0, 0.0),
       ),
-      drawer: navigationDrawer(),
+      drawer: NavigationDrawer(),
       body: Stack(
         children: [
           Container(

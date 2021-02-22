@@ -66,7 +66,7 @@ class AccountScreenState extends State<AccountScreen> {
         ),
         preferredSize: Size(0.0, 0.0),
       ),
-      drawer: navigationDrawer(),
+      drawer: NavigationDrawer(),
       body: Stack(
         children: [
           Container(

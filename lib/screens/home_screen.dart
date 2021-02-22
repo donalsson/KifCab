@@ -130,7 +130,7 @@ class HomeScreenState extends State<HomeScreen> {
         ),
         preferredSize: Size(0.0, 0.0),
       ),
-      drawer: navigationDrawer(),
+      drawer: NavigationDrawer(),
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
         child: Container(

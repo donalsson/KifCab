@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:kifcab/screens/course_screen.dart';
+import 'package:kifcab/screens/history_screen.dart';
+import 'package:kifcab/screens/location_car_screen.dart';
 import 'package:kifcab/screens/mapview.dart';
 
 import 'package:kifcab/screens/drawers/about_screen.dart';
@@ -116,13 +118,14 @@ class MyApp extends StatelessWidget {
           '/depot': (context) => DepotScreen(),
           '/mapview': (context) => MapView(),
           '/course': (context) => CourseScreen(),
-          '/location': (context) => LocationScreen(),
+          '/location': (context) => LocationCarScreen(),
           '/help': (context) => HelpScreen(),
           '/about': (context) => AboutScreen(),
           '/cgi': (context) => CgiScreen(),
           '/profile': (context) => BecomeDriverScreen(),
           '/account': (context) => AccountScreen(),
           '/become-driver': (context) => BecomeDriverScreen(),
+          '/history': (context) => HistoryScreen(),
         },
       ),
     );
