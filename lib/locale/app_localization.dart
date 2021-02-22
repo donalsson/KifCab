@@ -419,6 +419,26 @@ class AppLocalization {
     return Intl.message("Feminin(F)", name: 'female');
   }
 
+
+  String get needACarForAPeriod {
+    return Intl.message("Besoin d'un véhicule sur une période",
+        name: 'needACarForAPeriod');
+  }
+
+  String get makeForCourses {
+    return Intl.message("Faites vos courses",
+        name: 'makeForCourses');
+  }
+  durationFor(hour) => Intl.message("Pour $hour h",
+      name: 'durationFor', args: [hour]);
+  String get duration {
+    return Intl.message("Durée",
+        name: 'duration');
+  }
+  String get selectADuration {
+    return Intl.message("Sélectionner une durée",
+        name: 'selectADuration');
+  }
   displayIn(language) => Intl.message("Display in, $language!",
       name: 'displayIn', args: [language]);
 }
