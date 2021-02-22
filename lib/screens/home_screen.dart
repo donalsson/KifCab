@@ -57,9 +57,27 @@ class HomeScreenState extends State<HomeScreen> {
 
           int arrivIndex = result["commande"]["arrive"].indexOf(',');
           arrive = result["commande"]["arrive"].substring(0, arrivIndex);
-/*
-            globals.message = result;
-            globals.commande = result["commande"];
+
+          globals.commande = result["commande"];
+          globals.idcommande = result["commande"]["id_commande"];
+          globals.active = result["commande"]["statut"];
+          globals.type = result["commande"]["type"];
+          if (result["offres"].toString() != "[]") {
+            globals.offre = result["offres"][0];
+
+            log("goood");
+            globals.chauflat =
+                double.parse(result["offres"][0]["compte"]["latitude"]);
+            globals.chaufln =
+                double.parse(result["offres"][0]["compte"]["longitude"]);
+            globals.chaufname = result["offres"][0]["compte"]["nom"];
+            globals.chauffcmtoken =
+                result["offres"][0]["compte"]["description"];
+            globals.chaufprof = result["offres"][0]["compte"]["photo"];
+            globals.chauffeur = result["offres"][0]["compte"];
+            log(result["offres"][0]["compte"]["nom"]);
+          }
+          /*   globals.chauffeur = result;
             globals.idcommande = result["commande"]["id_commande"].toString();
             globals.active = result["commande"]["statut"].toString();
             globals.clientfcmtoken = result["client"]["description"].toString();
@@ -67,9 +85,18 @@ class HomeScreenState extends State<HomeScreen> {
             globals.clienttel = result["client"]["telephone"].toString();
             globals.clientprof = result["client"]["photo"].toString();
             globals.clientlat = double.parse(result["client"]["latitude"]);
-            globals.clientln = double.parse(result["client"]["longitude"]);
-            */
+            globals.clientln = double.parse(result["client"]["longitude"]);*/
         });
+
+        Navigator.of(context).pushReplacement(PageRouteBuilder(
+            pageBuilder: (_, __, ___) => new MapView(
+                  depname: result["commande"]["depart"],
+                  deplat: double.parse(result["commande"]["lat_d"]),
+                  depln: double.parse(result["commande"]["long_d"]),
+                  arrivname: result["commande"]["arrive"],
+                  arrivlat: double.parse(result["commande"]["lat_a"]),
+                  arrivln: double.parse(result["commande"]["long_a"]),
+                )));
       }
       /* if (result.toString() == "[]") {
         print("not current operation");

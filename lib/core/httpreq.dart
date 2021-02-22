@@ -180,11 +180,15 @@ AAAA3OBUsXw:APA91bF7g_X1nsoT67A8quk4Rx49btZQvt3ACXGeetfVjxGzLvJuDoEkVjSlRiNkG48e
         body: {"id": idcompte, "driver": "false"});
     if (response.statusCode == 200) {
       print("get current");
-      var myresponse = jsonDecode(response.body);
-      if (myresponse["result"].toString() != "[]") {
-        log("send Current operation chauf");
+      log(response.body);
+      if (response.body != '"null"') {
+        log("send Current operation chauf000");
+
+        var myresponse = jsonDecode(response.body);
+        return myresponse;
+      } else {
+        return "null";
       }
-      return myresponse["result"];
     } else {
       throw Exception('Failed to load album');
     }
