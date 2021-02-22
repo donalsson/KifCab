@@ -557,8 +557,7 @@ class _DepotScreenState extends State<DepotScreen> {
                 icon: Icons.chevron_left,
                 text: AppLocalization.of(context).previous,
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, '/home',
-                      arguments: <String, dynamic>{});
+                  Navigator.pop(context);
                 },
               ),
               NavigationButton(

@@ -7,9 +7,22 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import '../models/UserMod.dart';
 
 // set default values for the initial run
-double longitude = 5.1;
-double latitude = 9.0;
+double longitude;
+double latitude;
+String type = "";
+String active;
+double chauflat = 0;
+double chaufln;
+String chaufname;
+String chaufprof;
+String chauffcmtoken;
+var commande;
+var offre;
+var chauffeur;
+String idcommande;
 String fcmtoken = "";
+String fcmtokenauto =
+    "key=AAAA3OBUsXw:APA91bF7g_X1nsoT67A8quk4Rx49btZQvt3ACXGeetfVjxGzLvJuDoEkVjSlRiNkG48e-lhj92upoBsL_18R8N6RcxJWaRmxi_cvFyOG_zT3als1fkET9yog-22qfeJeCA0t2-APc4nu";
 UserMod userinfos;
 Location location = new Location(4.024394577478441, 9.705471602732858);
 String pass = '';

@@ -295,7 +295,7 @@ class LoginScreenState extends State<LoginScreen> {
                             visible = false;
                           });*/
                             HttpPostRequest.login_request(phoneNumber)
-                                .then((String result) async {
+                                .then((dynamic result) async {
                               //  await Future.delayed(Duration(seconds: 5));
                               print("result");
                               print(result);
@@ -328,7 +328,8 @@ class LoginScreenState extends State<LoginScreen> {
                                       textColor: Colors.white,
                                       fontSize: 16.0);
                                 } else {
-                                  if (result.toString() != codeval.toString()) {
+                                  if (result["mot_de_passe"].toString() !=
+                                      codeval.toString()) {
                                     setState(() {
                                       visible = false;
                                     });
@@ -343,8 +344,10 @@ class LoginScreenState extends State<LoginScreen> {
                                         fontSize: 16.0);
                                   } else {
                                     setState(() {
-                                      code0 = int.parse(result);
+                                      // code0 = int.parse(result);
                                       visible = false;
+                                      SharedPreferencesClass.save("userinfos",
+                                          "[" + jsonEncode(result) + "]");
                                       _validateInputs10();
                                     });
                                   }

@@ -16,7 +16,7 @@ import 'package:kifcab/screens/depot_screen.dart';
 import 'package:kifcab/screens/home_screen.dart';
 import 'package:kifcab/screens/location_screen.dart';
 import 'package:kifcab/screens/login_screen.dart';
-import 'package:kifcab/screens/test.dart';
+import 'package:kifcab/screens/mapview.dart';
 import 'package:kifcab/screens/register_screen.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -40,7 +40,8 @@ void main() async {
   bool compteU = false;
   await SharedPreferencesClass.restoreuser("userinfos").then((value) {
     var userinfos = new List<UserMod>();
-    log("valuee");
+    log("valuee :" + value + "b");
+    //  log(value);
     if (value != "") {
       compteU = true;
       Iterable list0 = jsonDecode(value);

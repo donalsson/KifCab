@@ -11,8 +11,11 @@ import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/gestures.dart';
+
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kifcab/library/loader.dart';
 import '../core/global.dart' as globals;
-import 'package:kifcab/screens/test.dart';
+import 'package:kifcab/screens/mapview.dart';
 import 'package:kifcab/screens/location_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -73,6 +76,7 @@ class LocationScreenState extends State<LocationScreen> {
   int _selectedRange = 0;
   int _selectedPayment = 0;
   int _timess = 0;
+  bool visible = false;
 /*  final _formKey = GlobalKey<FormBuilderState>();
   String _kGoogleApiKey = GOOGLE_API_KEY;
   final TextEditingController _textControllerFrom = new TextEditingController();
@@ -312,362 +316,425 @@ class LocationScreenState extends State<LocationScreen> {
     }
 
     return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: MyTheme.stripColor,
-      appBar: PreferredSize(
-        child: Container(
-          color: Colors.transparent,
-          // color: MyTheme.primaryDarkColor,
-        ),
-        preferredSize: Size(0.0, 0.0),
-      ),
-      drawer: navigationDrawer(),
-      body: Column(
-        children: [
-          Stack(
-            children: [
-              Container(
-                height: 260,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: GoogleMap(
-                  // myLocationEnabled: true,
-                  markers: markers != null ? Set<Marker>.from(markers) : null,
-                  mapType: MapType.normal,
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: false,
-                  scrollGesturesEnabled: false,
-                  zoomGesturesEnabled: false,
-                  zoomControlsEnabled: false,
-                  initialCameraPosition: CameraPosition(
-                      target: LatLng(widget.deplat, widget.depln)),
-                  polylines: Set<Polyline>.of(polylines.values),
-                  onMapCreated: (GoogleMapController controller) {
-                    mapController = controller;
-                  },
-                ),
-              ),
-              Positioned(
-                  bottom: 10,
-                  right: 50,
-                  child: Row(
-                    children: [
-                      Container(
-                        color: Colors.black,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 7),
-                        child: Text(
-                          AppLocalization.of(context).deposit,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      Container(
-                        color: Colors.white,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 7),
-                        child: Text(
-                          _placeDistance +
-                              " km / " +
-                              _timess.toString() +
-                              " minutes / " +
-                              prix.toString() +
-                              " Fcfa",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal),
-                        ),
-                      )
-                    ],
-                  )),
-              Positioned(
-                top: 0,
-                right: 0,
-                left: 0,
-                child: Container(
-                  color: Colors.transparent,
-                  height: AppBar().preferredSize.height,
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                          child: GestureDetector(
-                        onTap: () {
-                          if (_scaffoldKey.currentState.isDrawerOpen) {
-                            _scaffoldKey.currentState.openEndDrawer();
-                          } else {
-                            _scaffoldKey.currentState.openDrawer();
-                          }
-                        },
-                        child: Icon(
-                          Icons.menu,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      )),
-                      Container(
-                          child: GestureDetector(
-                        onTap: () {},
-                        child: Icon(
-                          Icons.radio_button_checked,
-                          color: Colors.red,
-                          size: 20,
-                        ),
-                      )),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+        key: _scaffoldKey,
+        backgroundColor: MyTheme.stripColor,
+        appBar: PreferredSize(
+          child: Container(
+            color: Colors.transparent,
+            // color: MyTheme.primaryDarkColor,
           ),
-
-          Expanded(
-              child: Container(
-                  color: Colors.white,
-                  child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Column(children: [
-                        new Form(
-                          key: _formKey,
-                          autovalidate: _autoValidate,
-                          child: SizedBox(
-                            height: 130,
-                            child: TextFormField(
-                              minLines: 2,
-                              maxLines: 5,
-                              keyboardType: TextInputType.multiline,
-                              validator: validateMessach,
-                              onChanged: (String val) {
-                                setState(() {
-                                  messagech = val;
-                                });
-                              },
+          preferredSize: Size(0.0, 0.0),
+        ),
+        drawer: navigationDrawer(),
+        body: Stack(children: <Widget>[
+          Column(
+            children: [
+              Stack(
+                children: [
+                  Container(
+                    height: 260,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: GoogleMap(
+                      // myLocationEnabled: true,
+                      markers:
+                          markers != null ? Set<Marker>.from(markers) : null,
+                      mapType: MapType.normal,
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: false,
+                      scrollGesturesEnabled: false,
+                      zoomGesturesEnabled: false,
+                      zoomControlsEnabled: false,
+                      initialCameraPosition: CameraPosition(
+                          target: LatLng(widget.deplat, widget.depln)),
+                      polylines: Set<Polyline>.of(polylines.values),
+                      onMapCreated: (GoogleMapController controller) {
+                        mapController = controller;
+                      },
+                    ),
+                  ),
+                  Positioned(
+                      bottom: 10,
+                      right: 50,
+                      child: Row(
+                        children: [
+                          Container(
+                            color: Colors.black,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 7),
+                            child: Text(
+                              AppLocalization.of(context).deposit,
                               style: TextStyle(
-                                  color: MyTheme.navBar,
-                                  fontWeight: FontWeight.w400),
-                              decoration: new InputDecoration(
-                                  contentPadding: const EdgeInsets.only(
-                                      top: 30.0, left: 15, right: 10),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent, width: 1.2),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent, width: 1),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: Colors.transparent, width: 1),
-                                  ),
-                                  hintText: AppLocalization.of(context)
-                                      .messageToSendToTheDriver,
-                                  hintStyle: TextStyle(
-                                      color: MyTheme.navBar,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 14)),
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600),
                             ),
                           ),
-                        ),
-                        Container(
-                          height: 250,
-                          //color:Color(0xFFF1F1F1),
-                          padding: EdgeInsets.all(0),
-                          child: ContainedTabBarView(
-                            tabs: [
-                              Text(AppLocalization.of(context).ranges,
-                                  style: TextStyle(
-                                      color: MyTheme.navBar,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14)),
-                              Text(AppLocalization.of(context).payment,
-                                  style: TextStyle(
-                                      color: MyTheme.navBar,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14))
-                            ],
-                            tabBarProperties: TabBarProperties(
-                                height: 32.0,
-                                indicatorColor: MyTheme.primaryColor,
-                                indicatorWeight: 2.5,
-                                labelColor: Colors.black,
-                                indicatorSize: TabBarIndicatorSize.tab,
-                                unselectedLabelColor: Colors.grey[400]),
-                            views: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
-                                color: Colors.transparent,
-                                child: Wrap(
-                                  direction: Axis.horizontal,
-                                  children: <Widget>[
-                                    CardButton(
-                                      index: 0,
-                                      selectedIndex: _selectedRange,
-                                      imageUrl: 'assets/2.png',
-                                      isAsset: true,
-                                      text: "Classe Bronze",
-                                      onTap: () {
-                                        print("Tap elemen");
-                                        setState(() {
-                                          _selectedRange = 0;
-                                          gammes = "Bronse";
-                                          prix = (distance + _timess + 1000)
-                                              .round() as int;
-                                        });
-                                      },
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    CardButton(
-                                      index: 1,
-                                      selectedIndex: _selectedRange,
-                                      imageUrl: 'assets/3.png',
-                                      isAsset: true,
-                                      text: "Classe Argent",
-                                      onTap: () {
-                                        print("Tap elemen");
-                                        setState(() {
-                                          _selectedRange = 1;
-                                          gammes = "Argent";
-                                          prix = (distance + _timess + 2000)
-                                              .round() as int;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
-                                color: Colors.transparent,
-                                child: Wrap(
-                                  direction: Axis.horizontal,
-                                  children: <Widget>[
-                                    CardButton(
-                                      index: 0,
-                                      selectedIndex: _selectedPayment,
-                                      imageUrl: 'assets/cash.png',
-                                      isAsset: true,
-                                      text: "Cash",
-                                      onTap: () {
-                                        print("Tap elemen");
-                                        setState(() {
-                                          _selectedPayment = 0;
-                                        });
-                                      },
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    CardButton(
-                                      index: 1,
-                                      selectedIndex: _selectedPayment,
-                                      imageUrl: 'assets/om.jpg',
-                                      isAsset: true,
-                                      text: "Orange",
-                                      onTap: () {
-                                        print("Tap elemen");
-                                        setState(() {
-                                          _selectedPayment = 1;
-                                        });
-                                      },
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    CardButton(
-                                      index: 2,
-                                      selectedIndex: _selectedPayment,
-                                      imageUrl: 'assets/mo.jpg',
-                                      isAsset: true,
-                                      text: "MTN",
-                                      onTap: () {
-                                        print("Tap elemen");
-                                        setState(() {
-                                          _selectedPayment = 2;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                            onChange: (index) => print(index),
-                          ),
-                        ),
-                      ])))),
-          //Button zone
-          Row(
-            children: [
-              NavigationButton(
-                backColor: Color(0xFA0c1117),
-                textColor: Color(0xFAFFFFFF),
-                icon: Icons.chevron_left,
-                text: AppLocalization.of(context).previous,
-                onTap: () {
-                  Navigator.pop(context);
-                },
+                          Container(
+                            color: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 7),
+                            child: Text(
+                              _placeDistance +
+                                  " km / " +
+                                  _timess.toString() +
+                                  " minutes / " +
+                                  prix.toString() +
+                                  " Fcfa",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          )
+                        ],
+                      )),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    left: 0,
+                    child: Container(
+                      color: Colors.transparent,
+                      height: AppBar().preferredSize.height,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                              child: GestureDetector(
+                            onTap: () {
+                              if (_scaffoldKey.currentState.isDrawerOpen) {
+                                _scaffoldKey.currentState.openEndDrawer();
+                              } else {
+                                _scaffoldKey.currentState.openDrawer();
+                              }
+                            },
+                            child: Icon(
+                              Icons.menu,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          )),
+                          Container(
+                              child: GestureDetector(
+                            onTap: () {},
+                            child: Icon(
+                              Icons.radio_button_checked,
+                              color: Colors.red,
+                              size: 20,
+                            ),
+                          )),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              NavigationButton(
-                backColor: MyTheme.primaryColor,
-                textColor: Colors.black,
-                icon: Icons.save,
-                text: AppLocalization.of(context).save,
-                onTap: () {
-                  print("Valider");
-                  print(prix);
-                  print(messagech);
-                  String type = "RESERVATION";
-                  print(globals.userinfos.id_compte);
-                  if (_formKey.currentState.validate()) {
-                    HttpPostRequest.saveoperations_request(
-                            type,
-                            globals.userinfos.id_compte.toString(),
-                            prix.toString(),
-                            widget.depname,
-                            widget.arrivname,
-                            gammes,
-                            widget.depln.toString(),
-                            widget.deplat.toString(),
-                            widget.arrivln.toString(),
-                            widget.arrivlat.toString(),
-                            distance.toString())
-                        .then((dynamic result) async {
-                      //  await Future.delayed(Duration(seconds: 5));
-                      print("result");
-                      print(result);
-                    });
-                  } else {
-                    setState(() {
-                      _autoValidate = true;
-                    });
-                  }
 
-                  // _calculateDistance();
-                  /*  mapController.animateCamera(CameraUpdate.newLatLngZoom(
+              Expanded(
+                  child: Container(
+                      color: Colors.white,
+                      child: SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          child: Column(children: [
+                            new Form(
+                              key: _formKey,
+                              autovalidate: _autoValidate,
+                              child: SizedBox(
+                                height: 130,
+                                child: TextFormField(
+                                  minLines: 2,
+                                  maxLines: 5,
+                                  keyboardType: TextInputType.multiline,
+                                  validator: validateMessach,
+                                  onChanged: (String val) {
+                                    setState(() {
+                                      messagech = val;
+                                    });
+                                  },
+                                  style: TextStyle(
+                                      color: MyTheme.navBar,
+                                      fontWeight: FontWeight.w400),
+                                  decoration: new InputDecoration(
+                                      contentPadding: const EdgeInsets.only(
+                                          top: 30.0, left: 15, right: 10),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.zero),
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1.2),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.zero),
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.zero),
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1),
+                                      ),
+                                      hintText: AppLocalization.of(context)
+                                          .messageToSendToTheDriver,
+                                      hintStyle: TextStyle(
+                                          color: MyTheme.navBar,
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 14)),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 250,
+                              //color:Color(0xFFF1F1F1),
+                              padding: EdgeInsets.all(0),
+                              child: ContainedTabBarView(
+                                tabs: [
+                                  Text(AppLocalization.of(context).ranges,
+                                      style: TextStyle(
+                                          color: MyTheme.navBar,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14)),
+                                  Text(AppLocalization.of(context).payment,
+                                      style: TextStyle(
+                                          color: MyTheme.navBar,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14))
+                                ],
+                                tabBarProperties: TabBarProperties(
+                                    height: 32.0,
+                                    indicatorColor: MyTheme.primaryColor,
+                                    indicatorWeight: 2.5,
+                                    labelColor: Colors.black,
+                                    indicatorSize: TabBarIndicatorSize.tab,
+                                    unselectedLabelColor: Colors.grey[400]),
+                                views: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    color: Colors.transparent,
+                                    child: Wrap(
+                                      direction: Axis.horizontal,
+                                      children: <Widget>[
+                                        CardButton(
+                                          index: 0,
+                                          selectedIndex: _selectedRange,
+                                          imageUrl: 'assets/2.png',
+                                          isAsset: true,
+                                          text: "Classe Bronze",
+                                          onTap: () {
+                                            print("Tap elemen");
+                                            setState(() {
+                                              _selectedRange = 0;
+                                              gammes = "Bronse";
+                                              prix = (distance + _timess + 1000)
+                                                  .round() as int;
+                                            });
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        CardButton(
+                                          index: 1,
+                                          selectedIndex: _selectedRange,
+                                          imageUrl: 'assets/3.png',
+                                          isAsset: true,
+                                          text: "Classe Argent",
+                                          onTap: () {
+                                            print("Tap elemen");
+                                            setState(() {
+                                              _selectedRange = 1;
+                                              gammes = "Argent";
+                                              prix = (distance + _timess + 2000)
+                                                  .round() as int;
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    color: Colors.transparent,
+                                    child: Wrap(
+                                      direction: Axis.horizontal,
+                                      children: <Widget>[
+                                        CardButton(
+                                          index: 0,
+                                          selectedIndex: _selectedPayment,
+                                          imageUrl: 'assets/cash.png',
+                                          isAsset: true,
+                                          text: "Cash",
+                                          onTap: () {
+                                            print("Tap elemen");
+                                            setState(() {
+                                              _selectedPayment = 0;
+                                            });
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        CardButton(
+                                          index: 1,
+                                          selectedIndex: _selectedPayment,
+                                          imageUrl: 'assets/om.jpg',
+                                          isAsset: true,
+                                          text: "Orange",
+                                          onTap: () {
+                                            print("Tap elemen");
+                                            setState(() {
+                                              _selectedPayment = 1;
+                                            });
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        CardButton(
+                                          index: 2,
+                                          selectedIndex: _selectedPayment,
+                                          imageUrl: 'assets/mo.jpg',
+                                          isAsset: true,
+                                          text: "MTN",
+                                          onTap: () {
+                                            print("Tap elemen");
+                                            setState(() {
+                                              _selectedPayment = 2;
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                onChange: (index) => print(index),
+                              ),
+                            ),
+                          ])))),
+              //Button zone
+              Row(
+                children: [
+                  NavigationButton(
+                    backColor: Color(0xFA0c1117),
+                    textColor: Color(0xFAFFFFFF),
+                    icon: Icons.chevron_left,
+                    text: AppLocalization.of(context).previous,
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  NavigationButton(
+                    backColor: MyTheme.primaryColor,
+                    textColor: Colors.black,
+                    icon: Icons.save,
+                    text: AppLocalization.of(context).save,
+                    onTap: () {
+                      setState(() {
+                        visible = true;
+                      });
+                      print("Valider");
+                      print(prix);
+                      print(messagech);
+                      String type = "RESERVATION";
+                      print(globals.userinfos.id_compte);
+                      if (_formKey.currentState.validate()) {
+                        HttpPostRequest.saveoperations_request(
+                                type,
+                                globals.userinfos.id_compte.toString(),
+                                prix.toString(),
+                                widget.depname,
+                                widget.arrivname,
+                                gammes,
+                                widget.depln.toString(),
+                                widget.deplat.toString(),
+                                widget.arrivln.toString(),
+                                widget.arrivlat.toString(),
+                                distance.toString())
+                            .then((dynamic result) async {
+                          setState(() {
+                            visible = false;
+                          });
+                          print(result['error']);
+                          if (result['error'].toString() == "true") {
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Une erreur s'est produite verifier votre connexion",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          } else {
+                            log(result['chauffeur']['description'].toString());
+                            globals.commande = result['commande'];
+                            globals.chauffeur = result['chauffeur'];
+                            globals.type =
+                                result['commande']['type'].toString();
+                            globals.idcommande =
+                                result['commande']['id_commande'].toString();
+                            globals.active =
+                                result['commande']['active'].toString();
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Votre Dépot a été enregistrer avec succès",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.green[400],
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => new MapView(
+                                          depname: widget.depname,
+                                          deplat: widget.deplat,
+                                          depln: widget.depln,
+                                          arrivname: widget.arrivname,
+                                          arrivlat: widget.arrivlat,
+                                          arrivln: widget.arrivln,
+                                        )),
+                                (Route<dynamic> route) => false);
+                          }
+                        });
+                      } else {
+                        setState(() {
+                          _autoValidate = true;
+                          visible = false;
+                        });
+                      }
+
+                      // _calculateDistance();
+                      /*  mapController.animateCamera(CameraUpdate.newLatLngZoom(
                       LatLng(widget.deplat, widget.depln), 11000.0));*/
 
-                  /* Navigator.of(context).push(PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => new MapView()));*/
-                },
-              ),
+                      /*  Navigator.of(context).push(PageRouteBuilder(
+                      pageBuilder: (_, __, ___) => new MapView(
+                            depname: widget.depname,
+                            deplat: widget.deplat,
+                            depln: widget.depln,
+                            arrivname: widget.arrivname,
+                            arrivlat: widget.arrivlat,
+                            arrivln: widget.arrivln,
+                          )));*/
+                    },
+                  ),
+                ],
+              )
             ],
-          )
-        ],
-      ),
-    );
+          ),
+          visible ? Load.loadSubmit(context) : Container()
+        ]));
     _calculateDistance();
   }
 

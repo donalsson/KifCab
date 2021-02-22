@@ -55,6 +55,10 @@ class AppLocalization {
     return Intl.message("Enregistrer", name: 'save');
   }
 
+  String get cancel {
+    return Intl.message("Annuler", name: 'cancel');
+  }
+
   String get alreadyHaveAccount {
     return Intl.message("Déjà un compte?", name: 'alreadyHaveAccount');
   }
@@ -261,6 +265,10 @@ class AppLocalization {
   String get enterTheArrivalPoint {
     return Intl.message("Entrer le point d'arrivée",
         name: 'enterTheArrivalPoint');
+  }
+
+  String get callservice {
+    return Intl.message("", name: 'callservice');
   }
 
   String get valenterTheArrivalPoint {

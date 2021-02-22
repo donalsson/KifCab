@@ -19,9 +19,17 @@ void getandsendposition(context) {
     oneSec,
     (Timer timer) async {
       await Geolocator.getCurrentPosition().then((value) => {
-            HttpPostRequest.sendposition_request(value.latitude.toString(),
-                    value.longitude.toString(), globals.userinfos.id_compte)
-                .then((String result) async {})
+            HttpPostRequest.sendposition_request(
+                    value.latitude.toString(),
+                    value.longitude.toString(),
+                    globals.userinfos.id_compte,
+                    globals.fcmtoken)
+                .then((String result) async {
+              //   print(result);
+
+              globals.latitude = value.latitude;
+              globals.longitude = value.longitude;
+            })
             /*     _positionItems.add(_PositionItem(
                             _PositionItemType.position, value.toString()))*/
           });
