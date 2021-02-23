@@ -53,8 +53,19 @@ class HttpPostRequest {
     }
   }
 
-  static Future<dynamic> saveoperations_request(type, iduser, cout, depart,
-      arriver, gamme, deplon, deplat, arrivlon, arrivlat, distance) async {
+  static Future<dynamic> saveoperations_request(
+      type,
+      iduser,
+      cout,
+      depart,
+      arriver,
+      gamme,
+      deplon,
+      deplat,
+      arrivlon,
+      arrivlat,
+      distance,
+      heure) async {
     // String urli = 'https://small-pocket.herokuapp.com/api/v1/auth/sign_in';
     // var url = '${urli}ocr';
     // var bytes = image.readAsBytesSync();
@@ -70,6 +81,7 @@ class HttpPostRequest {
           "compte": iduser,
           "cout": cout,
           "depart": depart,
+          "heure": heure,
           "arrive": arriver,
           "gamme": "8",
           "long_d": deplon,
@@ -132,13 +144,13 @@ class HttpPostRequest {
         body: json.encode(data),
         encoding: Encoding.getByName('utf-8'),
         headers: headers);
-    print(response.body);
+    // log(response.body);
     if (response.statusCode == 200) {
       // on success do sth
-      print('test ok push CFM');
+      log('test ok push CFM');
       return true;
     } else {
-      print(' CFM error');
+      log(' CFM error');
       // on failure do sth
       return false;
     }

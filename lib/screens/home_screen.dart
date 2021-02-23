@@ -49,15 +49,19 @@ class HomeScreenState extends State<HomeScreen> {
   void initSaveData() async {
     HttpPostRequest.getCurrentOperation(globals.userinfos.id_compte)
         .then((dynamic result) async {
+      String arr;
       print(result);
       if (result.toString() != "null") {
         setState(() {
           int deparIndex = result["commande"]["depart"].indexOf(',');
           depart = result["commande"]["depart"].substring(0, deparIndex);
-
-          int arrivIndex = result["commande"]["arrive"].indexOf(',');
-          arrive = result["commande"]["arrive"].substring(0, arrivIndex);
-
+          if (result["commande"]["type"] == "RESERVATION") {
+            int arrivIndex = result["commande"]["arrive"].indexOf(',');
+            arrive = result["commande"]["arrive"].substring(0, arrivIndex);
+            arr = result["commande"]["arrive"];
+          } else {
+            arr = "a";
+          }
           globals.commande = result["commande"];
           globals.idcommande = result["commande"]["id_commande"];
           globals.active = result["commande"]["statut"];
@@ -93,7 +97,7 @@ class HomeScreenState extends State<HomeScreen> {
                   depname: result["commande"]["depart"],
                   deplat: double.parse(result["commande"]["lat_d"]),
                   depln: double.parse(result["commande"]["long_d"]),
-                  arrivname: result["commande"]["arrive"],
+                  arrivname: arr,
                   arrivlat: double.parse(result["commande"]["lat_a"]),
                   arrivln: double.parse(result["commande"]["long_a"]),
                 )));

@@ -80,12 +80,14 @@ class MapView extends StatefulWidget {
 
 double longitude;
 double lonch = 0;
+int ii = 0;
+int iii = 0;
 double latitude;
 double latch;
 String depart = "";
 String arrive = "";
 
-class _MapViewState extends State<MapView> {
+class _MapViewState extends State<MapView> with TickerProviderStateMixin {
   _MapViewState();
   CameraPosition _initialLocation = CameraPosition(target: LatLng(0.0, 0.0));
   GoogleMapController mapController;
@@ -107,7 +109,8 @@ class _MapViewState extends State<MapView> {
   Position destinationCoordinates1;
   final startAddressFocusNode = FocusNode();
   final desrinationAddressFocusNode = FocusNode();
-
+  AnimationController _controller;
+  int levelClock = 0;
   String _placeDistance = " ";
   String _placeDistancek = "";
   String idoffre = "";
@@ -153,6 +156,18 @@ class _MapViewState extends State<MapView> {
 
   @override
   void initState() {
+    if (globals.type == "COURSE" && globals.active == "3") {
+      levelClock = int.parse(globals.commande["heure"]) * 60 * 60;
+      _controller = AnimationController(
+          vsync: this,
+          duration: Duration(
+              seconds: int.parse(globals.commande["heure"]) *
+                  60 *
+                  60) // gameData.levelClock is a user entered number elsewhere in the applciation
+          );
+
+      _controller.forward();
+    }
     initSaveData();
     initSaveDataCloud();
     super.initState();
@@ -242,6 +257,17 @@ class _MapViewState extends State<MapView> {
             setState(() {
               globals.active = "3";
             });
+            if (globals.type == "COURSE") {
+              _controller = AnimationController(
+                  vsync: this,
+                  duration: Duration(
+                      seconds: int.parse(globals.commande["heure"]) *
+                          60 *
+                          60) // gameData.levelClock is a user entered number elsewhere in the applciation
+                  );
+
+              _controller.forward();
+            }
             updatepositionChauffeur(double.parse(message["data"]["userlat"]),
                 double.parse(message["data"]["userln"]));
           } else {
@@ -284,9 +310,11 @@ class _MapViewState extends State<MapView> {
   void initSaveData() async {
     int deparIndex = widget.depname.indexOf(',');
     depart = widget.depname.substring(0, deparIndex);
+    if (globals.type == "RESERVATION") {
+      int arrivIndex = widget.arrivname.indexOf(',');
+      arrive = widget.arrivname.substring(0, arrivIndex);
+    }
 
-    int arrivIndex = widget.arrivname.indexOf(',');
-    arrive = widget.arrivname.substring(0, arrivIndex);
     await Geolocator.getCurrentPosition().then((value) => {
           setState(() {
             longitude = value.longitude;
@@ -330,9 +358,25 @@ class _MapViewState extends State<MapView> {
   createMarker(context, lat, lon) {
     /*print("customIcon1");
     print(lat);*/
+
+    ii = ii + 1;
+
     log("_placeDistancek");
     // log(globals.chauflat.toString());
     if (globals.chauflat == 0) {
+      Marker f = Marker(
+          markerId: MarkerId('1'),
+          icon: customIcon1,
+          alpha: 0.5,
+          position: LatLng(lat, lon),
+          infoWindow: InfoWindow(title: 'I am a marker!'));
+
+      markers.removeWhere((element) => element.markerId.value == '1');
+
+      markers.add(f);
+      mapController.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(target: LatLng(lat, lon), zoom: 16)));
+    } else {
       Marker f = Marker(
           markerId: MarkerId('1'),
           icon: customIcon1,
@@ -344,10 +388,8 @@ class _MapViewState extends State<MapView> {
         markers.removeWhere((element) => element.markerId.value == '1');
       });
       markers.add(f);
-      mapController.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(lat, lon), zoom: 16)));
-    } else {
-      if (globals.active == "3") {
+
+      if (globals.active == "3" && globals.type == "RESERVATION") {
         Position _northeastCoordinates;
         Position _southwestCoordinates;
 
@@ -572,7 +614,9 @@ class _MapViewState extends State<MapView> {
               100.0,
             ),
           );
-
+          if (globals.type == "COURSE") {
+            await _createPolylines(startCoordinates, destinationCoordinates);
+          }
           // Calculating the distance between the start and the end positions
           // with a straight path, without considering any route
           // double distanceInMeters = await Geolocator().bearingBetween(
@@ -611,6 +655,8 @@ class _MapViewState extends State<MapView> {
         arivmarker = icon;
       });
     });
+    Marker destinationMarker;
+    Marker startMarker;
     //  sleep(Duration(seconds: 10));
     try {
       // Retrieving placemarks from addresses
@@ -619,18 +665,21 @@ class _MapViewState extends State<MapView> {
           await locationFromAddress(widget.arrivname);*/
       log("enter");
       if (widget.deplat != null && widget.arrivlat != null) {
+        log("enter 222");
         // Use the retrieved coordinates of the current position,
         // instead of the address if the start position is user's
         // current position, as it results in better accuracy.
         setState(() {
           startCoordinates =
               Position(latitude: widget.deplat, longitude: widget.depln);
-          destinationCoordinates =
-              Position(latitude: widget.arrivlat, longitude: widget.arrivln);
+          if (globals.type == "RESERVATION") {
+            destinationCoordinates =
+                Position(latitude: widget.arrivlat, longitude: widget.arrivln);
+          }
         });
 
         // Start Location Marker
-        Marker startMarker = Marker(
+        startMarker = Marker(
           markerId: MarkerId('$startCoordinates'),
           icon: depmarker,
           alpha: 0.5,
@@ -643,122 +692,130 @@ class _MapViewState extends State<MapView> {
             snippet: widget.depname,
           ),
         );
-
-        // Destination Location Marker
-        Marker destinationMarker = Marker(
-          markerId: MarkerId('$destinationCoordinates'),
-          alpha: 0.5,
-          position: LatLng(
-            destinationCoordinates.latitude,
-            destinationCoordinates.longitude,
-          ),
-          infoWindow: InfoWindow(
-            title: 'Destination',
-            snippet: widget.arrivname,
-          ),
-          icon: arivmarker,
-        );
+        if (globals.type == "RESERVATION") {
+          // Destination Location Marker
+          destinationMarker = Marker(
+            markerId: MarkerId('$destinationCoordinates'),
+            alpha: 0.5,
+            position: LatLng(
+              destinationCoordinates.latitude,
+              destinationCoordinates.longitude,
+            ),
+            infoWindow: InfoWindow(
+              title: 'Destination',
+              snippet: widget.arrivname,
+            ),
+            icon: arivmarker,
+          );
+        }
         setState(() {
           markers.removeWhere(
               (element) => element.markerId.value == '$startCoordinates');
-          markers.removeWhere(
-              (element) => element.markerId.value == '$destinationCoordinates');
+          if (globals.type == "RESERVATION") {
+            markers.removeWhere((element) =>
+                element.markerId.value == '$destinationCoordinates');
+          }
         });
 
         // Adding the markers to the list
         markers.add(startMarker);
-        markers.add(destinationMarker);
+        if (globals.type == "RESERVATION") {
+          markers.add(destinationMarker);
+        }
         if (poll == "a") {
-          print('START COORDINATES: $startCoordinates');
-          print('DESTINATION COORDINATES: $destinationCoordinates');
+          if (globals.type == "RESERVATION") {
+            print('START COORDINATES: $startCoordinates');
+            print('DESTINATION COORDINATES: $destinationCoordinates');
 
-          Position _northeastCoordinates;
-          Position _southwestCoordinates;
+            Position _northeastCoordinates;
+            Position _southwestCoordinates;
 
-          // Calculating to check that the position relative
-          // to the frame, and pan & zoom the camera accordingly.
-          double miny =
-              (startCoordinates.latitude <= destinationCoordinates.latitude)
-                  ? startCoordinates.latitude
-                  : destinationCoordinates.latitude;
-          double minx =
-              (startCoordinates.longitude <= destinationCoordinates.longitude)
-                  ? startCoordinates.longitude
-                  : destinationCoordinates.longitude;
-          double maxy =
-              (startCoordinates.latitude <= destinationCoordinates.latitude)
-                  ? destinationCoordinates.latitude
-                  : startCoordinates.latitude;
-          double maxx =
-              (startCoordinates.longitude <= destinationCoordinates.longitude)
-                  ? destinationCoordinates.longitude
-                  : startCoordinates.longitude;
+            // Calculating to check that the position relative
+            // to the frame, and pan & zoom the camera accordingly.
+            double miny =
+                (startCoordinates.latitude <= destinationCoordinates.latitude)
+                    ? startCoordinates.latitude
+                    : destinationCoordinates.latitude;
+            double minx =
+                (startCoordinates.longitude <= destinationCoordinates.longitude)
+                    ? startCoordinates.longitude
+                    : destinationCoordinates.longitude;
+            double maxy =
+                (startCoordinates.latitude <= destinationCoordinates.latitude)
+                    ? destinationCoordinates.latitude
+                    : startCoordinates.latitude;
+            double maxx =
+                (startCoordinates.longitude <= destinationCoordinates.longitude)
+                    ? destinationCoordinates.longitude
+                    : startCoordinates.longitude;
 
-          _southwestCoordinates = Position(latitude: miny, longitude: minx);
-          _northeastCoordinates = Position(latitude: maxy, longitude: maxx);
+            _southwestCoordinates = Position(latitude: miny, longitude: minx);
+            _northeastCoordinates = Position(latitude: maxy, longitude: maxx);
 
-          // Accommodate the two locations within the
-          // camera view of the map
+            // Accommodate the two locations within the
+            // camera view of the map
 /*
         mapController.animateCamera(CameraUpdate.newCameraPosition(
             CameraPosition(target: LatLng(widget.deplat, widget.depln))));
 
         mapController.animateCamera(CameraUpdate.newLatLngZoom(
             LatLng(widget.deplat, widget.depln), 100));*/
-          mapController.animateCamera(
-            CameraUpdate.newLatLngBounds(
-              LatLngBounds(
-                northeast: LatLng(
-                  _northeastCoordinates.latitude,
-                  _northeastCoordinates.longitude,
+            mapController.animateCamera(
+              CameraUpdate.newLatLngBounds(
+                LatLngBounds(
+                  northeast: LatLng(
+                    _northeastCoordinates.latitude,
+                    _northeastCoordinates.longitude,
+                  ),
+                  southwest: LatLng(
+                    _southwestCoordinates.latitude,
+                    _southwestCoordinates.longitude,
+                  ),
                 ),
-                southwest: LatLng(
-                  _southwestCoordinates.latitude,
-                  _southwestCoordinates.longitude,
-                ),
+                100.0,
               ),
-              100.0,
-            ),
-          );
-
-          // Calculating the distance between the start and the end positions
-          // with a straight path, without considering any route
-          // double distanceInMeters = await Geolocator().bearingBetween(
-          //   startCoordinates.latitude,
-          //   startCoordinates.longitude,
-          //   destinationCoordinates.latitude,
-          //   destinationCoordinates.longitude,
-          // );
-
-          await _createPolylines(startCoordinates, destinationCoordinates);
-
-          double totalDistance = 0.0;
-          int timed = 00;
-
-          // Calculating the total distance by adding the distance
-          // between small segments
-          log("sdsdsd");
-          log(polylineCoordinates.length.toString());
-
-          for (int i = 0; i < polylineCoordinates.length - 1; i++) {
-            totalDistance += _coordinateDistance(
-              polylineCoordinates[i].latitude,
-              polylineCoordinates[i].longitude,
-              polylineCoordinates[i + 1].latitude,
-              polylineCoordinates[i + 1].longitude,
             );
+
+            // Calculating the distance between the start and the end positions
+            // with a straight path, without considering any route
+            // double distanceInMeters = await Geolocator().bearingBetween(
+            //   startCoordinates.latitude,
+            //   startCoordinates.longitude,
+            //   destinationCoordinates.latitude,
+            //   destinationCoordinates.longitude,
+            // );
+
+            await _createPolylines(startCoordinates, destinationCoordinates);
+
+            double totalDistance = 0.0;
+            int timed = 00;
+
+            // Calculating the total distance by adding the distance
+            // between small segments
+            log("sdsdsd");
+            log(polylineCoordinates.length.toString());
+
+            for (int i = 0; i < polylineCoordinates.length - 1; i++) {
+              totalDistance += _coordinateDistance(
+                polylineCoordinates[i].latitude,
+                polylineCoordinates[i].longitude,
+                polylineCoordinates[i + 1].latitude,
+                polylineCoordinates[i + 1].longitude,
+              );
+            }
+            timed += _coordinateTimess(totalDistance);
+            log("fdfdfdf");
+            log(_timess.toString());
+            setState(() {
+              _placeDistance = totalDistance.toStringAsFixed(2);
+              _timess = timed;
+              distance = totalDistance;
+              print('DISTANCE: $_placeDistance km');
+            });
+            return true;
           }
-          timed += _coordinateTimess(totalDistance);
-          log("fdfdfdf");
-          log(_timess.toString());
-          setState(() {
-            _placeDistance = totalDistance.toStringAsFixed(2);
-            _timess = timed;
-            distance = totalDistance;
-            print('DISTANCE: $_placeDistance km');
-          });
+
           _calculateDistance("b");
-          return true;
         }
       }
     } catch (e) {
@@ -810,12 +867,23 @@ class _MapViewState extends State<MapView> {
     }
 
     PolylineId id = PolylineId('poly');
-    Polyline polyline = Polyline(
-      polylineId: id,
-      color: Colors.blue,
-      points: polylineCoordinates,
-      width: 3,
-    );
+    Polyline polyline;
+    if (globals.type == "COURSE") {
+      polyline = Polyline(
+        polylineId: id,
+        color: Colors.red[400],
+        points: polylineCoordinates,
+        width: 3,
+      );
+    } else {
+      polyline = Polyline(
+        polylineId: id,
+        color: Colors.blue,
+        points: polylineCoordinates,
+        width: 3,
+      );
+    }
+
     polylines[id] = polyline;
   }
 
@@ -832,6 +900,28 @@ class _MapViewState extends State<MapView> {
   @override
   Widget build(BuildContext context) {
     i = i + 1;
+    if (i == 1) {
+      ImageConfiguration configuration1 =
+          createLocalImageConfiguration(context);
+      /*    final Uint8List markerIcon =
+              await getBytesFromAsset('assets/images/flutter.png', 100);*/
+      BitmapDescriptor.fromAssetImage(configuration1, 'assets/dep.png')
+          .then((icon) {
+        setState(() {
+          depmarker = icon;
+        });
+      });
+      ImageConfiguration configuration2 =
+          createLocalImageConfiguration(context);
+      /*    final Uint8List markerIcon =
+              await getBytesFromAsset('assets/images/flutter.png', 100);*/
+      BitmapDescriptor.fromAssetImage(configuration2, 'assets/arriv.png')
+          .then((icon) {
+        setState(() {
+          arivmarker = icon;
+        });
+      });
+    }
     log(i.toString());
     if (i == 2) {
       _calculateDistance("a");
@@ -841,36 +931,32 @@ class _MapViewState extends State<MapView> {
       _timer = new Timer.periodic(
         oneSec,
         (Timer timer) async {
-          ImageConfiguration configuration =
-              createLocalImageConfiguration(context);
-          /*    final Uint8List markerIcon =
+          if (iii == 0) {
+            iii = 1;
+            ImageConfiguration configuration =
+                createLocalImageConfiguration(context);
+            /*    final Uint8List markerIcon =
               await getBytesFromAsset('assets/images/flutter.png', 100);*/
-          BitmapDescriptor.fromAssetImage(
-                  configuration, 'assets/icon-client.png')
-              .then((icon) {
-            setState(() {
-              customIcon1 = icon;
+            BitmapDescriptor.fromAssetImage(
+                    configuration, 'assets/icon-client.png')
+                .then((icon) {
+              setState(() {
+                customIcon1 = icon;
+              });
             });
-          });
-          ImageConfiguration configuration1 =
-              createLocalImageConfiguration(context);
-          /*    final Uint8List markerIcon =
+            ImageConfiguration configuration1 =
+                createLocalImageConfiguration(context);
+            /*    final Uint8List markerIcon =
               await getBytesFromAsset('assets/images/flutter.png', 100);*/
-          BitmapDescriptor.fromAssetImage(
-                  configuration1, 'assets/icon-taxi.png')
-              .then((icon) {
-            setState(() {
-              customIcon2 = icon;
+            BitmapDescriptor.fromAssetImage(
+                    configuration1, 'assets/icon-taxi.png')
+                .then((icon) {
+              setState(() {
+                customIcon2 = icon;
+              });
             });
-          });
+          }
 
-          print("globals.latitude");
-          print(globals.latitude);
-          print("globals.lon");
-          print(globals.longitude);
-          print("globals.toke");
-          print(globals.fcmtoken);
-          print(globals.userinfos.id_compte);
           await Geolocator.getCurrentPosition().then((value) => {
                 HttpPostRequest.sendposition_request(
                         value.latitude.toString(),
@@ -878,10 +964,8 @@ class _MapViewState extends State<MapView> {
                         globals.userinfos.id_compte,
                         globals.fcmtoken)
                     .then((String result) async {
-                  setState(() {
-                    globals.latitude = value.latitude;
-                    globals.longitude = value.longitude;
-                  });
+                  globals.latitude = value.latitude;
+                  globals.longitude = value.longitude;
                   createMarker(context, value.latitude, value.longitude);
                 })
                 /*     _positionItems.add(_PositionItem(
@@ -937,6 +1021,34 @@ class _MapViewState extends State<MapView> {
                           width: MediaQuery.of(context).size.width,
                           child: Column(
                             children: [
+                              globals.type == "COURSE" && globals.active == "3"
+                                  ? Container(
+                                      color: Color.fromRGBO(255, 255, 255, 0.5),
+                                      margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              "Votre Course s'achève dans :",
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                            Countdown(
+                                              animation: StepTween(
+                                                begin:
+                                                    levelClock, // THIS IS A USER ENTERED NUMBER
+                                                end: 0,
+                                              ).animate(_controller),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
                               globals.active == "1"
                                   ? Container(
                                       margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
@@ -982,7 +1094,30 @@ class _MapViewState extends State<MapView> {
                                       ),
                                     )
                                   : Container(),
-                              globals.active == "3"
+                              globals.active == "3" && globals.type == "COURSE"
+                                  ? Container(
+                                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 100.0,
+                                      child: ListView(
+                                        padding: EdgeInsets.only(top: 50.0),
+                                        children: [
+                                          Marquee(
+                                            text:
+                                                'Bon déplacement avec KifCab, Noublier pas de noter le chauffeur a la fin.         Merci de faire confiance a KifCab ...                             ',
+                                            style: TextStyle(
+                                                foreground: Paint()
+                                                  ..style = PaintingStyle.stroke
+                                                  ..strokeWidth = 1
+                                                  ..color = Colors.black,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.normal),
+                                          ),
+                                        ].map(_wrapWithStuff).toList(),
+                                      ),
+                                    )
+                                  : Container(),
+                              globals.active == "3" && globals.type != "COURSE"
                                   ? Container(
                                       margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
                                       width: MediaQuery.of(context).size.width,
@@ -1136,39 +1271,79 @@ class _MapViewState extends State<MapView> {
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: Padding(
                                     padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          color: Colors.black,
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 4, horizontal: 7),
-                                          child: Text(
-                                            AppLocalization.of(context).deposit,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ),
-                                        Container(
-                                          color: Colors.white,
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 4, horizontal: 7),
-                                          child: Text(
-                                            _placeDistance +
-                                                " km / " +
-                                                _timess.toString() +
-                                                " minutes / " +
-                                                prix.toString() +
-                                                " Fcfa",
-                                            style: TextStyle(
+                                    child: globals.type == "RESERVATION"
+                                        ? Row(
+                                            children: [
+                                              Container(
                                                 color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal),
-                                          ),
-                                        )
-                                      ],
-                                    )),
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 4, horizontal: 7),
+                                                child: Text(
+                                                  AppLocalization.of(context)
+                                                      .deposit,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                              ),
+                                              Container(
+                                                color: Colors.white,
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 4, horizontal: 7),
+                                                child: Text(
+                                                  _placeDistance +
+                                                      " km / " +
+                                                      _timess.toString() +
+                                                      " minutes / " +
+                                                      prix.toString() +
+                                                      " Fcfa",
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.normal),
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        : Row(
+                                            children: [
+                                              Container(
+                                                color: Colors.black,
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 4, horizontal: 7),
+                                                child: Text(
+                                                  AppLocalization.of(context)
+                                                      .course,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                              ),
+                                              Container(
+                                                color: Colors.white,
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 4, horizontal: 7),
+                                                child: Text(
+                                                  globals.commande["heure"]
+                                                          .toString() +
+                                                      " heure / " +
+                                                      globals.commande["cout"]
+                                                          .toString() +
+                                                      " Fcfa",
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.normal),
+                                                ),
+                                              )
+                                            ],
+                                          )),
                               )
                             : Container(),
                         globals.active == "3" || globals.active == "4"
@@ -1178,81 +1353,179 @@ class _MapViewState extends State<MapView> {
                                   width: 330,
                                   color: Colors.white,
                                   margin: EdgeInsets.fromLTRB(10, 0, 7, 0),
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              color: Colors.black,
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 4, horizontal: 7),
-                                              child: Text(
-                                                AppLocalization.of(context)
-                                                    .deposit,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                            ),
-                                            Container(
-                                              color: Colors.white,
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 4, horizontal: 7),
-                                              child: Text(
-                                                _placeDistance +
-                                                    " km / " +
-                                                    _timess.toString() +
-                                                    " minutes / " +
-                                                    prix.toString() +
-                                                    " Fcfa",
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        Container(
-                                          width: 330,
+                                  child: globals.type == "RESERVATION"
+                                      ? Padding(
                                           padding:
-                                              EdgeInsets.fromLTRB(5, 2, 0, 0),
-                                          color: Colors.black12,
-                                          child: RichText(
-                                              text: new TextSpan(
-                                            // Note: Styles for TextSpans must be explicitly defined.
-                                            // Child text spans will inherit styles from parent
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1
-                                                .copyWith(
-                                                    fontWeight: FontWeight.w300,
-                                                    fontSize: 12,
-                                                    color: Colors.black),
-                                            children: <TextSpan>[
-                                              new TextSpan(
-                                                  text: 'DE ',
-                                                  style: new TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                              new TextSpan(text: depart),
-                                              new TextSpan(
-                                                  text: ' A ',
-                                                  style: new TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                              new TextSpan(text: arrive),
+                                              EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    color: Colors.black,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 4,
+                                                            horizontal: 7),
+                                                    child: Text(
+                                                      AppLocalization.of(
+                                                              context)
+                                                          .deposit,
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    color: Colors.white,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 4,
+                                                            horizontal: 7),
+                                                    child: Text(
+                                                      _placeDistance +
+                                                          " km / " +
+                                                          _timess.toString() +
+                                                          " minutes / " +
+                                                          prix.toString() +
+                                                          " Fcfa",
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Container(
+                                                width: 330,
+                                                padding: EdgeInsets.fromLTRB(
+                                                    5, 2, 0, 0),
+                                                color: Colors.black12,
+                                                child: RichText(
+                                                    text: new TextSpan(
+                                                  // Note: Styles for TextSpans must be explicitly defined.
+                                                  // Child text spans will inherit styles from parent
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                          fontSize: 12,
+                                                          color: Colors.black),
+                                                  children: <TextSpan>[
+                                                    new TextSpan(
+                                                        text: 'DE ',
+                                                        style: new TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    new TextSpan(text: depart),
+                                                    new TextSpan(
+                                                        text: ' A ',
+                                                        style: new TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    new TextSpan(text: arrive),
+                                                  ],
+                                                )),
+                                              )
                                             ],
-                                          )),
+                                          ),
                                         )
-                                      ],
-                                    ),
-                                  ),
+                                      : Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    color: Colors.black,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 4,
+                                                            horizontal: 7),
+                                                    child: Text(
+                                                      AppLocalization.of(
+                                                              context)
+                                                          .course,
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    color: Colors.white,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 4,
+                                                            horizontal: 7),
+                                                    child: Text(
+                                                      globals.commande["heure"]
+                                                              .toString() +
+                                                          " heure / " +
+                                                          globals
+                                                              .commande["cout"]
+                                                              .toString() +
+                                                          " Fcfa",
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Container(
+                                                width: 330,
+                                                padding: EdgeInsets.fromLTRB(
+                                                    5, 2, 0, 0),
+                                                color: Colors.black12,
+                                                child: RichText(
+                                                    text: new TextSpan(
+                                                  // Note: Styles for TextSpans must be explicitly defined.
+                                                  // Child text spans will inherit styles from parent
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                          fontSize: 12,
+                                                          color: Colors.black),
+                                                  children: <TextSpan>[
+                                                    new TextSpan(
+                                                        text: 'Départ ',
+                                                        style: new TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    new TextSpan(text: depart),
+                                                    new TextSpan(
+                                                        text: ' Durée ',
+                                                        style: new TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    new TextSpan(
+                                                        text: globals.commande[
+                                                                "heure"] +
+                                                            " H"),
+                                                  ],
+                                                )),
+                                              )
+                                            ],
+                                          ),
+                                        ),
                                 ),
                               )
                             : Container()
@@ -1783,4 +2056,31 @@ class _MapViewState extends State<MapView> {
 
 Widget getButton() {
   return null;
+}
+
+class Countdown extends AnimatedWidget {
+  Countdown({Key key, this.animation}) : super(key: key, listenable: animation);
+  Animation<int> animation;
+
+  @override
+  build(BuildContext context) {
+    Duration clockTimer = Duration(seconds: animation.value);
+
+    String timerText =
+        '${clockTimer.inHours.remainder(24).toString()} : ${clockTimer.inMinutes.remainder(60).toString()} : ${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
+/*
+    print('animation.value  ${animation.value} ');
+    print('inMinutes ${clockTimer.inMinutes.toString()}');
+    print('inSeconds ${clockTimer.inSeconds.toString()}');
+    print(
+        'inSeconds.remainder ${clockTimer.inSeconds.remainder(60).toString()}');
+*/
+    return Text(
+      "$timerText",
+      style: TextStyle(
+        fontSize: 30,
+        color: Theme.of(context).primaryColor,
+      ),
+    );
+  }
 }

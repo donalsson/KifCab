@@ -17,6 +17,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:kifcab/screens/location_screen.dart';
+import 'package:kifcab/screens/coursedet.dart';
 
 import 'package:kifcab/utils/tcheckconnection.dart';
 
@@ -39,6 +40,7 @@ class CourseScreen extends StatefulWidget {
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 final searchScaffoldKey = GlobalKey<ScaffoldState>();
 String departName;
+String dure;
 double deplat;
 double deln;
 
@@ -51,6 +53,7 @@ class _CourseScreenState extends State<CourseScreen> {
   bool _autoValidate = false;
   Mode _mode = Mode.overlay;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String kGoogleApiKey = GOOGLE_API_KEY;
   final TextEditingController _textControllerFrom = new TextEditingController();
   final TextEditingController _textControllerTo = new TextEditingController();
@@ -67,15 +70,17 @@ class _CourseScreenState extends State<CourseScreen> {
       textTheme: ButtonTextTheme.primary,
     ),
   );
-  List<CourseDuration> _durations = [CourseDuration.fill(id: "", name:"")];
-  List<CourseDuration> buildDurationList(BuildContext context){
+  List<CourseDuration> _durations = [CourseDuration.fill(id: "", name: "")];
+  List<CourseDuration> buildDurationList(BuildContext context) {
     List<CourseDuration> durations = [];
-    durations.add(CourseDuration.fill(id: "", name:AppLocalization.of(context).selectADuration));
-    for(int i = 1; i<=12; i++){
-      durations.add(CourseDuration.fill(id: "1", name:AppLocalization.of(context).durationFor(i)));
+    durations.add(CourseDuration.fill(
+        id: "", name: AppLocalization.of(context).selectADuration));
+    for (int i = 1; i <= 6; i++) {
+      durations.add(CourseDuration.fill(
+          id: "1", name: AppLocalization.of(context).durationFor(i)));
     }
     setState(() {
-      _durations =  durations;
+      _durations = durations;
     });
   }
 
@@ -93,9 +98,8 @@ class _CourseScreenState extends State<CourseScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 0),(){
+    Future.delayed(Duration(seconds: 0), () {
       this.buildDurationList(context);
-
     });
     _textControllerFrom.addListener(() {
       setState(() {
@@ -119,7 +123,7 @@ class _CourseScreenState extends State<CourseScreen> {
     if (p != null) {
       // get detail (lat/lng)
       PlacesDetailsResponse detail =
-      await _places.getDetailsByPlaceId(p.placeId);
+          await _places.getDetailsByPlaceId(p.placeId);
 
       final lat = detail.result.geometry.location.lat;
       final lng = detail.result.geometry.location.lng;
@@ -147,27 +151,129 @@ class _CourseScreenState extends State<CourseScreen> {
 
     techkconnection(context);
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: MyTheme.stripColor,
-      appBar: AppBar(
-        elevation: 0.0,
-        bottomOpacity: 0.0,
-        backgroundColor: MyTheme.stripColor,
-        actions: <Widget>[
-          Padding(
-              padding: EdgeInsets.only(right: 20.0, top: 15.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(
-                  Icons.radio_button_checked,
-                  color: Colors.red,
-                  size: 20,
-                ),
-              )),
-        ],
+      appBar: PreferredSize(
+        child: Container(
+          color: Colors.transparent,
+          // color: MyTheme.primaryDarkColor,
+        ),
+        preferredSize: Size(0.0, 0.0),
       ),
       drawer: navigationDrawer(),
       body: Column(
         children: [
+          Stack(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                decoration: new BoxDecoration(
+                  color: Color.fromRGBO(0, 0, 0, 0.0),
+                  image: new DecorationImage(
+                    fit: BoxFit.cover,
+                    colorFilter: new ColorFilter.mode(
+                        Color.fromRGBO(0, 0, 0, 0.1), BlendMode.dstATop),
+                    image: AssetImage("assets/pictures/2.jpg"),
+                  ),
+                ),
+                child: Center(
+                  // Center is a layout widget. It takes a single child and positions it
+                  // in the middle of the parent.
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                      AppLocalization.of(context)
+                                          .needACarForAPeriod,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          )),
+                                  SizedBox(
+                                    height: 07,
+                                  ),
+                                  Text(
+                                      AppLocalization.of(context)
+                                          .makeForCourses,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .copyWith(
+                                              fontWeight: FontWeight.w300,
+                                              color: Colors.white)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Icon(
+                              Icons.local_taxi,
+                              color: Color(0xFAFFFFFF),
+                              size: 40,
+                            ),
+                          ]),
+                      SizedBox(
+                        height: 30,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                left: 0,
+                child: Container(
+                  color: Colors.transparent,
+                  height: AppBar().preferredSize.height,
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                          child: GestureDetector(
+                        onTap: () {
+                          if (_scaffoldKey.currentState.isDrawerOpen) {
+                            _scaffoldKey.currentState.openEndDrawer();
+                          } else {
+                            _scaffoldKey.currentState.openDrawer();
+                          }
+                        },
+                        child: Icon(
+                          Icons.menu,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      )),
+                      Container(
+                          child: GestureDetector(
+                        onTap: () {},
+                        child: Icon(
+                          Icons.radio_button_checked,
+                          color: Colors.red,
+                          size: 20,
+                        ),
+                      )),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+
           Form(
             key: _formKey,
             autovalidate: _autoValidate,
@@ -178,73 +284,12 @@ class _CourseScreenState extends State<CourseScreen> {
                   physics: AlwaysScrollableScrollPhysics(),
                   child: Column(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: MyTheme.stripColor,
-                        ),
-                        child: Center(
-                          // Center is a layout widget. It takes a single child and positions it
-                          // in the middle of the parent.
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Row(children: <Widget>[
-                                SizedBox(
-                                  width: 25,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                          AppLocalization.of(context)
-                                              .needACarForAPeriod,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1
-                                              .copyWith(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                          )),
-                                      SizedBox(
-                                        height: 07,
-                                      ),
-                                      Text(
-                                          AppLocalization.of(context)
-                                              .makeForCourses,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2
-                                              .copyWith(
-                                              fontWeight: FontWeight.w300,
-                                              color: Colors.white)),
-                                    ],
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.local_taxi,
-                                  color: Color(0xFAFFFFFF),
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                              ]),
-                              SizedBox(
-                                height: 30,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                       SizedBox(
                         height: 30,
                       ),
                       Container(
                         padding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                         child: Column(
                           children: [
                             Row(
@@ -256,10 +301,10 @@ class _CourseScreenState extends State<CourseScreen> {
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: MyTheme.navBar,
-                                  ),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: MyTheme.navBar,
+                                      ),
                                 ),
                                 Text(
                                   AppLocalization.of(context).required,
@@ -267,10 +312,10 @@ class _CourseScreenState extends State<CourseScreen> {
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w300,
-                                    color: MyTheme.navBar,
-                                  ),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w300,
+                                        color: MyTheme.navBar,
+                                      ),
                                 )
                               ],
                             ),
@@ -288,7 +333,7 @@ class _CourseScreenState extends State<CourseScreen> {
                                     PageRouteBuilder(
                                         opaque: false,
                                         pageBuilder: (_, __, ___) =>
-                                        new CustomSearchScaffold()));
+                                            new CustomSearchScaffold()));
 
                                 setState(() {
                                   print(result[3]);
@@ -313,14 +358,14 @@ class _CourseScreenState extends State<CourseScreen> {
                                   ),
                                   suffixIcon: _showClearButtonInputFrom
                                       ? IconButton(
-                                    onPressed: () =>
-                                        _textControllerFrom.clear(),
-                                    icon: Icon(
-                                      Icons.clear,
-                                      color: MyTheme.navBar,
-                                      size: 16,
-                                    ),
-                                  )
+                                          onPressed: () =>
+                                              _textControllerFrom.clear(),
+                                          icon: Icon(
+                                            Icons.clear,
+                                            color: MyTheme.navBar,
+                                            size: 16,
+                                          ),
+                                        )
                                       : null,
                                   contentPadding: const EdgeInsets.symmetric(
                                       vertical: 0.0, horizontal: 10),
@@ -352,7 +397,7 @@ class _CourseScreenState extends State<CourseScreen> {
                       ),
                       Container(
                         padding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                         child: Column(
                           children: [
                             Row(
@@ -364,10 +409,10 @@ class _CourseScreenState extends State<CourseScreen> {
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: MyTheme.navBar,
-                                  ),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: MyTheme.navBar,
+                                      ),
                                 ),
                                 Text(
                                   AppLocalization.of(context).required,
@@ -375,84 +420,93 @@ class _CourseScreenState extends State<CourseScreen> {
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w300,
-                                    color: MyTheme.navBar,
-                                  ),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w300,
+                                        color: MyTheme.navBar,
+                                      ),
                                 )
                               ],
                             ),
                             SizedBox(
                               height: 10,
                             ),
+                            if (_durations != null && _durations.length > 0)
+                              FormBuilderDropdown(
+                                //controller: _textControllerTo,
+                                //cursorColor: MyTheme.primaryColor,
+                                //validator: validatearr,
 
-                            if(_durations!=null && _durations.length>0) FormBuilderDropdown(
-                              //controller: _textControllerTo,
-                              //cursorColor: MyTheme.primaryColor,
-                              //validator: validatearr,
-                              validator: FormBuilderValidators.compose(
-                                  [FormBuilderValidators.required(context)]),
-                              items: _durations
-                                  .map((duration) => DropdownMenuItem(
+                                validator: (value) => value == null
+                                    ? 'Veuillez sélectioner la durée'
+                                    : null,
+                                items: _durations
+                                    .map((duration) => DropdownMenuItem(
+                                          value: duration.name,
+                                          child: Text(
+                                            '${duration.name}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2
+                                                .copyWith(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w300,
+                                                  color: Color(0xFF888888),
+                                                ),
+                                          ),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    dure = value.toString();
+                                  });
+                                },
+                                onTap: () async {
+                                  // print("arriver");
+                                },
+                                //initialValue: _durations!=null && _durations.length>0? _durations.elementAt(0):null ,
 
-                                value: duration,
-                                child: Text('${duration.name}', style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    .copyWith(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w300,
-                                  color: Color(0xFF888888),
-                                ),),
-                              ))
-                                  .toList(),
-
-                              onTap: () async {
-                                print("arriver");
-                              },
-                              //initialValue: _durations!=null && _durations.length>0? _durations.elementAt(0):null ,
-
-                              style: TextStyle(
-                                  color: MyTheme.navBar,
-                                  fontWeight: FontWeight.w400),
-                              decoration: new InputDecoration(
-                                  prefixIcon: Icon(
-                                    Icons.alarm,
-                                    color: MyTheme.navBar,
-                                    size: 18,
-                                  ),
-
-                                  suffixIcon: Icon(
-                                    Icons.arrow_drop_down,
-                                    color: MyTheme.navBar,
-                                    size: 22,
-                                  ),
-
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 0.0, horizontal: 10),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.primaryColor,
-                                        width: 1.2),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.navBar, width: 1),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide(
-                                        color: MyTheme.navBar, width: 1),
-                                  ),
-                                  hintText: AppLocalization.of(context)
-                                      .selectADuration,
-                                  hintStyle: TextStyle(
+                                style: TextStyle(
+                                    color: MyTheme.primaryColor,
+                                    fontWeight: FontWeight.w400),
+                                decoration: new InputDecoration(
+                                    prefixIcon: Icon(
+                                      Icons.alarm,
                                       color: MyTheme.navBar,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 14)),
-                            ),
+                                      size: 18,
+                                    ),
+                                    suffixIcon: Icon(
+                                      Icons.arrow_drop_down,
+                                      color: MyTheme.navBar,
+                                      size: 22,
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 0.0, horizontal: 10),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero),
+                                      borderSide: BorderSide(
+                                          color: MyTheme.primaryColor,
+                                          width: 1.2),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero),
+                                      borderSide: BorderSide(
+                                          color: MyTheme.navBar, width: 1),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero),
+                                      borderSide: BorderSide(
+                                          color: MyTheme.navBar, width: 1),
+                                    ),
+                                    hintText: AppLocalization.of(context)
+                                        .selectADuration,
+                                    hintStyle: TextStyle(
+                                        color: MyTheme.navBar,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 14)),
+                              ),
                           ],
                         ),
                       ),
@@ -485,15 +539,18 @@ class _CourseScreenState extends State<CourseScreen> {
                   print("tapped next");
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
+                    print(departName);
+                    //  print(duration.toString());
+
+                    dure = dure.substring(5, 6);
+                    print(dure);
                     Navigator.of(context).push(PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => new LocationScreen(
-                          depname: departName,
-                          deplat: deplat,
-                          depln: deln,
-                          arrivname: arrivName,
-                          arrivlat: arriplat,
-                          arrivln: arriln,
-                        )));
+                        pageBuilder: (_, __, ___) => new Coursedetai(
+                              depname: departName,
+                              deplat: deplat,
+                              depln: deln,
+                              dure: dure,
+                            )));
                   } else {
                     setState(() {
                       _autoValidate = true;
@@ -529,16 +586,16 @@ class CustomSearchScaffold extends PlacesAutocompleteWidget {
   String qualite;
   CustomSearchScaffold({this.qualite})
       : super(
-    apiKey: kGoogleApiKey,
-    mode: Mode.overlay,
-    strictbounds: true,
-    location: Uuid().generateLocation(),
-    radius: 200,
-    hint: "Recherchez",
-    sessionToken: Uuid().generateV4(),
-    language: "fr",
-    components: [Component(Component.country, "cmr")],
-  );
+          apiKey: kGoogleApiKey,
+          mode: Mode.overlay,
+          strictbounds: true,
+          location: Uuid().generateLocation(),
+          radius: 200,
+          hint: "Recherchez",
+          sessionToken: Uuid().generateV4(),
+          language: "fr",
+          components: [Component(Component.country, "cmr")],
+        );
 
   @override
   _CustomSearchScaffoldState createState() => _CustomSearchScaffoldState();
@@ -591,16 +648,16 @@ void getLocation() {}
 class CustomSearchScaffold1 extends PlacesAutocompleteWidget {
   CustomSearchScaffold1()
       : super(
-    apiKey: kGoogleApiKey,
-    mode: Mode.overlay,
-    strictbounds: true,
-    location: Uuid().generateLocation(),
-    radius: 20000,
-    hint: "Recherche",
-    sessionToken: Uuid().generateV4(),
-    language: "fr",
-    components: [Component(Component.country, "cmr")],
-  );
+          apiKey: kGoogleApiKey,
+          mode: Mode.overlay,
+          strictbounds: true,
+          location: Uuid().generateLocation(),
+          radius: 20000,
+          hint: "Recherche",
+          sessionToken: Uuid().generateV4(),
+          language: "fr",
+          components: [Component(Component.country, "cmr")],
+        );
 
   @override
   _CustomSearchScaffoldState1 createState() => _CustomSearchScaffoldState1();

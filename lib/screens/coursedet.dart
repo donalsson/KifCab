@@ -27,28 +27,19 @@ import 'dart:math' show cos, sqrt, asin;
 
 import 'package:kifcab/core/httpreq.dart';
 
-class LocationScreen extends StatefulWidget {
-  String depname, arrivname;
-  double depln, deplat, arrivlat, arrivln;
+class Coursedetai extends StatefulWidget {
+  String depname, dure;
+  double depln, deplat;
 
-  LocationScreen({
-    Key key,
-    this.depname,
-    this.deplat,
-    this.depln,
-    this.arrivname,
-    this.arrivlat,
-    this.arrivln,
-  }) : super(key: key);
+  Coursedetai({Key key, this.depname, this.deplat, this.depln, this.dure})
+      : super(key: key);
 
   @override
-  LocationScreenState createState() {
-    return LocationScreenState();
-  }
+  _CoursedetaiState createState() => _CoursedetaiState();
 }
 
-class LocationScreenState extends State<LocationScreen> {
-  LocationScreenState();
+class _CoursedetaiState extends State<Coursedetai> {
+  _CoursedetaiState();
   CameraPosition _initialLocation = CameraPosition(target: LatLng(0.0, 0.0));
   GoogleMapController mapController;
   double distance;
@@ -99,6 +90,9 @@ class LocationScreenState extends State<LocationScreen> {
 
   @override
   void initState() {
+    setState(() {
+      prix = int.parse(widget.dure) + 2500;
+    });
     super.initState();
     //Timer.run(() => _calculateDistance());
   }
@@ -117,6 +111,7 @@ class LocationScreenState extends State<LocationScreen> {
       List<Location> destinationPlacemark =
           await locationFromAddress(widget.arrivname);*/
       log("enter");
+      /*
       if (widget.deplat != null && widget.arrivlat != null) {
         // Use the retrieved coordinates of the current position,
         // instead of the address if the start position is user's
@@ -248,7 +243,8 @@ class LocationScreenState extends State<LocationScreen> {
         });
 
         return true;
-      }
+      }*/
+      return true;
     } catch (e) {
       print(e);
     }
@@ -365,7 +361,7 @@ class LocationScreenState extends State<LocationScreen> {
                             padding: EdgeInsets.symmetric(
                                 vertical: 4, horizontal: 7),
                             child: Text(
-                              AppLocalization.of(context).deposit,
+                              AppLocalization.of(context).course,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -377,10 +373,8 @@ class LocationScreenState extends State<LocationScreen> {
                             padding: EdgeInsets.symmetric(
                                 vertical: 4, horizontal: 7),
                             child: Text(
-                              _placeDistance +
-                                  " km / " +
-                                  _timess.toString() +
-                                  " minutes / " +
+                              widget.dure.toString() +
+                                  " Heures / " +
                                   prix.toString() +
                                   " Fcfa",
                               style: TextStyle(
@@ -534,8 +528,8 @@ class LocationScreenState extends State<LocationScreen> {
                                             setState(() {
                                               _selectedRange = 0;
                                               gammes = "Bronse";
-                                              prix = (distance + _timess + 1000)
-                                                  .round() as int;
+                                              prix =
+                                                  int.parse(widget.dure) * 2500;
                                             });
                                           },
                                         ),
@@ -553,8 +547,8 @@ class LocationScreenState extends State<LocationScreen> {
                                             setState(() {
                                               _selectedRange = 1;
                                               gammes = "Argent";
-                                              prix = (distance + _timess + 2000)
-                                                  .round() as int;
+                                              prix =
+                                                  int.parse(widget.dure) * 3500;
                                             });
                                           },
                                         ),
@@ -645,22 +639,23 @@ class LocationScreenState extends State<LocationScreen> {
                       print("Valider");
                       print(prix);
                       print(messagech);
-                      String type = "RESERVATION";
+                      String type = "COURSE";
                       print(globals.userinfos.id_compte);
+
                       if (_formKey.currentState.validate()) {
                         HttpPostRequest.saveoperations_request(
                                 type,
                                 globals.userinfos.id_compte.toString(),
                                 prix.toString(),
                                 widget.depname,
-                                widget.arrivname,
+                                "",
                                 gammes,
                                 widget.depln.toString(),
                                 widget.deplat.toString(),
-                                widget.arrivln.toString(),
-                                widget.arrivlat.toString(),
+                                "",
+                                "",
                                 distance.toString(),
-                                "")
+                                widget.dure)
                             .then((dynamic result) async {
                           setState(() {
                             visible = false;
@@ -701,9 +696,9 @@ class LocationScreenState extends State<LocationScreen> {
                                           depname: widget.depname,
                                           deplat: widget.deplat,
                                           depln: widget.depln,
-                                          arrivname: widget.arrivname,
-                                          arrivlat: widget.arrivlat,
-                                          arrivln: widget.arrivln,
+                                          arrivname: "a",
+                                          arrivlat: 0,
+                                          arrivln: 0,
                                         )),
                                 (Route<dynamic> route) => false);
                           }
