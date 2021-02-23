@@ -325,7 +325,7 @@ class LocationScreenState extends State<LocationScreen> {
           ),
           preferredSize: Size(0.0, 0.0),
         ),
-        drawer: navigationDrawer(),
+        drawer: NavigationDrawer(),
         body: Stack(children: <Widget>[
           Column(
             children: [

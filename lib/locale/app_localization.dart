@@ -439,6 +439,98 @@ class AppLocalization {
     return Intl.message("Sélectionner une durée",
         name: 'selectADuration');
   }
+  String get moreThan100CarAvailabled {
+    return Intl.message("Plus de 100 vérhicules disponibles",
+        name: 'moreThan100CarAvailabled');
+  }
+  String get leaseACar {
+    return Intl.message("Louer un véhicule",
+        name: 'leaseACar');
+  }
+
+  String get startingDate {
+    return Intl.message("Date de départ",
+        name: 'startingDate');
+  }
+  String get endingPoint {
+    return Intl.message("Date de fin",
+        name: 'endingPoint');
+  }
+  String get selectADate {
+    return Intl.message("Sélectionner une date",
+        name: 'selectADate');
+  }
+  String get historyPageTitle {
+    return Intl.message("Liste des dépôts et locations effectués",
+        name: 'historyPageTitle');
+  }
+  String get finance {
+    return Intl.message("Finance", name: 'finance');
+  }
+  String get reseted {
+    return Intl.message("Annulée", name: 'reseted');
+  }
+  String get waiting {
+    return Intl.message("En attente", name: 'waiting');
+  }
+  String get programmed {
+    return Intl.message("Programmée", name: 'programmed');
+  }
+  String get inProgress {
+    return Intl.message("En cours", name: 'inProgress');
+  }
+  String get ended {
+    return Intl.message("Terminée", name: 'ended');
+  }
+  String get depositInfos {
+    return Intl.message("Information du dépôt", name: 'depositInfos');
+  }
+  String get startPoint {
+    return Intl.message("Départ", name: 'startPoint');
+  }
+  String get createdAt {
+    return Intl.message("Créé le ", name: 'createdAt');
+  }
+  String get destination {
+    return Intl.message("Destination ", name: 'destination');
+  }
+
+  String get start {
+    return Intl.message("Démarrer", name: 'start');
+  }
+  String get end {
+    return Intl.message("Terminer", name: 'end');
+  }
+  String get open {
+    return Intl.message("Ouvrir", name: 'open');
+  }
+  String get update {
+    return Intl.message("Modifier", name: 'update');
+  }
+  String get reset {
+    return Intl.message("Annuler", name: 'reset');
+  }
+  String get courseInfos {
+    return Intl.message("Information de la course", name: 'courseInfos');
+  }
+  String get countHours {
+    return Intl.message("Nombre d'heures", name: 'countHours');
+  }
+  String get price {
+    return Intl.message("Prix", name: 'price');
+  }
+  String get locationInfos {
+    return Intl.message("Information de la location", name: 'locationInfos');
+  }
+  String get ca {
+    return Intl.message("CA(F CFA)", name: 'ca');
+  }
+  String get creditCa {
+    return Intl.message("Credit(F CFA)", name: 'creditCa');
+  }
+  String get detteCa {
+    return Intl.message("Dette(F CFA)", name: 'detteCa');
+  }
   displayIn(language) => Intl.message("Display in, $language!",
       name: 'displayIn', args: [language]);
 }

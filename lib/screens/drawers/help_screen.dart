@@ -53,7 +53,7 @@ class HelpScreenState extends State<HelpScreen> {
         ),
         preferredSize: Size(0.0, 0.0),
       ),
-      drawer: navigationDrawer(),
+      drawer: NavigationDrawer(),
       body: Stack(
 
         children: [

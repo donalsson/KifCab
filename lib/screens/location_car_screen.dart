@@ -4,8 +4,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart' hide Mode;
 import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
+import 'package:kifcab/models/CourseDuration.dart';
 import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
 import 'package:kifcab/widgets/location_input.dart';
@@ -17,21 +19,22 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:kifcab/screens/location_screen.dart';
 
 import 'package:kifcab/utils/tcheckconnection.dart';
+import 'package:intl/intl.dart';
 
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
 const kGoogleApiKey = "AIzaSyDRn0mlxRwnXRJZI4cNqFOgsGNssI5APRo";
 
-class DepotScreen extends StatefulWidget {
+class LocationCarScreen extends StatefulWidget {
   double longitude, latitude;
 
-  DepotScreen({
+  LocationCarScreen({
     this.longitude,
     this.latitude,
     Key key,
   }) : super(key: key);
 
   @override
-  _DepotScreenState createState() => _DepotScreenState();
+  _LocationCarScreenState createState() => _LocationCarScreenState();
 }
 
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
@@ -44,7 +47,7 @@ String arrivName;
 double arriplat;
 double arriln;
 
-class _DepotScreenState extends State<DepotScreen> {
+class _LocationCarScreenState extends State<LocationCarScreen> {
   // DepotScreenState();
   bool _autoValidate = false;
   Mode _mode = Mode.overlay;
@@ -65,6 +68,17 @@ class _DepotScreenState extends State<DepotScreen> {
       textTheme: ButtonTextTheme.primary,
     ),
   );
+  List<CourseDuration> _durations = [CourseDuration.fill(id: "", name:"")];
+  List<CourseDuration> buildDurationList(BuildContext context){
+    List<CourseDuration> durations = [];
+    durations.add(CourseDuration.fill(id: "", name:AppLocalization.of(context).selectADuration));
+    for(int i = 1; i<=12; i++){
+      durations.add(CourseDuration.fill(id: "1", name:AppLocalization.of(context).durationFor(i)));
+    }
+    setState(() {
+      _durations =  durations;
+    });
+  }
 
 // Dark Theme
   final ThemeData darkTheme = ThemeData.dark().copyWith(
@@ -80,6 +94,10 @@ class _DepotScreenState extends State<DepotScreen> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration(seconds: 0),(){
+      this.buildDurationList(context);
+
+    });
     _textControllerFrom.addListener(() {
       setState(() {
         _showClearButtonInputFrom = _textControllerFrom.text.length > 0;
@@ -102,7 +120,7 @@ class _DepotScreenState extends State<DepotScreen> {
     if (p != null) {
       // get detail (lat/lng)
       PlacesDetailsResponse detail =
-          await _places.getDetailsByPlaceId(p.placeId);
+      await _places.getDetailsByPlaceId(p.placeId);
 
       final lat = detail.result.geometry.location.lat;
       final lng = detail.result.geometry.location.lng;
@@ -127,6 +145,7 @@ class _DepotScreenState extends State<DepotScreen> {
     globals.location = location;
 
     */
+
     techkconnection(context);
     return Scaffold(
       backgroundColor: MyTheme.stripColor,
@@ -177,41 +196,41 @@ class _DepotScreenState extends State<DepotScreen> {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
                                           AppLocalization.of(context)
-                                              .needASecureCar,
+                                              .moreThan100CarAvailabled,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText1
                                               .copyWith(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 17,
-                                                color: Colors.white,
-                                              )),
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          )),
                                       SizedBox(
                                         height: 07,
                                       ),
                                       Text(
                                           AppLocalization.of(context)
-                                              .takeADeposit,
+                                              .leaseACar,
                                           style: Theme.of(context)
                                               .textTheme
                                               .subtitle2
                                               .copyWith(
-                                                  fontWeight: FontWeight.w300,
-                                                  color: Colors.white)),
+                                              fontWeight: FontWeight.w300,
+                                              color: Colors.white)),
                                     ],
                                   ),
                                 ),
                                 Icon(
-                                  Icons.local_taxi,
+                                  Icons.directions_bus,
                                   color: Color(0xFAFFFFFF),
                                   size: 40,
                                 ),
                                 SizedBox(
-                                  width: 25,
+                                  width: 20,
                                 ),
                               ]),
                               SizedBox(
@@ -226,7 +245,7 @@ class _DepotScreenState extends State<DepotScreen> {
                       ),
                       Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                         child: Column(
                           children: [
                             Row(
@@ -238,10 +257,10 @@ class _DepotScreenState extends State<DepotScreen> {
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: MyTheme.navBar,
-                                      ),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: MyTheme.navBar,
+                                  ),
                                 ),
                                 Text(
                                   AppLocalization.of(context).required,
@@ -249,10 +268,10 @@ class _DepotScreenState extends State<DepotScreen> {
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w300,
-                                        color: MyTheme.navBar,
-                                      ),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w300,
+                                    color: MyTheme.navBar,
+                                  ),
                                 )
                               ],
                             ),
@@ -265,25 +284,12 @@ class _DepotScreenState extends State<DepotScreen> {
                               cursorColor: MyTheme.primaryColor,
                               onTap: () async {
                                 print("depart");
-                                /* Navigator.of(context).push(PageRouteBuilder(
-                                    opaque: false,
-                                    pageBuilder: (_, __, ___) =>
-                                        new CustomSearchScaffold()));*/
-/*
-                                Prediction p = await PlacesAutocomplete.show(
-                                    context: context,
-                                    apiKey: kGoogleApiKey,
-                                    mode: Mode.overlay, // Mode.fullscreen
-                                    language: "fr",
-                                    components: [
-                                      new Component(Component.country, "fr")
-                                    ]);
-*/
+
                                 final result = await Navigator.of(context).push(
                                     PageRouteBuilder(
                                         opaque: false,
                                         pageBuilder: (_, __, ___) =>
-                                            new CustomSearchScaffold()));
+                                        new CustomSearchScaffold()));
 
                                 setState(() {
                                   print(result[3]);
@@ -293,51 +299,6 @@ class _DepotScreenState extends State<DepotScreen> {
                                   deln = result[1];
                                   deplat = result[2];
                                 });
-                                /* Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PlacePicker(
-                                      apiKey:
-                                          kGoogleApiKey, // Put YOUR OWN KEY here.
-                                      onPlacePicked: (result) {
-                                        _textControllerFrom.text = result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName;
-                                        deplat = result.geometry.location.lat;
-                                        deln = result.geometry.location.lng;
-                                        departName = result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName;
-                                        print(result.name.toString());
-                                        print(jsonDecode(result.toString()));
-                                        print(result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName);
-                                        Navigator.of(context).pop();
-                                      },
-                                      strictbounds: true,
-                                      useCurrentLocation: true,
-                                      initialPosition: kInitialPosition,
-                                      selectInitialPosition: true,
-                                      initialMapType: MapType.terrain,
-                                    ),
-                                  ),
-                                );*/
                               },
                               onSaved: (String val) {
                                 departName = val;
@@ -353,14 +314,14 @@ class _DepotScreenState extends State<DepotScreen> {
                                   ),
                                   suffixIcon: _showClearButtonInputFrom
                                       ? IconButton(
-                                          onPressed: () =>
-                                              _textControllerFrom.clear(),
-                                          icon: Icon(
-                                            Icons.clear,
-                                            color: MyTheme.navBar,
-                                            size: 16,
-                                          ),
-                                        )
+                                    onPressed: () =>
+                                        _textControllerFrom.clear(),
+                                    icon: Icon(
+                                      Icons.clear,
+                                      color: MyTheme.navBar,
+                                      size: 16,
+                                    ),
+                                  )
                                       : null,
                                   contentPadding: const EdgeInsets.symmetric(
                                       vertical: 0.0, horizontal: 10),
@@ -390,24 +351,28 @@ class _DepotScreenState extends State<DepotScreen> {
                           ],
                         ),
                       ),
+
+
+
+
                       Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                         child: Column(
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  AppLocalization.of(context).arrivalPoint,
+                                  AppLocalization.of(context).startingPoint,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: MyTheme.navBar,
-                                      ),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: MyTheme.navBar,
+                                  ),
                                 ),
                                 Text(
                                   AppLocalization.of(context).required,
@@ -415,104 +380,43 @@ class _DepotScreenState extends State<DepotScreen> {
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w300,
-                                        color: MyTheme.navBar,
-                                      ),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w300,
+                                    color: MyTheme.navBar,
+                                  ),
                                 )
                               ],
                             ),
                             SizedBox(
                               height: 10,
                             ),
-                            TextFormField(
-                              controller: _textControllerTo,
-                              cursorColor: MyTheme.primaryColor,
-                              validator: validatearr,
-                              onTap: () async {
-                                print("arriver");
 
-                                final result = await Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                        opaque: false,
-                                        pageBuilder: (_, __, ___) =>
-                                            new CustomSearchScaffold1()));
-                                setState(() {
-                                  print(result[3]);
+                           FormBuilderDateTimePicker(
+                              //controller: _textControllerTo,
+                              //cursorColor: MyTheme.primaryColor,
+                              //validator: validatearr,
+                              inputType: InputType.both,
+                              validator: FormBuilderValidators.compose(
+                                  [FormBuilderValidators.required(context)]),
 
-                                  _textControllerTo.text = result[0];
-                                  arrivName = result[0];
-                                  arriln = result[1];
-                                  arriplat = result[2];
-                                });
+                             cursorColor: MyTheme.primaryColor,
+                             initialValue: DateTime.now(),
+                              locale: Locale('fr',"FR"),
 
-                                /*  Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PlacePicker(
-                                      apiKey:
-                                          kGoogleApiKey, // Put YOUR OWN KEY here.
-                                      onPlacePicked: (result) {
-                                        _textControllerTo.text = result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName;
-                                        arriplat = result.geometry.location.lat;
-                                        arriln = result.geometry.location.lng;
-                                        arrivName = result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName;
-                                        print(result
-                                                .addressComponents[0].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[1].longName +
-                                            ", " +
-                                            result
-                                                .addressComponents[2].longName);
-                                        Navigator.of(context).pop();
-                                      },
-                                      useCurrentLocation: true,
-                                      initialPosition: kInitialPosition,
-                                      forceAndroidLocationManager: true,
-                                      selectInitialPosition: false,
-                                      initialMapType: MapType.hybrid,
-                                      autocompleteRadius: 200,
-                                      autocompleteLanguage: "fr",
-                                      searchingText: "dsdsd",
-                                    ),
-                                  ),
-                                );*/
-                              },
+                              //initialValue: _durations!=null && _durations.length>0? _durations.elementAt(0):null ,
+                             //format: DateFormat('yyyy/MM/dd hh:mm:ss'),
                               style: TextStyle(
                                   color: MyTheme.navBar,
                                   fontWeight: FontWeight.w400),
                               decoration: new InputDecoration(
                                   prefixIcon: Icon(
-                                    Icons.room,
+                                    Icons.calendar_today,
                                     color: MyTheme.navBar,
                                     size: 18,
                                   ),
-                                  suffixIcon: _showClearButtonInputTo
-                                      ? IconButton(
-                                          onPressed: () =>
-                                              _textControllerTo.clear(),
-                                          icon: Icon(
-                                            Icons.clear,
-                                            color: MyTheme.navBar,
-                                            size: 16,
-                                          ),
-                                        )
-                                      : null,
+
+
+
                                   contentPadding: const EdgeInsets.symmetric(
                                       vertical: 0.0, horizontal: 10),
                                   focusedBorder: OutlineInputBorder(
@@ -532,7 +436,96 @@ class _DepotScreenState extends State<DepotScreen> {
                                         color: MyTheme.navBar, width: 1),
                                   ),
                                   hintText: AppLocalization.of(context)
-                                      .enterTheArrivalPoint,
+                                      .selectADate,
+                                  hintStyle: TextStyle(
+                                      color: MyTheme.navBar,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 14)),
+                            ),
+                          ],
+                        ),
+                      ),
+
+
+
+
+
+                      Container(
+                        padding:
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  AppLocalization.of(context).endingPoint,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: MyTheme.navBar,
+                                  ),
+                                ),
+                                Text(
+                                  AppLocalization.of(context).required,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w300,
+                                    color: MyTheme.navBar,
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+
+                            FormBuilderDateTimePicker(
+                              inputType: InputType.both,
+                              validator: FormBuilderValidators.compose(
+                                  [FormBuilderValidators.required(context)]),
+
+                              cursorColor: MyTheme.primaryColor,
+                              initialValue: DateTime.now(),
+                              locale: Locale('fr',"FR"),
+                              style: TextStyle(
+                                  color: MyTheme.navBar,
+                                  fontWeight: FontWeight.w400),
+                              decoration: new InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.calendar_today,
+                                    color: MyTheme.navBar,
+                                    size: 18,
+                                  ),
+
+
+
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 0.0, horizontal: 10),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: MyTheme.primaryColor,
+                                        width: 1.2),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: MyTheme.navBar, width: 1),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide(
+                                        color: MyTheme.navBar, width: 1),
+                                  ),
+                                  hintText: AppLocalization.of(context)
+                                      .selectADate,
                                   hintStyle: TextStyle(
                                       color: MyTheme.navBar,
                                       fontWeight: FontWeight.w300,
@@ -557,7 +550,8 @@ class _DepotScreenState extends State<DepotScreen> {
                 icon: Icons.chevron_left,
                 text: AppLocalization.of(context).previous,
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(context, '/home',
+                      arguments: <String, dynamic>{});
                 },
               ),
               NavigationButton(
@@ -571,13 +565,13 @@ class _DepotScreenState extends State<DepotScreen> {
                     _formKey.currentState.save();
                     Navigator.of(context).push(PageRouteBuilder(
                         pageBuilder: (_, __, ___) => new LocationScreen(
-                              depname: departName,
-                              deplat: deplat,
-                              depln: deln,
-                              arrivname: arrivName,
-                              arrivlat: arriplat,
-                              arrivln: arriln,
-                            )));
+                          depname: departName,
+                          deplat: deplat,
+                          depln: deln,
+                          arrivname: arrivName,
+                          arrivlat: arriplat,
+                          arrivln: arriln,
+                        )));
                   } else {
                     setState(() {
                       _autoValidate = true;
@@ -613,23 +607,23 @@ class CustomSearchScaffold extends PlacesAutocompleteWidget {
   String qualite;
   CustomSearchScaffold({this.qualite})
       : super(
-          apiKey: kGoogleApiKey,
-          mode: Mode.overlay,
-          strictbounds: true,
-          location: Uuid().generateLocation(),
-          radius: 200,
-          hint: "Recherchez",
-          sessionToken: Uuid().generateV4(),
-          language: "fr",
-          components: [Component(Component.country, "cmr")],
-        );
+    apiKey: kGoogleApiKey,
+    mode: Mode.overlay,
+    strictbounds: true,
+    location: Uuid().generateLocation(),
+    radius: 200,
+    hint: "Recherchez",
+    sessionToken: Uuid().generateV4(),
+    language: "fr",
+    components: [Component(Component.country, "cmr")],
+  );
 
   @override
   _CustomSearchScaffoldState createState() => _CustomSearchScaffoldState();
 }
 
 class _CustomSearchScaffoldState extends PlacesAutocompleteState {
-  final DepotScreen = new _DepotScreenState();
+  final DepotScreen = new _LocationCarScreenState();
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
@@ -675,23 +669,23 @@ void getLocation() {}
 class CustomSearchScaffold1 extends PlacesAutocompleteWidget {
   CustomSearchScaffold1()
       : super(
-          apiKey: kGoogleApiKey,
-          mode: Mode.overlay,
-          strictbounds: true,
-          location: Uuid().generateLocation(),
-          radius: 20000,
-          hint: "Recherche",
-          sessionToken: Uuid().generateV4(),
-          language: "fr",
-          components: [Component(Component.country, "cmr")],
-        );
+    apiKey: kGoogleApiKey,
+    mode: Mode.overlay,
+    strictbounds: true,
+    location: Uuid().generateLocation(),
+    radius: 20000,
+    hint: "Recherche",
+    sessionToken: Uuid().generateV4(),
+    language: "fr",
+    components: [Component(Component.country, "cmr")],
+  );
 
   @override
   _CustomSearchScaffoldState1 createState() => _CustomSearchScaffoldState1();
 }
 
 class _CustomSearchScaffoldState1 extends PlacesAutocompleteState {
-  final DepotScreen = new _DepotScreenState();
+  final DepotScreen = new _LocationCarScreenState();
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:kifcab/locale/app_localization.dart';
 import 'package:kifcab/utils/colors.dart';
 
-class navigationDrawer extends StatelessWidget {
+class NavigationDrawer extends StatelessWidget {
   Widget createDrawerHeader(BuildContext context) {
     return DrawerHeader(
         margin: EdgeInsets.zero,
@@ -133,7 +133,11 @@ class navigationDrawer extends StatelessWidget {
               }),
           createDrawerBodyItem(
               icon: Icons.local_taxi,
-              text: AppLocalization.of(context).history),
+              text: AppLocalization.of(context).history,
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/history',
+                    arguments: <String, dynamic>{});
+              }),
           createExpandableDrawerBodyItem(
             icon: Icons.settings,
             text: AppLocalization.of(context).settings,

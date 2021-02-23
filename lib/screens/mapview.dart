@@ -980,7 +980,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: MyTheme.stripColor,
-      drawer: navigationDrawer(),
+      drawer: NavigationDrawer(),
       body: Column(
         children: [
           Stack(

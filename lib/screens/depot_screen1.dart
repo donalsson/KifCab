@@ -142,7 +142,7 @@ class _DepotScreenState extends State<DepotScreen> {
               )),
         ],
       ),
-      drawer: navigationDrawer(),
+      drawer: NavigationDrawer(),
       body: Column(
         children: [
           Form(

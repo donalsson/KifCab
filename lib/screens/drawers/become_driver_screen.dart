@@ -44,7 +44,7 @@ class BecomeDriverScreenState extends State<BecomeDriverScreen> {
         ),
         preferredSize: Size(0.0, 0.0),
       ),
-      drawer: navigationDrawer(),
+      drawer: NavigationDrawer(),
       body: Stack(
         children: [
           Container(
