@@ -16,7 +16,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kifcab/library/loader.dart';
 import '../core/global.dart' as globals;
 import 'package:kifcab/screens/mapview.dart';
-import 'package:kifcab/screens/location_screen.dart';
+import 'package:kifcab/screens/deforevalid.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
@@ -47,7 +47,7 @@ class _CoursedetaiState extends State<Coursedetai> {
   String _currentAddress;
   String messagech = "";
   int prix = 0;
-  String gammes = "Bronse";
+  String gammes = globals.depogammes[0].idgamme;
   int i = 0;
   final startAddressController = TextEditingController();
   final destinationAddressController = TextEditingController();
@@ -90,9 +90,8 @@ class _CoursedetaiState extends State<Coursedetai> {
 
   @override
   void initState() {
-    setState(() {
-      prix = int.parse(widget.dure) + 2500;
-    });
+    visible = true;
+    getprice(gammes, widget.dure);
     super.initState();
     //Timer.run(() => _calculateDistance());
   }
@@ -100,6 +99,26 @@ class _CoursedetaiState extends State<Coursedetai> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  getprice(gam, dure) {
+    visible = true;
+    HttpPostRequest.getpriceoperation("COURSE", gam, "", dure, "")
+        .then((int result) async {
+      log(result.toString());
+
+      setState(() {
+        visible = false;
+      });
+      if (result == 0) {
+      } else {
+        setState(() {
+          prix = result;
+        });
+      }
+
+      // createMarker(context, value.latitude, value.longitude);
+    });
   }
 
   _calculateDistance() async {
@@ -321,7 +340,7 @@ class _CoursedetaiState extends State<Coursedetai> {
           ),
           preferredSize: Size(0.0, 0.0),
         ),
-        drawer: navigationDrawer(),
+        drawer: NavigationDrawer(),
         body: Stack(children: <Widget>[
           Column(
             children: [
@@ -344,7 +363,8 @@ class _CoursedetaiState extends State<Coursedetai> {
                       zoomGesturesEnabled: false,
                       zoomControlsEnabled: false,
                       initialCameraPosition: CameraPosition(
-                          target: LatLng(widget.deplat, widget.depln)),
+                          target: LatLng(widget.deplat, widget.depln),
+                          zoom: 16),
                       polylines: Set<Polyline>.of(polylines.values),
                       onMapCreated: (GoogleMapController controller) {
                         mapController = controller;
@@ -443,7 +463,6 @@ class _CoursedetaiState extends State<Coursedetai> {
                                   minLines: 2,
                                   maxLines: 5,
                                   keyboardType: TextInputType.multiline,
-                                  validator: validateMessach,
                                   onChanged: (String val) {
                                     setState(() {
                                       messagech = val;
@@ -516,43 +535,8 @@ class _CoursedetaiState extends State<Coursedetai> {
                                     color: Colors.transparent,
                                     child: Wrap(
                                       direction: Axis.horizontal,
-                                      children: <Widget>[
-                                        CardButton(
-                                          index: 0,
-                                          selectedIndex: _selectedRange,
-                                          imageUrl: 'assets/2.png',
-                                          isAsset: true,
-                                          text: "Classe Bronze",
-                                          onTap: () {
-                                            print("Tap elemen");
-                                            setState(() {
-                                              _selectedRange = 0;
-                                              gammes = "Bronse";
-                                              prix =
-                                                  int.parse(widget.dure) * 2500;
-                                            });
-                                          },
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        CardButton(
-                                          index: 1,
-                                          selectedIndex: _selectedRange,
-                                          imageUrl: 'assets/3.png',
-                                          isAsset: true,
-                                          text: "Classe Argent",
-                                          onTap: () {
-                                            print("Tap elemen");
-                                            setState(() {
-                                              _selectedRange = 1;
-                                              gammes = "Argent";
-                                              prix =
-                                                  int.parse(widget.dure) * 3500;
-                                            });
-                                          },
-                                        ),
-                                      ],
+                                      children:
+                                          loadSubmit10(context, "RESERVATION"),
                                     ),
                                   ),
                                   Container(
@@ -630,19 +614,39 @@ class _CoursedetaiState extends State<Coursedetai> {
                   NavigationButton(
                     backColor: MyTheme.primaryColor,
                     textColor: Colors.black,
-                    icon: Icons.save,
-                    text: AppLocalization.of(context).save,
+                    icon: Icons.chevron_right,
+                    text: AppLocalization.of(context).next,
                     onTap: () {
                       setState(() {
                         visible = true;
                       });
                       print("Valider");
-                      print(prix);
+                      print(gammes);
                       print(messagech);
                       String type = "COURSE";
                       print(globals.userinfos.id_compte);
 
-                      if (_formKey.currentState.validate()) {
+                      Navigator.of(context).push(PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => new Beforevali(
+                              type: type,
+                              iduser: globals.userinfos.id_compte.toString(),
+                              prix: prix.toString(),
+                              depname: widget.depname,
+                              arrivname: "",
+                              gamme: gammes,
+                              depln: widget.depln,
+                              deplat: widget.deplat,
+                              arrivln: 0,
+                              arrivlat: 0,
+                              distance: distance.toString(),
+                              heure: widget.dure,
+                              debu: DateTime.now(),
+                              message: messagech,
+                              fin: DateTime.now())));
+                      setState(() {
+                        visible = false;
+                      });
+/*
                         HttpPostRequest.saveoperations_request(
                                 type,
                                 globals.userinfos.id_compte.toString(),
@@ -655,7 +659,9 @@ class _CoursedetaiState extends State<Coursedetai> {
                                 "",
                                 "",
                                 distance.toString(),
-                                widget.dure)
+                                widget.dure,
+                                "",
+                                "")
                             .then((dynamic result) async {
                           setState(() {
                             visible = false;
@@ -703,12 +709,8 @@ class _CoursedetaiState extends State<Coursedetai> {
                                 (Route<dynamic> route) => false);
                           }
                         });
-                      } else {
-                        setState(() {
-                          _autoValidate = true;
-                          visible = false;
-                        });
-                      }
+
+                        */
 
                       // _calculateDistance();
                       /*  mapController.animateCamera(CameraUpdate.newLatLngZoom(
@@ -741,6 +743,124 @@ class _CoursedetaiState extends State<Coursedetai> {
       return AppLocalization.of(context).checkmessagech;
     else
       return null;
+  }
+
+  List _listings = new List();
+  List<Widget> loadSubmit10(context, type) {
+    List listings = List<Widget>();
+    int i123 = 0;
+
+    for (i123 = 0; i123 < globals.coursegammes.length; i123++) {
+      log("i12.5454  " + i123.toString());
+      if (i123 == 0) {
+        listings.add(
+          CardButton(
+            index: 0,
+            selectedIndex: _selectedRange,
+            imageUrl: globals.coursegammes[i123].photo,
+            isAsset: false,
+            text: globals.coursegammes[i123].libelleg,
+            onTap: () {
+              print("Tap elemen " + (i123).toString());
+              setState(() {
+                log(i.toString());
+                _selectedRange = 0;
+
+                gammes = globals.coursegammes[0].idgamme.toString();
+                getprice(
+                    globals.coursegammes[0].idgamme.toString(), widget.dure);
+              });
+            },
+          ),
+        );
+      }
+      if (i123 == 1) {
+        listings.add(
+          CardButton(
+            index: 1,
+            selectedIndex: _selectedRange,
+            imageUrl: globals.coursegammes[i123].photo,
+            isAsset: false,
+            text: globals.coursegammes[i123].libelleg,
+            onTap: () {
+              print("Tap elemen " + (i123).toString());
+              setState(() {
+                log(i.toString());
+                _selectedRange = 1;
+                gammes = globals.coursegammes[1].idgamme.toString();
+                getprice(
+                    globals.coursegammes[1].idgamme.toString(), widget.dure);
+              });
+            },
+          ),
+        );
+      }
+      if (i123 == 2) {
+        listings.add(
+          CardButton(
+            index: 2,
+            selectedIndex: _selectedRange,
+            imageUrl: globals.coursegammes[i123].photo,
+            isAsset: false,
+            text: globals.coursegammes[i123].libelleg,
+            onTap: () {
+              print("Tap elemen " + (i123).toString());
+              setState(() {
+                log(i.toString());
+                _selectedRange = 2;
+                gammes = globals.coursegammes[2].idgamme.toString();
+                getprice(
+                    globals.coursegammes[2].idgamme.toString(), widget.dure);
+              });
+            },
+          ),
+        );
+      }
+      if (i123 == 3) {
+        listings.add(
+          CardButton(
+            index: 3,
+            selectedIndex: _selectedRange,
+            imageUrl: globals.coursegammes[i123].photo,
+            isAsset: false,
+            text: globals.coursegammes[i123].libelleg,
+            onTap: () {
+              print("Tap elemen " + (i123).toString());
+              setState(() {
+                log(i.toString());
+                _selectedRange = 3;
+                gammes = globals.coursegammes[3].idgamme.toString();
+                getprice(
+                    globals.coursegammes[3].idgamme.toString(), widget.dure);
+              });
+            },
+          ),
+        );
+      }
+      if (i123 == 4) {
+        listings.add(
+          CardButton(
+            index: 4,
+            selectedIndex: _selectedRange,
+            imageUrl: globals.coursegammes[i123].photo,
+            isAsset: false,
+            text: globals.coursegammes[i123].libelleg,
+            onTap: () {
+              print("Tap elemen " + (i123).toString());
+              setState(() {
+                log(i.toString());
+                _selectedRange = 4;
+                gammes = globals.coursegammes[4].idgamme.toString();
+                getprice(
+                    globals.coursegammes[4].idgamme.toString(), widget.dure);
+                // prix = (distance + _timess + 1000).round() as int;
+              });
+            },
+          ),
+        );
+      }
+    }
+    return listings;
   }
 }
 

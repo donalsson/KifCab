@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import '../core/global.dart' as globals;
 import 'package:kifcab/locale/app_localization.dart';
 import 'package:kifcab/utils/colors.dart';
 
@@ -18,7 +21,11 @@ class NavigationDrawer extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 40,
-                backgroundImage: AssetImage("assets/login.png"),
+                backgroundImage:
+                    CachedNetworkImageProvider(globals.userinfos.photo),
+              ),
+              SizedBox(
+                width: 10,
               ),
               Expanded(
                   child: Column(
@@ -26,7 +33,7 @@ class NavigationDrawer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "John Doe",
+                    globals.userinfos.nom,
                     style: Theme.of(context).textTheme.bodyText1.copyWith(
                         fontWeight: FontWeight.w400,
                         fontSize: 14,
@@ -38,7 +45,7 @@ class NavigationDrawer extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Douala",
+                        globals.userinfos.localisation,
                         style: Theme.of(context).textTheme.bodyText1.copyWith(
                             fontWeight: FontWeight.w300,
                             fontSize: 12,
@@ -48,7 +55,7 @@ class NavigationDrawer extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        "611111111",
+                        globals.userinfos.telephone,
                         style: Theme.of(context).textTheme.bodyText1.copyWith(
                             fontWeight: FontWeight.w300,
                             fontSize: 12,
@@ -64,12 +71,18 @@ class NavigationDrawer extends StatelessWidget {
   }
 
   Widget createDrawerBodyItem(
-      {double marginLeft = 0,IconData icon, String text, GestureTapCallback onTap, Widget trailing}) {
+      {double marginLeft = 0,
+      IconData icon,
+      String text,
+      GestureTapCallback onTap,
+      Widget trailing}) {
     return ListTile(
       dense: true,
       title: Row(
         children: <Widget>[
-          SizedBox(width: marginLeft,),
+          SizedBox(
+            width: marginLeft,
+          ),
           Icon(
             icon,
             size: 18,
@@ -94,7 +107,6 @@ class NavigationDrawer extends StatelessWidget {
       GestureTapCallback onTap,
       List<Widget> children}) {
     return ExpansionTile(
-
       title: Row(
         children: <Widget>[
           Icon(
@@ -152,7 +164,7 @@ class NavigationDrawer extends StatelessWidget {
                   }),*/
               createDrawerBodyItem(
                   icon: Icons.account_box,
-                  marginLeft:25,
+                  marginLeft: 25,
                   text: AppLocalization.of(context).myAccount,
                   onTap: () {
                     Navigator.pushReplacementNamed(context, '/account',
@@ -160,7 +172,7 @@ class NavigationDrawer extends StatelessWidget {
                   }),
               createDrawerBodyItem(
                   icon: Icons.airline_seat_recline_normal,
-                  marginLeft:25,
+                  marginLeft: 25,
                   text: AppLocalization.of(context).becomeDriver,
                   onTap: () {
                     Navigator.pushReplacementNamed(context, '/become-driver',
@@ -168,7 +180,7 @@ class NavigationDrawer extends StatelessWidget {
                   }),
               createDrawerBodyItem(
                   icon: Icons.logout,
-                  marginLeft:25,
+                  marginLeft: 25,
                   text: AppLocalization.of(context).logout,
                   onTap: () {
                     Navigator.pushReplacementNamed(context, '/about',

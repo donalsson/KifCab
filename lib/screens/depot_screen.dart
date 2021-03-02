@@ -279,6 +279,8 @@ class _DepotScreenState extends State<DepotScreen> {
                                       new Component(Component.country, "fr")
                                     ]);
 */
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
                                 final result = await Navigator.of(context).push(
                                     PageRouteBuilder(
                                         opaque: false,
@@ -292,6 +294,9 @@ class _DepotScreenState extends State<DepotScreen> {
                                   departName = result[0];
                                   deln = result[1];
                                   deplat = result[2];
+
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
                                 });
                                 /* Navigator.push(
                                   context,
@@ -431,7 +436,8 @@ class _DepotScreenState extends State<DepotScreen> {
                               validator: validatearr,
                               onTap: () async {
                                 print("arriver");
-
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
                                 final result = await Navigator.of(context).push(
                                     PageRouteBuilder(
                                         opaque: false,
@@ -439,7 +445,8 @@ class _DepotScreenState extends State<DepotScreen> {
                                             new CustomSearchScaffold1()));
                                 setState(() {
                                   print(result[3]);
-
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
                                   _textControllerTo.text = result[0];
                                   arrivName = result[0];
                                   arriln = result[1];
@@ -618,7 +625,7 @@ class CustomSearchScaffold extends PlacesAutocompleteWidget {
           strictbounds: true,
           location: Uuid().generateLocation(),
           radius: 200,
-          hint: "Recherchez",
+          hint: "Entrer le point de départ",
           sessionToken: Uuid().generateV4(),
           language: "fr",
           components: [Component(Component.country, "cmr")],
@@ -634,7 +641,7 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       title: AppBarPlacesAutoCompleteTextField(),
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.white10,
     );
     final body = PlacesAutocompleteResult(
       onTap: (p) {
@@ -680,7 +687,7 @@ class CustomSearchScaffold1 extends PlacesAutocompleteWidget {
           strictbounds: true,
           location: Uuid().generateLocation(),
           radius: 20000,
-          hint: "Recherche",
+          hint: "Entrer le point d'arriver",
           sessionToken: Uuid().generateV4(),
           language: "fr",
           components: [Component(Component.country, "cmr")],
@@ -697,7 +704,7 @@ class _CustomSearchScaffoldState1 extends PlacesAutocompleteState {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       title: AppBarPlacesAutoCompleteTextField(),
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.white10,
     );
     final body = PlacesAutocompleteResult(
       onTap: (p) {

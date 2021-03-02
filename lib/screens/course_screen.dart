@@ -328,7 +328,8 @@ class _CourseScreenState extends State<CourseScreen> {
                               cursorColor: MyTheme.primaryColor,
                               onTap: () async {
                                 print("depart");
-
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
                                 final result = await Navigator.of(context).push(
                                     PageRouteBuilder(
                                         opaque: false,
@@ -337,7 +338,8 @@ class _CourseScreenState extends State<CourseScreen> {
 
                                 setState(() {
                                   print(result[3]);
-
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
                                   _textControllerFrom.text = result[0];
                                   departName = result[0];
                                   deln = result[1];
@@ -591,7 +593,7 @@ class CustomSearchScaffold extends PlacesAutocompleteWidget {
           strictbounds: true,
           location: Uuid().generateLocation(),
           radius: 200,
-          hint: "Recherchez",
+          hint: "Entrer le point de départ",
           sessionToken: Uuid().generateV4(),
           language: "fr",
           components: [Component(Component.country, "cmr")],
@@ -607,7 +609,7 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       title: AppBarPlacesAutoCompleteTextField(),
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.white10,
     );
     final body = PlacesAutocompleteResult(
       onTap: (p) {

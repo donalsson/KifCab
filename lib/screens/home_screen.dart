@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:kifcab/locale/app_localization.dart';
@@ -15,7 +16,9 @@ import 'package:kifcab/core/httpreq.dart';
 import 'package:kifcab/library/loader.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kifcab/utils/tcheckconnection.dart';
+import '../models/GammesModel.dart';
 import 'package:kifcab/utils/getandsendpossition.dart';
 import 'package:kifcab/utils/tcheckifoperation.dart';
 
@@ -47,6 +50,28 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void initSaveData() async {
+    final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+    sharedPrefs.setString("sql", "");
+    var valuconst = sharedPrefs.get('listpriceconst');
+    var valudepo = sharedPrefs.get('listGammereser');
+    var valucourse = sharedPrefs.get('listGammecourse');
+    var valulocation = sharedPrefs.get('listGammeloca');
+    globals.priceconst = jsonDecode(valuconst);
+    if (valudepo != null) {
+      Iterable list1 = jsonDecode(valudepo)["list"];
+      globals.depogammes =
+          list1.map((model) => GammesModel.fromJson(model)).toList();
+    }
+    if (valucourse != null) {
+      Iterable list0 = jsonDecode(valucourse)["list"];
+      globals.coursegammes =
+          list0.map((model) => GammesModel.fromJson(model)).toList();
+    }
+    if (valulocation != null) {
+      Iterable list2 = jsonDecode(valulocation)["list"];
+      globals.locagammes =
+          list2.map((model) => GammesModel.fromJson(model)).toList();
+    }
     HttpPostRequest.getCurrentOperation(globals.userinfos.id_compte)
         .then((dynamic result) async {
       String arr;
@@ -77,7 +102,9 @@ class HomeScreenState extends State<HomeScreen> {
             globals.chaufname = result["offres"][0]["compte"]["nom"];
             globals.chauffcmtoken =
                 result["offres"][0]["compte"]["description"];
-            globals.chaufprof = result["offres"][0]["compte"]["photo"];
+            globals.chaufprof =
+                "https://www.smartcab-africa.com/assets/uploads/images/" +
+                    result["offres"][0]["compte"]["photo"];
             globals.chauffeur = result["offres"][0]["compte"];
             log(result["offres"][0]["compte"]["nom"]);
           }
@@ -94,13 +121,30 @@ class HomeScreenState extends State<HomeScreen> {
 
         Navigator.of(context).pushReplacement(PageRouteBuilder(
             pageBuilder: (_, __, ___) => new MapView(
-                  depname: result["commande"]["depart"],
+                  depname: result["commande"]["depart"].toString(),
                   deplat: double.parse(result["commande"]["lat_d"]),
                   depln: double.parse(result["commande"]["long_d"]),
-                  arrivname: arr,
+                  arrivname: arr.toString(),
                   arrivlat: double.parse(result["commande"]["lat_a"]),
                   arrivln: double.parse(result["commande"]["long_a"]),
                 )));
+      } else {
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+
+        String result = sharedPreferences.getString("non_note");
+        log("idcom : " + result.toString());
+        if (result != "" && result != null) {
+          Navigator.of(context).pushReplacement(PageRouteBuilder(
+              pageBuilder: (_, __, ___) => new MapView(
+                    depname: "",
+                    deplat: 0,
+                    depln: 0,
+                    arrivname: "",
+                    arrivlat: 0,
+                    arrivln: 0,
+                  )));
+        }
       }
       /* if (result.toString() == "[]") {
         print("not current operation");
@@ -202,10 +246,7 @@ class HomeScreenState extends State<HomeScreen> {
                               size: 30.0,
                             ))),
                     InkWell(
-                        onTap: () {
-                          Navigator.pushReplacementNamed(context, '/welcome',
-                              arguments: <String, dynamic>{});
-                        },
+                        onTap: () {},
                         child: Container(
                             width: MediaQuery.of(context).size.width - 70,
                             alignment: Alignment.topRight,

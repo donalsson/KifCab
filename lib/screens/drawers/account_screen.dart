@@ -5,6 +5,8 @@ import 'package:kifcab/constant.dart';
 import 'package:kifcab/locale/app_localization.dart';
 import 'package:kifcab/models/UserMod.dart';
 import 'package:kifcab/utils/Utils.dart';
+import '../../core/global.dart' as globals;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:kifcab/widgets/card_button.dart';
 import 'package:kifcab/widgets/card_sex_button.dart';
 import 'package:kifcab/widgets/navigation_drawer.dart';
@@ -35,18 +37,6 @@ class AccountScreenState extends State<AccountScreen> {
   @override
   void initState() {
     super.initState();
-    currentUser = UserMod.fill(
-      id_compte: "",
-      nom: "TANDA",
-      prenom: "Cedric",
-      telephone: "691681456",
-      sexe: "M",
-      description: "Je suis comme je suis...",
-      email: "tandacedric@gmail.com",
-      profil: "",
-      localisation: "Yaoundé",
-      date_naissance: "1994/09/02",
-    );
   }
 
   @override
@@ -105,8 +95,8 @@ class AccountScreenState extends State<AccountScreen> {
                               children: [
                                 CircleAvatar(
                                   radius: 35,
-                                  backgroundImage:
-                                      AssetImage("assets/login.png"),
+                                  backgroundImage: CachedNetworkImageProvider(
+                                      globals.userinfos.photo),
                                 ),
                                 SizedBox(
                                   width: 15,
@@ -117,9 +107,9 @@ class AccountScreenState extends State<AccountScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      currentUser?.prenom +
+                                      globals.userinfos.prenom +
                                           " " +
-                                          currentUser?.nom,
+                                          globals.userinfos.nom,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyText1
@@ -230,6 +220,7 @@ class AccountScreenState extends State<AccountScreen> {
                                                 AppLocalization.of(context)
                                                     .enterYourFirstName,
                                                 Icons.person),
+                                        initialValue: globals.userinfos.prenom,
                                         //onChanged: _onChanged,
                                         // valueTransformer: (text) => num.tryParse(text),
                                         //validator: validateMobile,
@@ -249,6 +240,7 @@ class AccountScreenState extends State<AccountScreen> {
                                                 AppLocalization.of(context)
                                                     .enterYourLastName,
                                                 Icons.person),
+                                        initialValue: globals.userinfos.nom,
                                         //onChanged: _onChanged,
                                         // valueTransformer: (text) => num.tryParse(text),
                                         //validator: validateMobile,
@@ -269,6 +261,8 @@ class AccountScreenState extends State<AccountScreen> {
                                                     .enterYourLocalization,
                                                 Icons.room),
                                         //onChanged: _onChanged,
+                                        initialValue:
+                                            globals.userinfos.localisation,
                                         // valueTransformer: (text) => num.tryParse(text),
                                         //validator: validateMobile,
                                         onChanged: (String val) {},
@@ -288,6 +282,8 @@ class AccountScreenState extends State<AccountScreen> {
                                                 AppLocalization.of(context)
                                                     .enterYourPhone,
                                                 Icons.call),
+                                        initialValue:
+                                            globals.userinfos.telephone,
                                         //onChanged: _onChanged,
                                         // valueTransformer: (text) => num.tryParse(text),
                                         //validator: validateMobile,
@@ -308,6 +304,7 @@ class AccountScreenState extends State<AccountScreen> {
                                                     .enterYourEmail,
                                                 Icons.call),
                                         //onChanged: _onChanged,
+                                        initialValue: globals.userinfos.email,
                                         // valueTransformer: (text) => num.tryParse(text),
                                         //validator: validateMobile,
                                         onChanged: (String val) {},
@@ -389,8 +386,9 @@ class AccountScreenState extends State<AccountScreen> {
                                           Expanded(
                                               child: Container(
                                             padding: const EdgeInsets.only(
-                                                top: 30,
-                                                bottom: 30,),
+                                              top: 30,
+                                              bottom: 30,
+                                            ),
                                             child: RaisedButton(
                                               materialTapTargetSize:
                                                   MaterialTapTargetSize
@@ -414,7 +412,9 @@ class AccountScreenState extends State<AccountScreen> {
                                                 child: Row(
                                                   //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: <Widget>[
-                                                    SizedBox(width: 15,),
+                                                    SizedBox(
+                                                      width: 15,
+                                                    ),
                                                     Container(
                                                       //color: Color.fromRGBO(229, 188, 1, 1),
                                                       color: Color.fromRGBO(

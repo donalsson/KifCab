@@ -1,28 +1,35 @@
- import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesClass {
-     static Future restore(String key) async {
+  static Future restore(String key) async {
     final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-   
+
     sharedPrefs.setBool('languecc', true);
     return (sharedPrefs.get(key) ?? false);
   }
- static Future restoreuser(String key) async {
+
+  static Future restoreuser(String key) async {
     final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-   
+
     sharedPrefs.setBool('languecc', true);
     return (sharedPrefs.get(key) ?? "");
   }
+
   static Future restoreUserVal(String key) async {
     final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
     return (sharedPrefs.get(key) ?? false);
   }
 
-
- static Future restorelanguage(String key) async {
+  static Future restorelanguage(String key) async {
     final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-   // sharedPrefs.setBool('initialized', true);
+    // sharedPrefs.setBool('initialized', true);
     return (sharedPrefs.get(key) ?? 'fr');
+  }
+
+  static Future restoresql(String key) async {
+    final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+    // sharedPrefs.setBool('initialized', true);
+    return (sharedPrefs.getString(key) ?? "");
   }
 
   static save(String key, dynamic value) async {

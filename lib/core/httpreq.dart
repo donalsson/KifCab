@@ -9,6 +9,7 @@ import 'package:http/io_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kifcab/core/preference.dart';
 import '../models/UserMod.dart';
+import '../models/GammesModel.dart';
 
 var userinfos = new List<UserMod>();
 
@@ -53,6 +54,82 @@ class HttpPostRequest {
     }
   }
 
+  static Future<List<GammesModel>> getAllGammesReser() async {
+    final ioc = new HttpClient();
+    ioc.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+    final httpp = new IOClient(ioc);
+    http.Response response = await httpp.post(
+        'https://149.202.47.143/index.php/webservice/gammes',
+        body: {"type": "RESERVATION"});
+
+    if (response.statusCode == 200) {
+      //  log(response.body);
+      // print(json.decode(response.body)["list"]);
+      Iterable list = json.decode(response.body)["list"];
+      SharedPreferencesClass.save("listGammereser", response.body);
+      return list.map((model) => GammesModel.fromJson(model)).toList();
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  static Future<List<GammesModel>> getAllGammescourse() async {
+    final ioc = new HttpClient();
+    ioc.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+    final httpp = new IOClient(ioc);
+    http.Response response = await httpp.post(
+        'https://149.202.47.143/index.php/webservice/gammes',
+        body: {"type": "COURSE"});
+
+    if (response.statusCode == 200) {
+      // log(response.body);
+      Iterable list = json.decode(response.body)["list"];
+      SharedPreferencesClass.save("listGammecourse", response.body);
+      return list.map((model) => GammesModel.fromJson(model)).toList();
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  static Future<String> getAllConst() async {
+    final ioc = new HttpClient();
+    ioc.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+    final httpp = new IOClient(ioc);
+    http.Response response = await httpp.post(
+        'https://149.202.47.143/index.php/webservice/priceconst',
+        body: {});
+
+    if (response.statusCode == 200) {
+      //  log(response.body);
+      SharedPreferencesClass.save("listpriceconst", response.body);
+      return "";
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  static Future<List<GammesModel>> getAllGammeslocation() async {
+    final ioc = new HttpClient();
+    ioc.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+    final httpp = new IOClient(ioc);
+    http.Response response = await httpp.post(
+        'https://149.202.47.143/index.php/webservice/gammes',
+        body: {"type": "LOCATION"});
+
+    if (response.statusCode == 200) {
+      //  log(response.body);
+      Iterable list = json.decode(response.body)["list"];
+      SharedPreferencesClass.save("listGammeloca", response.body);
+      return list.map((model) => GammesModel.fromJson(model)).toList();
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
   static Future<dynamic> saveoperations_request(
       type,
       iduser,
@@ -65,7 +142,10 @@ class HttpPostRequest {
       arrivlon,
       arrivlat,
       distance,
-      heure) async {
+      heure,
+      debut,
+      fin,
+      message) async {
     // String urli = 'https://small-pocket.herokuapp.com/api/v1/auth/sign_in';
     // var url = '${urli}ocr';
     // var bytes = image.readAsBytesSync();
@@ -87,23 +167,133 @@ class HttpPostRequest {
           "long_d": deplon,
           "lat_d": deplat,
           "long_a": arrivlon,
+          "debut": debut,
+          "fin": fin,
+          "message": message,
           "lat_a": arrivlat
         });
     if (response.statusCode == 200) {
       print("response.bodyddd");
       log(response.body);
       var myresponse = jsonDecode(response.body);
-      log(jsonEncode(myresponse['commande']));
-      // print(myresponse['chauffeur']['description'].toString());
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("getchauf", "1");
-      fcmsendmessage(
-          "Nouvelle commande",
-          "Vous avez une nouvelle commande disponible",
-          jsonEncode(myresponse['commande']),
-          myresponse['chauffeur']['description'].toString(),
-          "1");
-      return myresponse;
+      var error = myresponse["error"];
+      print("token");
+      if (error.toString() == "true") {
+        print(error.toString());
+        return "error";
+      } else {
+        log(jsonEncode(myresponse['commande']));
+        // print(myresponse['chauffeur']['description'].toString());
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("getchauf", "1");
+        log("1111" + type + "1111");
+        if (type != "LOCATION") {
+          fcmsendmessage(
+              "Nouvelle commande",
+              "Vous avez une nouvelle commande disponible",
+              jsonEncode(myresponse['commande']),
+              myresponse['chauffeur']['description'].toString(),
+              "1");
+        }
+
+        return myresponse;
+      }
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  static Future<dynamic> getnextchauf(sql, gamme, type) async {
+    // String urli = 'https://small-pocket.herokuapp.com/api/v1/auth/sign_in';
+    // var url = '${urli}ocr';
+    // var bytes = image.readAsBytesSync();
+    log("sqllll  " + sql);
+    final ioc = new HttpClient();
+    ioc.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+    final httpp = new IOClient(ioc);
+    http.Response response = await httpp.post(
+        'https://149.202.47.143/index.php/webservice/getmindischauf',
+        body: {
+          "type": type,
+          "sql": sql,
+          "gamme": gamme,
+          "lat_d": global.commande["lat_d"],
+          "long_d": global.commande["long_d"]
+        });
+    print("response.bodyddd");
+    log(response.body);
+    if (response.statusCode == 200) {
+      print("response.bodyddd");
+      log(response.body);
+      var myresponse = jsonDecode(response.body);
+      var error = myresponse["error"];
+      print("token");
+      if (error.toString() == "true") {
+        print(error.toString());
+        return "error";
+      } else {
+        log(jsonEncode(myresponse['commande']));
+        // print(myresponse['chauffeur']['description'].toString());
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("getchauf", "1");
+        log("1111 " + gamme + " 1111");
+        global.chauffeur = myresponse['chauffeur'];
+        fcmsendmessage(
+            "Nouvelle commande",
+            "Vous avez une nouvelle commande disponible",
+            jsonEncode(global.commande),
+            myresponse['chauffeur']['description'].toString(),
+            "1");
+
+        return myresponse;
+      }
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  static Future<int> getpriceoperation(
+      type, gamme, temps, heure, distance) async {
+    log("gamme: " +
+        gamme +
+        " type  :" +
+        type +
+        " temps :" +
+        temps +
+        " heure :" +
+        heure +
+        " distance : " +
+        distance);
+    final ioc = new HttpClient();
+    ioc.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+    final httpp = new IOClient(ioc);
+    http.Response response = await httpp.post(
+        'https://149.202.47.143/index.php/webservice/getoperationprice',
+        body: {
+          "type": type,
+          "distance": distance,
+          "gamme": gamme,
+          "temps": temps,
+          "heure": heure
+        });
+    print("response.bodyddd");
+    log(response.body);
+    if (response.statusCode == 200) {
+      print("response.bodyddd");
+      log(response.body);
+      var myresponse = jsonDecode(response.body);
+      var error = myresponse["error"];
+      print("token");
+      if (error.toString() == "true") {
+        print(error.toString());
+        return 0;
+      } else {
+        // print(myresponse['chauffeur']['description'].toString());
+
+        return int.parse(myresponse["prix"]);
+      }
     } else {
       throw Exception('Failed to load album');
     }
@@ -119,19 +309,18 @@ class HttpPostRequest {
     final postUrl = 'https://fcm.googleapis.com/fcm/send';
     final data = {
       "to": token,
-      "notification": {
-        "title": title,
-        "body": message,
-      },
+      "notification": {"title": title, "body": message},
       "data": {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
         "commande": datau,
         "userln": global.longitude,
         "etat": etat,
         "userlat": global.latitude,
         "username": global.userinfos.nom,
+        "usertel": global.userinfos.telephone,
         "usertoken": global.fcmtoken,
-        "userphone": global.userinfos.telephone,
-        "userpro": global.userinfos.photo
+        "userpro": global.userinfos.photo,
+        "date": DateTime.now().millisecondsSinceEpoch,
       }
     };
 
@@ -144,13 +333,13 @@ class HttpPostRequest {
         body: json.encode(data),
         encoding: Encoding.getByName('utf-8'),
         headers: headers);
-    // log(response.body);
+    print(response.body);
     if (response.statusCode == 200) {
       // on success do sth
-      log('test ok push CFM');
+      print('test ok push CFM');
       return true;
     } else {
-      log(' CFM error');
+      print(' CFM error');
       // on failure do sth
       return false;
     }
@@ -197,7 +386,11 @@ AAAA3OBUsXw:APA91bF7g_X1nsoT67A8quk4Rx49btZQvt3ACXGeetfVjxGzLvJuDoEkVjSlRiNkG48e
         log("send Current operation chauf000");
 
         var myresponse = jsonDecode(response.body);
-        return myresponse;
+        if (myresponse["commande"]["type"] != "LOCATION") {
+          return myresponse;
+        } else {
+          return "null";
+        }
       } else {
         return "null";
       }

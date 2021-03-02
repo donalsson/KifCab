@@ -16,7 +16,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kifcab/library/loader.dart';
 import '../core/global.dart' as globals;
 import 'package:kifcab/screens/mapview.dart';
-import 'package:kifcab/screens/location_screen.dart';
+import 'package:kifcab/screens/deforevalid.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
@@ -56,8 +56,10 @@ class LocationScreenState extends State<LocationScreen> {
   String _currentAddress;
   String messagech = "";
   int prix = 0;
-  String gammes = "Bronse";
+  String gammes = globals.depogammes[0].idgamme;
   int i = 0;
+  int cb = 0;
+  int ct = 0;
   final startAddressController = TextEditingController();
   final destinationAddressController = TextEditingController();
 
@@ -65,7 +67,7 @@ class LocationScreenState extends State<LocationScreen> {
   final desrinationAddressFocusNode = FocusNode();
 
   String _placeDistance = " ";
-
+  Timer _timer;
   Set<Marker> markers = {};
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   PolylinePoints polylinePoints;
@@ -99,6 +101,7 @@ class LocationScreenState extends State<LocationScreen> {
 
   @override
   void initState() {
+    visible = true;
     super.initState();
     //Timer.run(() => _calculateDistance());
   }
@@ -238,9 +241,26 @@ class LocationScreenState extends State<LocationScreen> {
           );
         }
         timed += _coordinateTimess(totalDistance);
-        log("fdfdfdf");
-        log(_timess.toString());
+        HttpPostRequest.getpriceoperation(
+                "DEPOT", gammes, timed.toString(), "", totalDistance.toString())
+            .then((int result) async {
+          log(result.toString());
+
+          setState(() {
+            visible = false;
+          });
+          if (result == 0) {
+          } else {
+            setState(() {
+              prix = result;
+            });
+          }
+
+          // createMarker(context, value.latitude, value.longitude);
+        });
         setState(() {
+          globals.depodure = timed;
+          globals.depodistance = totalDistance.toStringAsFixed(2);
           _placeDistance = totalDistance.toStringAsFixed(2);
           _timess = timed;
           distance = totalDistance;
@@ -273,7 +293,9 @@ class LocationScreenState extends State<LocationScreen> {
     r2 = r1 / p;
     setState(() {
       // _selectedRange = 0;
-      prix = (distance + _timess + 1000).round() as int;
+      //  prix = (distance + _timess + 1000).round() as int;
+
+      globals.depoprix = prix;
     });
     return (r1 / p).round();
   }
@@ -311,8 +333,12 @@ class LocationScreenState extends State<LocationScreen> {
   Widget build(BuildContext context) {
     i = i + 1;
     log(i.toString());
-    if (i == 2) {
-      _calculateDistance();
+    if (i == 1) {
+      const oneSec = const Duration(seconds: 2);
+      _timer = new Timer.periodic(oneSec, (Timer timer) async {
+        _calculateDistance();
+        _timer.cancel();
+      });
     }
 
     return Scaffold(
@@ -449,7 +475,6 @@ class LocationScreenState extends State<LocationScreen> {
                                   minLines: 2,
                                   maxLines: 5,
                                   keyboardType: TextInputType.multiline,
-                                  validator: validateMessach,
                                   onChanged: (String val) {
                                     setState(() {
                                       messagech = val;
@@ -522,43 +547,8 @@ class LocationScreenState extends State<LocationScreen> {
                                     color: Colors.transparent,
                                     child: Wrap(
                                       direction: Axis.horizontal,
-                                      children: <Widget>[
-                                        CardButton(
-                                          index: 0,
-                                          selectedIndex: _selectedRange,
-                                          imageUrl: 'assets/2.png',
-                                          isAsset: true,
-                                          text: "Classe Bronze",
-                                          onTap: () {
-                                            print("Tap elemen");
-                                            setState(() {
-                                              _selectedRange = 0;
-                                              gammes = "Bronse";
-                                              prix = (distance + _timess + 1000)
-                                                  .round() as int;
-                                            });
-                                          },
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        CardButton(
-                                          index: 1,
-                                          selectedIndex: _selectedRange,
-                                          imageUrl: 'assets/3.png',
-                                          isAsset: true,
-                                          text: "Classe Argent",
-                                          onTap: () {
-                                            print("Tap elemen");
-                                            setState(() {
-                                              _selectedRange = 1;
-                                              gammes = "Argent";
-                                              prix = (distance + _timess + 2000)
-                                                  .round() as int;
-                                            });
-                                          },
-                                        ),
-                                      ],
+                                      children:
+                                          loadSubmit10(context, "RESERVATION"),
                                     ),
                                   ),
                                   Container(
@@ -636,8 +626,8 @@ class LocationScreenState extends State<LocationScreen> {
                   NavigationButton(
                     backColor: MyTheme.primaryColor,
                     textColor: Colors.black,
-                    icon: Icons.save,
-                    text: AppLocalization.of(context).save,
+                    icon: Icons.chevron_right,
+                    text: AppLocalization.of(context).next,
                     onTap: () {
                       setState(() {
                         visible = true;
@@ -647,73 +637,25 @@ class LocationScreenState extends State<LocationScreen> {
                       print(messagech);
                       String type = "RESERVATION";
                       print(globals.userinfos.id_compte);
-                      if (_formKey.currentState.validate()) {
-                        HttpPostRequest.saveoperations_request(
-                                type,
-                                globals.userinfos.id_compte.toString(),
-                                prix.toString(),
-                                widget.depname,
-                                widget.arrivname,
-                                gammes,
-                                widget.depln.toString(),
-                                widget.deplat.toString(),
-                                widget.arrivln.toString(),
-                                widget.arrivlat.toString(),
-                                distance.toString(),
-                                "")
-                            .then((dynamic result) async {
-                          setState(() {
-                            visible = false;
-                          });
-                          print(result['error']);
-                          if (result['error'].toString() == "true") {
-                            Fluttertoast.showToast(
-                                msg:
-                                    "Une erreur s'est produite verifier votre connexion",
-                                toastLength: Toast.LENGTH_LONG,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                          } else {
-                            log(result['chauffeur']['description'].toString());
-                            globals.commande = result['commande'];
-                            globals.chauffeur = result['chauffeur'];
-                            globals.type =
-                                result['commande']['type'].toString();
-                            globals.idcommande =
-                                result['commande']['id_commande'].toString();
-                            globals.active =
-                                result['commande']['active'].toString();
-                            Fluttertoast.showToast(
-                                msg:
-                                    "Votre Dépot a été enregistrer avec succès",
-                                toastLength: Toast.LENGTH_LONG,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.green[400],
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => new MapView(
-                                          depname: widget.depname,
-                                          deplat: widget.deplat,
-                                          depln: widget.depln,
-                                          arrivname: widget.arrivname,
-                                          arrivlat: widget.arrivlat,
-                                          arrivln: widget.arrivln,
-                                        )),
-                                (Route<dynamic> route) => false);
-                          }
-                        });
-                      } else {
-                        setState(() {
-                          _autoValidate = true;
-                          visible = false;
-                        });
-                      }
+                      visible = false;
+                      log("gamme" + gammes);
+                      Navigator.of(context).push(PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => new Beforevali(
+                              type: type,
+                              iduser: globals.userinfos.id_compte.toString(),
+                              prix: prix.toString(),
+                              depname: widget.depname,
+                              arrivname: widget.arrivname,
+                              gamme: gammes,
+                              depln: widget.depln,
+                              deplat: widget.deplat,
+                              arrivln: widget.arrivln,
+                              arrivlat: widget.arrivlat,
+                              distance: distance.toString(),
+                              heure: "",
+                              debu: DateTime.now(),
+                              message: messagech,
+                              fin: DateTime.now())));
 
                       // _calculateDistance();
                       /*  mapController.animateCamera(CameraUpdate.newLatLngZoom(
@@ -746,6 +688,238 @@ class LocationScreenState extends State<LocationScreen> {
       return AppLocalization.of(context).checkmessagech;
     else
       return null;
+  }
+
+  List _listings = new List();
+  List<Widget> loadSubmit10(context, type) {
+    List listings = List<Widget>();
+    int i123 = 0;
+    // gammes = globals.depogammes[0].idgamme;
+
+    for (i123 = 0; i123 < globals.depogammes.length; i123++) {
+      log("i12.5454  " + i123.toString());
+      if (i123 == 0) {
+        listings.add(
+          CardButton(
+            index: 0,
+            selectedIndex: _selectedRange,
+            imageUrl: globals.coursegammes[i123].photo,
+            isAsset: false,
+            text: globals.depogammes[i123].libelleg,
+            onTap: () {
+              print("Tap elemen " + (i123).toString());
+              setState(() {
+                log(i.toString());
+                log("gg :" + gammes);
+                visible = true;
+                gammes = globals.depogammes[0].idgamme;
+                _selectedRange = 0;
+                HttpPostRequest.getpriceoperation(
+                        "DEPOT",
+                        globals.depogammes[0].idgamme,
+                        _timess.toString(),
+                        "",
+                        distance.toString())
+                    .then((int result) async {
+                  log(result.toString());
+
+                  setState(() {
+                    visible = false;
+                  });
+                  if (result == 0) {
+                  } else {
+                    setState(() {
+                      prix = result;
+                    });
+                  }
+
+                  // createMarker(context, value.latitude, value.longitude);
+                });
+                //   gammes = globals.depogammes[i].idgamme.toString();
+                // prix = (distance + _timess + 1000).round() as int;
+              });
+            },
+          ),
+        );
+      }
+      if (i123 == 1) {
+        listings.add(
+          CardButton(
+            index: 1,
+            selectedIndex: _selectedRange,
+            imageUrl: globals.coursegammes[i123].photo,
+            isAsset: false,
+            text: globals.depogammes[i123].libelleg,
+            onTap: () {
+              print("Tap elemen " + (i123).toString());
+              setState(() {
+                gammes = globals.depogammes[1].idgamme;
+                log("gg :" + gammes);
+                log(i.toString());
+                visible = true;
+                _selectedRange = 1;
+                HttpPostRequest.getpriceoperation(
+                        "DEPOT",
+                        globals.depogammes[1].idgamme,
+                        _timess.toString(),
+                        "",
+                        distance.toString())
+                    .then((int result) async {
+                  log(result.toString());
+
+                  setState(() {
+                    visible = false;
+                  });
+                  if (result == 0) {
+                  } else {
+                    setState(() {
+                      prix = result;
+                    });
+                  }
+
+                  // createMarker(context, value.latitude, value.longitude);
+                });
+                //   gammes = globals.depogammes[i].idgamme.toString();
+                // prix = (distance + _timess + 1000).round() as int;
+              });
+            },
+          ),
+        );
+      }
+      if (i123 == 2) {
+        listings.add(
+          CardButton(
+            index: 2,
+            selectedIndex: _selectedRange,
+            imageUrl: globals.coursegammes[i123].photo,
+            isAsset: false,
+            text: globals.depogammes[i123].libelleg,
+            onTap: () {
+              print("Tap elemen " + (i123).toString());
+              setState(() {
+                gammes = globals.depogammes[2].idgamme;
+                log("gg :" + gammes);
+                log(i.toString());
+                _selectedRange = 2;
+                visible = true;
+                HttpPostRequest.getpriceoperation(
+                        "DEPOT",
+                        globals.depogammes[2].idgamme,
+                        _timess.toString(),
+                        "",
+                        distance.toString())
+                    .then((int result) async {
+                  log(result.toString());
+
+                  setState(() {
+                    visible = false;
+                  });
+                  if (result == 0) {
+                  } else {
+                    setState(() {
+                      prix = result;
+                    });
+                  }
+
+                  // createMarker(context, value.latitude, value.longitude);
+                });
+                //   gammes = globals.depogammes[i].idgamme.toString();
+                // prix = (distance + _timess + 1000).round() as int;
+              });
+            },
+          ),
+        );
+      }
+      if (i123 == 3) {
+        listings.add(
+          CardButton(
+            index: 3,
+            selectedIndex: _selectedRange,
+            imageUrl: globals.coursegammes[i123].photo,
+            isAsset: false,
+            text: globals.depogammes[i123].libelleg,
+            onTap: () {
+              print("Tap elemen " + (i123).toString());
+              setState(() {
+                log(i.toString());
+                _selectedRange = 3;
+                log("gg :" + gammes);
+                visible = true;
+                gammes = globals.depogammes[3].idgamme;
+                HttpPostRequest.getpriceoperation(
+                        "DEPOT",
+                        globals.depogammes[3].idgamme,
+                        _timess.toString(),
+                        "",
+                        distance.toString())
+                    .then((int result) async {
+                  log(result.toString());
+
+                  setState(() {
+                    visible = false;
+                  });
+                  if (result == 0) {
+                  } else {
+                    setState(() {
+                      prix = result;
+                    });
+                  }
+
+                  // createMarker(context, value.latitude, value.longitude);
+                });
+                //   gammes = globals.depogammes[i].idgamme.toString();
+                // prix = (distance + _timess + 1000).round() as int;
+              });
+            },
+          ),
+        );
+      }
+      if (i123 == 4) {
+        listings.add(
+          CardButton(
+            index: 4,
+            selectedIndex: _selectedRange,
+            imageUrl: globals.coursegammes[i123].photo,
+            isAsset: false,
+            text: globals.depogammes[i123].libelleg,
+            onTap: () {
+              print("Tap gg " + (i123).toString());
+              setState(() {
+                gammes = globals.depogammes[4].idgamme;
+                log("gg :" + gammes);
+                log(i.toString());
+                _selectedRange = 4;
+                visible = true;
+                HttpPostRequest.getpriceoperation(
+                        "DEPOT",
+                        globals.depogammes[4].idgamme,
+                        _timess.toString(),
+                        "",
+                        distance.toString())
+                    .then((int result) async {
+                  log(result.toString());
+
+                  setState(() {
+                    visible = false;
+                  });
+                  if (result == 0) {
+                  } else {
+                    setState(() {
+                      prix = result;
+                    });
+                  }
+
+                  // createMarker(context, value.latitude, value.longitude);
+                });
+                //   gammes = globals.depogammes[i].idgamme.toString();
+                // prix = (distance + _timess + 1000).round() as int;
+              });
+            },
+          ),
+        );
+      }
+    }
+    return listings;
   }
 }
 

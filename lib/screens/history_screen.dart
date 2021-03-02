@@ -140,7 +140,8 @@ class HistoryScreenState extends State<HistoryScreen> {
         return Colors.black;
     }
   }
-  bool isMe(){
+
+  bool isMe() {
     //TODO
     return false;
   }
@@ -257,22 +258,29 @@ class HistoryScreenState extends State<HistoryScreen> {
                             height: 15,
                           ),
                           Container(
+                            width: MediaQuery.of(context).size.width,
                             padding: EdgeInsets.symmetric(horizontal: 15),
                             color: Colors.transparent,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                CardSexButton(
-                                  index: 0,
-                                  selectedIndex: selectedMenuIndex,
-                                  text: AppLocalization.of(context).deposit,
-                                  onTap: () {
-                                    print("Tap elemen");
-                                    setState(() {
-                                      selectedMenuIndex = 0;
-                                    });
-                                  },
-                                ),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 4,
+                                    child: Center(
+                                      child: CardSexButton(
+                                        index: 0,
+                                        selectedIndex: selectedMenuIndex,
+                                        text:
+                                            AppLocalization.of(context).deposit,
+                                        onTap: () {
+                                          print("Tap elemen");
+                                          setState(() {
+                                            selectedMenuIndex = 0;
+                                          });
+                                        },
+                                      ),
+                                    )),
                                 SizedBox(
                                   width: 5,
                                 ),
@@ -304,17 +312,18 @@ class HistoryScreenState extends State<HistoryScreen> {
                                 SizedBox(
                                   width: 5,
                                 ),
-                                if(true)CardSexButton(
-                                  index: 3,
-                                  selectedIndex: selectedMenuIndex,
-                                  text: AppLocalization.of(context).finance,
-                                  onTap: () {
-                                    print("Tap elemen");
-                                    setState(() {
-                                      selectedMenuIndex = 3;
-                                    });
-                                  },
-                                ),
+                                if (true)
+                                  CardSexButton(
+                                    index: 3,
+                                    selectedIndex: selectedMenuIndex,
+                                    text: AppLocalization.of(context).finance,
+                                    onTap: () {
+                                      print("Tap elemen");
+                                      setState(() {
+                                        selectedMenuIndex = 3;
+                                      });
+                                    },
+                                  ),
                                 Expanded(
                                   flex: 1,
                                   child: Container(),
@@ -501,134 +510,238 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                 Text(
                                                     "- " +
                                                         AppLocalization.of(
-                                                            context)
+                                                                context)
                                                             .destination,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                      fontSize: 13,
-                                                      color: MyTheme.navBar,
-                                                    )),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: MyTheme.navBar,
+                                                        )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text(
-                                                    item.arrive,
+                                                Text(item.arrive,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w400,
-                                                      fontSize: 12,
-                                                      color: MyTheme.navBar,
-                                                    ))
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12,
+                                                          color: MyTheme.navBar,
+                                                        ))
                                               ],
                                             ),
                                             SizedBox(
                                               height: 5,
                                             ),
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  if(item.status == 2) SizedBox(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                if (item.status == 2)
+                                                  SizedBox(
                                                       width: 75.0,
-                                                      height:30,
-                                                      child:RaisedButton(
-                                                    onPressed: () {
-                                                      print("Démarrer" );
-                                                      print(item.id );
-                                                    },
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.all(
-                                                          Radius.circular(0.0),
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Démarrer");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: MyTheme
+                                                                        .button,
+                                                                    width: 0)),
+                                                        color: MyTheme.button,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .start,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
                                                         ),
-                                                        side: BorderSide(color: MyTheme.button, width: 0)),
-                                                    color: MyTheme.button,
-                                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                    child: Text(AppLocalization.of(context).start, style: TextStyle(color:Colors.black),),)),
-                                                  if(item.status == 3) SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  if(item.status == 3)SizedBox(
-                                                      width: 75.0,
-                                                      height:30,
-                                                    child:RaisedButton(
-                                                    onPressed: () {
-                                                      print("Terminer" );
-                                                      print(item.id );
-                                                    },
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.all(
-                                                          Radius.circular(0.0),
-                                                        ),
-                                                        side: BorderSide(color: MyTheme.button, width: 0)),
-                                                    color:  MyTheme.button,
-                                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                    child: Text(AppLocalization.of(context).end, style: TextStyle(color:Colors.black),),)),
+                                                      )),
+                                                if (item.status == 3)
                                                   SizedBox(
                                                     width: 10,
                                                   ),
+                                                if (item.status == 3)
                                                   SizedBox(
-                                                      width: 60.0,
-                                                      height:30,
-                                                      child:RaisedButton(
-                                                    onPressed: () {
-                                                      print("Ouvrir" );
-                                                      print(item.id );
-                                                    },
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.all(
-                                                          Radius.circular(0.0),
+                                                      width: 75.0,
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Terminer");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: MyTheme
+                                                                        .button,
+                                                                    width: 0)),
+                                                        color: MyTheme.button,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .end,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
                                                         ),
-                                                        side: BorderSide(color: Colors.black, width: 0)),
-                                                    color: Colors.black,
-                                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-
-                                                    child: Text(AppLocalization.of(context).open, style: TextStyle(color:Colors.white),),)),
-                                                  if(item.status <3 && isMe()) SizedBox(
+                                                      )),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                SizedBox(
+                                                    width: 60.0,
+                                                    height: 30,
+                                                    child: RaisedButton(
+                                                      onPressed: () {
+                                                        print("Ouvrir");
+                                                        print(item.id);
+                                                      },
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    0.0),
+                                                              ),
+                                                              side: BorderSide(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  width: 0)),
+                                                      color: Colors.black,
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              0, 0, 0, 0),
+                                                      child: Text(
+                                                        AppLocalization.of(
+                                                                context)
+                                                            .open,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    )),
+                                                if (item.status < 3 && isMe())
+                                                  SizedBox(
                                                     width: 10,
                                                   ),
-                                                  if(item.status <3 && isMe())SizedBox(
+                                                if (item.status < 3 && isMe())
+                                                  SizedBox(
                                                       width: 75.0,
-                                                      height:30,
-                                                     child:RaisedButton(
-                                                    onPressed: () {
-                                                      print("Modifier" );
-                                                      print(item.id );
-                                                    },
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.all(
-                                                          Radius.circular(0.0),
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Modifier");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    width: 0)),
+                                                        color: Colors.black,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .update,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
                                                         ),
-                                                        side: BorderSide(color: Colors.black, width: 0)),
-                                                    color: Colors.black,
-                                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                    child: Text(AppLocalization.of(context).update, style: TextStyle(color:Colors.white),),)),
-
-                                                  if((!isMe() && item.status >1 && item.status <3) || (isMe() && item.status !=0 && item.status !=4)) SizedBox(
+                                                      )),
+                                                if ((!isMe() &&
+                                                        item.status > 1 &&
+                                                        item.status < 3) ||
+                                                    (isMe() &&
+                                                        item.status != 0 &&
+                                                        item.status != 4))
+                                                  SizedBox(
                                                     width: 10,
                                                   ),
-                                                  if((!isMe() && item.status >1 && item.status <3) || (isMe() && item.status !=0 && item.status !=4)) SizedBox(
+                                                if ((!isMe() &&
+                                                        item.status > 1 &&
+                                                        item.status < 3) ||
+                                                    (isMe() &&
+                                                        item.status != 0 &&
+                                                        item.status != 4))
+                                                  SizedBox(
                                                       width: 75.0,
-                                                      height:30,
-                                                    child:RaisedButton(
-                                                    onPressed: () {
-                                                      print("Annuler" );
-                                                      print(item.id );
-                                                    },
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.all(
-                                                          Radius.circular(0.0),
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Annuler");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    width: 0)),
+                                                        color: Colors.black,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .reset,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
                                                         ),
-                                                        side: BorderSide(color:Colors.black, width: 0)),
-                                                    color: Colors.black,
-                                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                    child: Text(AppLocalization.of(context).reset, style: TextStyle(color:Colors.white),),))
-                                                ],
+                                                      ))
+                                              ],
                                             ),
                                             SizedBox(
                                               height: 10,
@@ -652,7 +765,7 @@ class HistoryScreenState extends State<HistoryScreen> {
                           if (selectedMenuIndex == 1)
                             Container(
                               padding:
-                              const EdgeInsets.only(left: 15, right: 15),
+                                  const EdgeInsets.only(left: 15, right: 15),
                               child: Container(
                                 child: ListView.separated(
                                     key: Key("Course123"),
@@ -663,7 +776,7 @@ class HistoryScreenState extends State<HistoryScreen> {
                                       return ExpandablePanel(
                                         header: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: 10,
@@ -675,11 +788,11 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w700,
-                                                      fontSize: 14,
-                                                      color: MyTheme.navBar,
-                                                    )),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 14,
+                                                          color: MyTheme.navBar,
+                                                        )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
@@ -687,7 +800,7 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                   color: getStatusColor(
                                                       item.status),
                                                   padding: const EdgeInsets
-                                                      .symmetric(
+                                                          .symmetric(
                                                       horizontal: 7,
                                                       vertical: 3),
                                                   child: Text(
@@ -697,11 +810,11 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                           .textTheme
                                                           .bodyText1
                                                           .copyWith(
-                                                        fontWeight:
-                                                        FontWeight.w500,
-                                                        fontSize: 13,
-                                                        color: Colors.white,
-                                                      )),
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 13,
+                                                            color: Colors.white,
+                                                          )),
                                                 )
                                               ],
                                             ),
@@ -715,13 +828,13 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                 .textTheme
                                                 .bodyText1
                                                 .copyWith(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 12,
-                                              color: MyTheme.navBar,
-                                            )),
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 12,
+                                                  color: MyTheme.navBar,
+                                                )),
                                         expanded: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                                 AppLocalization.of(context)
@@ -733,11 +846,11 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                     .textTheme
                                                     .bodyText1
                                                     .copyWith(
-                                                  fontWeight:
-                                                  FontWeight.w400,
-                                                  fontSize: 14,
-                                                  color: MyTheme.navBar,
-                                                )),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 14,
+                                                      color: MyTheme.navBar,
+                                                    )),
                                             SizedBox(
                                               height: 5,
                                             ),
@@ -746,17 +859,17 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                 Text(
                                                     "- " +
                                                         AppLocalization.of(
-                                                            context)
+                                                                context)
                                                             .startPoint,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                      fontSize: 13,
-                                                      color: MyTheme.navBar,
-                                                    )),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: MyTheme.navBar,
+                                                        )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
@@ -765,11 +878,11 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w400,
-                                                      fontSize: 12,
-                                                      color: MyTheme.navBar,
-                                                    ))
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12,
+                                                          color: MyTheme.navBar,
+                                                        ))
                                               ],
                                             ),
                                             SizedBox(
@@ -780,17 +893,17 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                 Text(
                                                     "- " +
                                                         AppLocalization.of(
-                                                            context)
+                                                                context)
                                                             .createdAt,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                      fontSize: 13,
-                                                      color: MyTheme.navBar,
-                                                    )),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: MyTheme.navBar,
+                                                        )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
@@ -798,16 +911,16 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                     DateFormat.yMMMd()
                                                         .add_Hms()
                                                         .format(
-                                                        item.date_creation),
+                                                            item.date_creation),
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w400,
-                                                      fontSize: 12,
-                                                      color: MyTheme.navBar,
-                                                    ))
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12,
+                                                          color: MyTheme.navBar,
+                                                        ))
                                               ],
                                             ),
                                             SizedBox(
@@ -818,31 +931,30 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                 Text(
                                                     "- " +
                                                         AppLocalization.of(
-                                                            context)
+                                                                context)
                                                             .countHours,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                      fontSize: 13,
-                                                      color: MyTheme.navBar,
-                                                    )),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: MyTheme.navBar,
+                                                        )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text(
-                                                    "${item.hdebut}h",
+                                                Text("${item.hdebut}h",
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w400,
-                                                      fontSize: 12,
-                                                      color: MyTheme.navBar,
-                                                    ))
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12,
+                                                          color: MyTheme.navBar,
+                                                        ))
                                               ],
                                             ),
                                             SizedBox(
@@ -853,133 +965,237 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                 Text(
                                                     "- " +
                                                         AppLocalization.of(
-                                                            context)
+                                                                context)
                                                             .price,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                      fontSize: 13,
-                                                      color: MyTheme.navBar,
-                                                    )),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: MyTheme.navBar,
+                                                        )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text(
-                                                    "${item.cout} XAF",
+                                                Text("${item.cout} XAF",
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w400,
-                                                      fontSize: 12,
-                                                      color: MyTheme.navBar,
-                                                    ))
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12,
+                                                          color: MyTheme.navBar,
+                                                        ))
                                               ],
                                             ),
                                             SizedBox(
                                               height: 5,
                                             ),
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
                                               children: [
-                                                if(item.status == 2) SizedBox(
-                                                    width: 75.0,
-                                                    height:30,
-                                                    child:RaisedButton(
-                                                      onPressed: () {
-                                                        print("Démarrer" );
-                                                        print(item.id );
-                                                      },
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(0.0),
-                                                          ),
-                                                          side: BorderSide(color: MyTheme.button, width: 0)),
-                                                      color: MyTheme.button,
-                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                      child: Text(AppLocalization.of(context).start, style: TextStyle(color:Colors.black),),)),
-                                                if(item.status == 3) SizedBox(
-                                                  width: 10,
-                                                ),
-                                                if(item.status == 3)SizedBox(
-                                                    width: 75.0,
-                                                    height:30,
-                                                    child:RaisedButton(
-                                                      onPressed: () {
-                                                        print("Terminer" );
-                                                        print(item.id );
-                                                      },
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(0.0),
-                                                          ),
-                                                          side: BorderSide(color: MyTheme.button, width: 0)),
-                                                      color:  MyTheme.button,
-                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                      child: Text(AppLocalization.of(context).end, style: TextStyle(color:Colors.black),),)),
+                                                if (item.status == 2)
+                                                  SizedBox(
+                                                      width: 75.0,
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Démarrer");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: MyTheme
+                                                                        .button,
+                                                                    width: 0)),
+                                                        color: MyTheme.button,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .start,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      )),
+                                                if (item.status == 3)
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                if (item.status == 3)
+                                                  SizedBox(
+                                                      width: 75.0,
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Terminer");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: MyTheme
+                                                                        .button,
+                                                                    width: 0)),
+                                                        color: MyTheme.button,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .end,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
                                                 SizedBox(
                                                     width: 60.0,
-                                                    height:30,
-                                                    child:RaisedButton(
+                                                    height: 30,
+                                                    child: RaisedButton(
                                                       onPressed: () {
-                                                        print("Ouvrir" );
-                                                        print(item.id );
+                                                        print("Ouvrir");
+                                                        print(item.id);
                                                       },
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(0.0),
-                                                          ),
-                                                          side: BorderSide(color: Colors.black, width: 0)),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    0.0),
+                                                              ),
+                                                              side: BorderSide(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  width: 0)),
                                                       color: Colors.black,
-                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-
-                                                      child: Text(AppLocalization.of(context).open, style: TextStyle(color:Colors.white),),)),
-                                                if(item.status <3 && isMe()) SizedBox(
-                                                  width: 10,
-                                                ),
-                                                if(item.status <3 && isMe())SizedBox(
-                                                    width: 75.0,
-                                                    height:30,
-                                                    child:RaisedButton(
-                                                      onPressed: () {
-                                                        print("Modifier" );
-                                                        print(item.id );
-                                                      },
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(0.0),
-                                                          ),
-                                                          side: BorderSide(color: Colors.black, width: 0)),
-                                                      color: Colors.black,
-                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                      child: Text(AppLocalization.of(context).update, style: TextStyle(color:Colors.white),),)),
-
-                                                if((!isMe() && item.status >1 && item.status <3) || (isMe() && item.status !=0 && item.status !=4)) SizedBox(
-                                                  width: 10,
-                                                ),
-                                                if((!isMe() && item.status >1 && item.status <3) || (isMe() && item.status !=0 && item.status !=4)) SizedBox(
-                                                    width: 75.0,
-                                                    height:30,
-                                                    child:RaisedButton(
-                                                      onPressed: () {
-                                                        print("Annuler" );
-                                                        print(item.id );
-                                                      },
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(0.0),
-                                                          ),
-                                                          side: BorderSide(color:Colors.black, width: 0)),
-                                                      color: Colors.black,
-                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                      child: Text(AppLocalization.of(context).reset, style: TextStyle(color:Colors.white),),))
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              0, 0, 0, 0),
+                                                      child: Text(
+                                                        AppLocalization.of(
+                                                                context)
+                                                            .open,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    )),
+                                                if (item.status < 3 && isMe())
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                if (item.status < 3 && isMe())
+                                                  SizedBox(
+                                                      width: 75.0,
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Modifier");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    width: 0)),
+                                                        color: Colors.black,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .update,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      )),
+                                                if ((!isMe() &&
+                                                        item.status > 1 &&
+                                                        item.status < 3) ||
+                                                    (isMe() &&
+                                                        item.status != 0 &&
+                                                        item.status != 4))
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                if ((!isMe() &&
+                                                        item.status > 1 &&
+                                                        item.status < 3) ||
+                                                    (isMe() &&
+                                                        item.status != 0 &&
+                                                        item.status != 4))
+                                                  SizedBox(
+                                                      width: 75.0,
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Annuler");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    width: 0)),
+                                                        color: Colors.black,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .reset,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      ))
                                               ],
                                             ),
                                             SizedBox(
@@ -1003,18 +1219,19 @@ class HistoryScreenState extends State<HistoryScreen> {
                           if (selectedMenuIndex == 2)
                             Container(
                               padding:
-                              const EdgeInsets.only(left: 15, right: 15),
+                                  const EdgeInsets.only(left: 15, right: 15),
                               child: Container(
                                 child: ListView.separated(
                                     key: Key("Location123"),
                                     physics: NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
-                                      Command item = _locations.elementAt(index);
+                                      Command item =
+                                          _locations.elementAt(index);
                                       return ExpandablePanel(
                                         header: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: 10,
@@ -1026,11 +1243,11 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w700,
-                                                      fontSize: 14,
-                                                      color: MyTheme.navBar,
-                                                    )),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 14,
+                                                          color: MyTheme.navBar,
+                                                        )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
@@ -1038,7 +1255,7 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                   color: getStatusColor(
                                                       item.status),
                                                   padding: const EdgeInsets
-                                                      .symmetric(
+                                                          .symmetric(
                                                       horizontal: 7,
                                                       vertical: 3),
                                                   child: Text(
@@ -1048,11 +1265,11 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                           .textTheme
                                                           .bodyText1
                                                           .copyWith(
-                                                        fontWeight:
-                                                        FontWeight.w500,
-                                                        fontSize: 13,
-                                                        color: Colors.white,
-                                                      )),
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 13,
+                                                            color: Colors.white,
+                                                          )),
                                                 )
                                               ],
                                             ),
@@ -1066,13 +1283,13 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                 .textTheme
                                                 .bodyText1
                                                 .copyWith(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 12,
-                                              color: MyTheme.navBar,
-                                            )),
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 12,
+                                                  color: MyTheme.navBar,
+                                                )),
                                         expanded: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                                 AppLocalization.of(context)
@@ -1084,11 +1301,11 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                     .textTheme
                                                     .bodyText1
                                                     .copyWith(
-                                                  fontWeight:
-                                                  FontWeight.w400,
-                                                  fontSize: 14,
-                                                  color: MyTheme.navBar,
-                                                )),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 14,
+                                                      color: MyTheme.navBar,
+                                                    )),
                                             SizedBox(
                                               height: 5,
                                             ),
@@ -1097,17 +1314,17 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                 Text(
                                                     "- " +
                                                         AppLocalization.of(
-                                                            context)
+                                                                context)
                                                             .startPoint,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                      fontSize: 13,
-                                                      color: MyTheme.navBar,
-                                                    )),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: MyTheme.navBar,
+                                                        )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
@@ -1116,11 +1333,11 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w400,
-                                                      fontSize: 12,
-                                                      color: MyTheme.navBar,
-                                                    ))
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12,
+                                                          color: MyTheme.navBar,
+                                                        ))
                                               ],
                                             ),
                                             SizedBox(
@@ -1131,17 +1348,17 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                 Text(
                                                     "- " +
                                                         AppLocalization.of(
-                                                            context)
+                                                                context)
                                                             .createdAt,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                      fontSize: 13,
-                                                      color: MyTheme.navBar,
-                                                    )),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: MyTheme.navBar,
+                                                        )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
@@ -1149,16 +1366,16 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                     DateFormat.yMMMd()
                                                         .add_Hms()
                                                         .format(
-                                                        item.date_creation),
+                                                            item.date_creation),
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w400,
-                                                      fontSize: 12,
-                                                      color: MyTheme.navBar,
-                                                    ))
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12,
+                                                          color: MyTheme.navBar,
+                                                        ))
                                               ],
                                             ),
                                             SizedBox(
@@ -1169,31 +1386,30 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                 Text(
                                                     "- " +
                                                         AppLocalization.of(
-                                                            context)
+                                                                context)
                                                             .destination,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                      fontSize: 13,
-                                                      color: MyTheme.navBar,
-                                                    )),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: MyTheme.navBar,
+                                                        )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text(
-                                                    item.arrive,
+                                                Text(item.arrive,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w400,
-                                                      fontSize: 12,
-                                                      color: MyTheme.navBar,
-                                                    ))
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12,
+                                                          color: MyTheme.navBar,
+                                                        ))
                                               ],
                                             ),
                                             SizedBox(
@@ -1204,133 +1420,237 @@ class HistoryScreenState extends State<HistoryScreen> {
                                                 Text(
                                                     "- " +
                                                         AppLocalization.of(
-                                                            context)
+                                                                context)
                                                             .price,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                      fontSize: 13,
-                                                      color: MyTheme.navBar,
-                                                    )),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13,
+                                                          color: MyTheme.navBar,
+                                                        )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text(
-                                                    "${item.cout} XAF",
+                                                Text("${item.cout} XAF",
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
                                                         .copyWith(
-                                                      fontWeight:
-                                                      FontWeight.w400,
-                                                      fontSize: 12,
-                                                      color: MyTheme.navBar,
-                                                    ))
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12,
+                                                          color: MyTheme.navBar,
+                                                        ))
                                               ],
                                             ),
                                             SizedBox(
                                               height: 5,
                                             ),
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
                                               children: [
-                                                if(item.status == 2) SizedBox(
-                                                    width: 75.0,
-                                                    height:30,
-                                                    child:RaisedButton(
-                                                      onPressed: () {
-                                                        print("Démarrer" );
-                                                        print(item.id );
-                                                      },
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(0.0),
-                                                          ),
-                                                          side: BorderSide(color: MyTheme.button, width: 0)),
-                                                      color: MyTheme.button,
-                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                      child: Text(AppLocalization.of(context).start, style: TextStyle(color:Colors.black),),)),
-                                                if(item.status == 3) SizedBox(
-                                                  width: 10,
-                                                ),
-                                                if(item.status == 3)SizedBox(
-                                                    width: 75.0,
-                                                    height:30,
-                                                    child:RaisedButton(
-                                                      onPressed: () {
-                                                        print("Terminer" );
-                                                        print(item.id );
-                                                      },
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(0.0),
-                                                          ),
-                                                          side: BorderSide(color: MyTheme.button, width: 0)),
-                                                      color:  MyTheme.button,
-                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                      child: Text(AppLocalization.of(context).end, style: TextStyle(color:Colors.black),),)),
+                                                if (item.status == 2)
+                                                  SizedBox(
+                                                      width: 75.0,
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Démarrer");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: MyTheme
+                                                                        .button,
+                                                                    width: 0)),
+                                                        color: MyTheme.button,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .start,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      )),
+                                                if (item.status == 3)
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                if (item.status == 3)
+                                                  SizedBox(
+                                                      width: 75.0,
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Terminer");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: MyTheme
+                                                                        .button,
+                                                                    width: 0)),
+                                                        color: MyTheme.button,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .end,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      )),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
                                                 SizedBox(
                                                     width: 60.0,
-                                                    height:30,
-                                                    child:RaisedButton(
+                                                    height: 30,
+                                                    child: RaisedButton(
                                                       onPressed: () {
-                                                        print("Ouvrir" );
-                                                        print(item.id );
+                                                        print("Ouvrir");
+                                                        print(item.id);
                                                       },
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(0.0),
-                                                          ),
-                                                          side: BorderSide(color: Colors.black, width: 0)),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    0.0),
+                                                              ),
+                                                              side: BorderSide(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  width: 0)),
                                                       color: Colors.black,
-                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-
-                                                      child: Text(AppLocalization.of(context).open, style: TextStyle(color:Colors.white),),)),
-                                                if(item.status <3 && isMe()) SizedBox(
-                                                  width: 10,
-                                                ),
-                                                if(item.status <3 && isMe())SizedBox(
-                                                    width: 75.0,
-                                                    height:30,
-                                                    child:RaisedButton(
-                                                      onPressed: () {
-                                                        print("Modifier" );
-                                                        print(item.id );
-                                                      },
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(0.0),
-                                                          ),
-                                                          side: BorderSide(color: Colors.black, width: 0)),
-                                                      color: Colors.black,
-                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                      child: Text(AppLocalization.of(context).update, style: TextStyle(color:Colors.white),),)),
-
-                                                if((!isMe() && item.status >1 && item.status <3) || (isMe() && item.status !=0 && item.status !=4)) SizedBox(
-                                                  width: 10,
-                                                ),
-                                                if((!isMe() && item.status >1 && item.status <3) || (isMe() && item.status !=0 && item.status !=4)) SizedBox(
-                                                    width: 75.0,
-                                                    height:30,
-                                                    child:RaisedButton(
-                                                      onPressed: () {
-                                                        print("Annuler" );
-                                                        print(item.id );
-                                                      },
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(0.0),
-                                                          ),
-                                                          side: BorderSide(color:Colors.black, width: 0)),
-                                                      color: Colors.black,
-                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                      child: Text(AppLocalization.of(context).reset, style: TextStyle(color:Colors.white),),))
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              0, 0, 0, 0),
+                                                      child: Text(
+                                                        AppLocalization.of(
+                                                                context)
+                                                            .open,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    )),
+                                                if (item.status < 3 && isMe())
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                if (item.status < 3 && isMe())
+                                                  SizedBox(
+                                                      width: 75.0,
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Modifier");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    width: 0)),
+                                                        color: Colors.black,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .update,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      )),
+                                                if ((!isMe() &&
+                                                        item.status > 1 &&
+                                                        item.status < 3) ||
+                                                    (isMe() &&
+                                                        item.status != 0 &&
+                                                        item.status != 4))
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                if ((!isMe() &&
+                                                        item.status > 1 &&
+                                                        item.status < 3) ||
+                                                    (isMe() &&
+                                                        item.status != 0 &&
+                                                        item.status != 4))
+                                                  SizedBox(
+                                                      width: 75.0,
+                                                      height: 30,
+                                                      child: RaisedButton(
+                                                        onPressed: () {
+                                                          print("Annuler");
+                                                          print(item.id);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          0.0),
+                                                                ),
+                                                                side: BorderSide(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    width: 0)),
+                                                        color: Colors.black,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        child: Text(
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .reset,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      ))
                                               ],
                                             ),
                                             SizedBox(
@@ -1354,28 +1674,22 @@ class HistoryScreenState extends State<HistoryScreen> {
                           if (selectedMenuIndex == 3)
                             Container(
                               padding:
-                              const EdgeInsets.only(left: 15, right: 15),
+                                  const EdgeInsets.only(left: 15, right: 15),
                               child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
                                   Row(
                                     children: [
                                       Text(
-                                          "- " +
-                                              AppLocalization.of(
-                                                  context)
-                                                  .ca,
+                                          "- " + AppLocalization.of(context).ca,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText1
                                               .copyWith(
-                                            fontWeight:
-                                            FontWeight.w500,
-                                            fontSize: 15,
-                                            color: MyTheme.navBar,
-                                          )),
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 15,
+                                                color: MyTheme.navBar,
+                                              )),
                                       SizedBox(
                                         width: 10,
                                       ),
@@ -1384,11 +1698,10 @@ class HistoryScreenState extends State<HistoryScreen> {
                                               .textTheme
                                               .bodyText1
                                               .copyWith(
-                                            fontWeight:
-                                            FontWeight.w400,
-                                            fontSize: 14,
-                                            color: MyTheme.navBar,
-                                          ))
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14,
+                                                color: MyTheme.navBar,
+                                              ))
                                     ],
                                   ),
                                   SizedBox(
@@ -1398,18 +1711,16 @@ class HistoryScreenState extends State<HistoryScreen> {
                                     children: [
                                       Text(
                                           "- " +
-                                              AppLocalization.of(
-                                                  context)
+                                              AppLocalization.of(context)
                                                   .creditCa,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText1
                                               .copyWith(
-                                            fontWeight:
-                                            FontWeight.w500,
-                                            fontSize: 15,
-                                            color: MyTheme.navBar,
-                                          )),
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 15,
+                                                color: MyTheme.navBar,
+                                              )),
                                       SizedBox(
                                         width: 10,
                                       ),
@@ -1418,11 +1729,10 @@ class HistoryScreenState extends State<HistoryScreen> {
                                               .textTheme
                                               .bodyText1
                                               .copyWith(
-                                            fontWeight:
-                                            FontWeight.w400,
-                                            fontSize: 14,
-                                            color: MyTheme.navBar,
-                                          ))
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14,
+                                                color: MyTheme.navBar,
+                                              ))
                                     ],
                                   ),
                                   SizedBox(
@@ -1432,36 +1742,30 @@ class HistoryScreenState extends State<HistoryScreen> {
                                     children: [
                                       Text(
                                           "- " +
-                                              AppLocalization.of(
-                                                  context)
+                                              AppLocalization.of(context)
                                                   .detteCa,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText1
                                               .copyWith(
-                                            fontWeight:
-                                            FontWeight.w500,
-                                            fontSize: 15,
-                                            color: MyTheme.navBar,
-                                          )),
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 15,
+                                                color: MyTheme.navBar,
+                                              )),
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      Text(
-                                          "50 000",
+                                      Text("50 000",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText1
                                               .copyWith(
-                                            fontWeight:
-                                            FontWeight.w400,
-                                            fontSize: 14,
-                                            color: MyTheme.navBar,
-                                          ))
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14,
+                                                color: MyTheme.navBar,
+                                              ))
                                     ],
                                   ),
-
-
                                 ],
                               ),
                             ),

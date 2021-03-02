@@ -26,7 +26,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kifcab/screens/welcome_screen.dart';
 import 'core/preference.dart';
+import 'core/httpreq.dart';
 import 'models/UserMod.dart';
+import 'models/GammesModel.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:geolocator/geolocator.dart';
@@ -40,6 +42,35 @@ void main() async {
     global.fcmtoken = val;
     print('Token: ' + val);
   });
+
+  HttpPostRequest.getAllGammesReser().then((List<GammesModel> result) {
+    if (result.length > 0) {
+      log('savelistTot-reservation');
+      // SharedPreferencesClass.save('listHotel1', result);
+    }
+  });
+
+  HttpPostRequest.getAllConst().then((String result) {
+    if (result.length > 0) {
+      log('savelistTot-reservation');
+      // SharedPreferencesClass.save('listHotel1', result);
+    }
+  });
+
+  HttpPostRequest.getAllGammescourse().then((List<GammesModel> result) {
+    if (result.length > 0) {
+      log('savelistTot-course');
+      // SharedPreferencesClass.save('listHotel1', result);
+    }
+  });
+
+  HttpPostRequest.getAllGammeslocation().then((List<GammesModel> result) {
+    if (result.length > 0) {
+      log('savelistTot-location');
+      //SharedPreferencesClass.save('listHotel1', result);
+    }
+  });
+
   bool compteU = false;
   await SharedPreferencesClass.restoreuser("userinfos").then((value) {
     var userinfos = new List<UserMod>();
