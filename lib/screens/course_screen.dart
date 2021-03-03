@@ -535,7 +535,7 @@ class _CourseScreenState extends State<CourseScreen> {
               NavigationButton(
                 backColor: MyTheme.primaryColor,
                 textColor: Colors.black,
-                icon: Icons.chevron_right,
+                icon: Icons.chevron_right_outlined,
                 text: AppLocalization.of(context).next,
                 onTap: () {
                   print("tapped next");

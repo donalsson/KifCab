@@ -99,7 +99,7 @@ class _DepotScreenState extends State<DepotScreen> {
     if (p != null) {
       // get detail (lat/lng)
       PlacesDetailsResponse detail =
-      await _places.getDetailsByPlaceId(p.placeId);
+          await _places.getDetailsByPlaceId(p.placeId);
 
       final lat = detail.result.geometry.location.lat;
       final lng = detail.result.geometry.location.lng;
@@ -172,7 +172,7 @@ class _DepotScreenState extends State<DepotScreen> {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
                                           AppLocalization.of(context)
@@ -181,10 +181,10 @@ class _DepotScreenState extends State<DepotScreen> {
                                               .textTheme
                                               .bodyText1
                                               .copyWith(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 17,
-                                            color: Colors.white,
-                                          )),
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 17,
+                                                color: Colors.white,
+                                              )),
                                       SizedBox(
                                         height: 07,
                                       ),
@@ -195,8 +195,8 @@ class _DepotScreenState extends State<DepotScreen> {
                                               .textTheme
                                               .subtitle2
                                               .copyWith(
-                                              fontWeight: FontWeight.w300,
-                                              color: Colors.white)),
+                                                  fontWeight: FontWeight.w300,
+                                                  color: Colors.white)),
                                     ],
                                   ),
                                 ),
@@ -221,7 +221,7 @@ class _DepotScreenState extends State<DepotScreen> {
                       ),
                       Container(
                         padding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                         child: Column(
                           children: [
                             Row(
@@ -233,10 +233,10 @@ class _DepotScreenState extends State<DepotScreen> {
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: MyTheme.navBar,
-                                  ),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: MyTheme.navBar,
+                                      ),
                                 ),
                                 Text(
                                   AppLocalization.of(context).required,
@@ -244,10 +244,10 @@ class _DepotScreenState extends State<DepotScreen> {
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w300,
-                                    color: MyTheme.navBar,
-                                  ),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w300,
+                                        color: MyTheme.navBar,
+                                      ),
                                 )
                               ],
                             ),
@@ -265,7 +265,7 @@ class _DepotScreenState extends State<DepotScreen> {
                                     PageRouteBuilder(
                                         opaque: false,
                                         pageBuilder: (_, __, ___) =>
-                                        new CustomSearchScaffold()));
+                                            new CustomSearchScaffold()));
 
                                 setState(() {
                                   print(result[3]);
@@ -275,7 +275,6 @@ class _DepotScreenState extends State<DepotScreen> {
                                   deln = result[1];
                                   deplat = result[2];
                                 });
-
                               },
                               onSaved: (String val) {
                                 departName = val;
@@ -291,14 +290,14 @@ class _DepotScreenState extends State<DepotScreen> {
                                   ),
                                   suffixIcon: _showClearButtonInputFrom
                                       ? IconButton(
-                                    onPressed: () =>
-                                        _textControllerFrom.clear(),
-                                    icon: Icon(
-                                      Icons.clear,
-                                      color: MyTheme.navBar,
-                                      size: 16,
-                                    ),
-                                  )
+                                          onPressed: () =>
+                                              _textControllerFrom.clear(),
+                                          icon: Icon(
+                                            Icons.clear,
+                                            color: MyTheme.navBar,
+                                            size: 16,
+                                          ),
+                                        )
                                       : null,
                                   contentPadding: const EdgeInsets.symmetric(
                                       vertical: 0.0, horizontal: 10),
@@ -330,7 +329,7 @@ class _DepotScreenState extends State<DepotScreen> {
                       ),
                       Container(
                         padding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                         child: Column(
                           children: [
                             Row(
@@ -342,10 +341,10 @@ class _DepotScreenState extends State<DepotScreen> {
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: MyTheme.navBar,
-                                  ),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: MyTheme.navBar,
+                                      ),
                                 ),
                                 Text(
                                   AppLocalization.of(context).required,
@@ -353,10 +352,10 @@ class _DepotScreenState extends State<DepotScreen> {
                                       .textTheme
                                       .bodyText2
                                       .copyWith(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w300,
-                                    color: MyTheme.navBar,
-                                  ),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w300,
+                                        color: MyTheme.navBar,
+                                      ),
                                 )
                               ],
                             ),
@@ -374,7 +373,7 @@ class _DepotScreenState extends State<DepotScreen> {
                                     PageRouteBuilder(
                                         opaque: false,
                                         pageBuilder: (_, __, ___) =>
-                                        new CustomSearchScaffold1()));
+                                            new CustomSearchScaffold1()));
                                 setState(() {
                                   print(result[3]);
 
@@ -383,8 +382,6 @@ class _DepotScreenState extends State<DepotScreen> {
                                   arriln = result[1];
                                   arriplat = result[2];
                                 });
-
-
                               },
                               style: TextStyle(
                                   color: MyTheme.navBar,
@@ -397,14 +394,14 @@ class _DepotScreenState extends State<DepotScreen> {
                                   ),
                                   suffixIcon: _showClearButtonInputTo
                                       ? IconButton(
-                                    onPressed: () =>
-                                        _textControllerTo.clear(),
-                                    icon: Icon(
-                                      Icons.clear,
-                                      color: MyTheme.navBar,
-                                      size: 16,
-                                    ),
-                                  )
+                                          onPressed: () =>
+                                              _textControllerTo.clear(),
+                                          icon: Icon(
+                                            Icons.clear,
+                                            color: MyTheme.navBar,
+                                            size: 16,
+                                          ),
+                                        )
                                       : null,
                                   contentPadding: const EdgeInsets.symmetric(
                                       vertical: 0.0, horizontal: 10),
@@ -457,7 +454,7 @@ class _DepotScreenState extends State<DepotScreen> {
               NavigationButton(
                 backColor: MyTheme.primaryColor,
                 textColor: Colors.black,
-                icon: Icons.chevron_right,
+                icon: Icons.chevron_right_outlined,
                 text: AppLocalization.of(context).next,
                 onTap: () {
                   print("tapped next");
@@ -498,16 +495,16 @@ class CustomSearchScaffold extends PlacesAutocompleteWidget {
   String qualite;
   CustomSearchScaffold({this.qualite})
       : super(
-    apiKey: kGoogleApiKey,
-    mode: Mode.overlay,
-    strictbounds: true,
-    location: Uuid().generateLocation(),
-    radius: 200,
-    hint: "Recherchez",
-    sessionToken: Uuid().generateV4(),
-    language: "fr",
-    components: [Component(Component.country, "cmr")],
-  );
+          apiKey: kGoogleApiKey,
+          mode: Mode.overlay,
+          strictbounds: true,
+          location: Uuid().generateLocation(),
+          radius: 200,
+          hint: "Recherchez",
+          sessionToken: Uuid().generateV4(),
+          language: "fr",
+          components: [Component(Component.country, "cmr")],
+        );
 
   @override
   _CustomSearchScaffoldState createState() => _CustomSearchScaffoldState();
@@ -560,16 +557,16 @@ void getLocation() {}
 class CustomSearchScaffold1 extends PlacesAutocompleteWidget {
   CustomSearchScaffold1()
       : super(
-    apiKey: kGoogleApiKey,
-    mode: Mode.overlay,
-    strictbounds: true,
-    location: Uuid().generateLocation(),
-    radius: 20000,
-    hint: "Recherche",
-    sessionToken: Uuid().generateV4(),
-    language: "fr",
-    components: [Component(Component.country, "cmr")],
-  );
+          apiKey: kGoogleApiKey,
+          mode: Mode.overlay,
+          strictbounds: true,
+          location: Uuid().generateLocation(),
+          radius: 20000,
+          hint: "Recherche",
+          sessionToken: Uuid().generateV4(),
+          language: "fr",
+          components: [Component(Component.country, "cmr")],
+        );
 
   @override
   _CustomSearchScaffoldState1 createState() => _CustomSearchScaffoldState1();
