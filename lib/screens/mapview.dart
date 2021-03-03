@@ -426,6 +426,76 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
         setState(() {
           end = 40;
         });
+        if (globals.active != "1") {
+          globals.active = "1";
+          return showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              backgroundColor: Colors.white,
+              content: Text(
+                "Votre chauffeur ne peux pas venir vous chercher que désirez vous ?",
+                style: Theme.of(context).textTheme.headline6.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  minWidth: 100.0,
+                  height: 30,
+                  color: Colors.red[400],
+                  onPressed: () {
+                    setState(() {
+                      visible = true;
+                    });
+                    HttpPostRequest.processOperation(
+                            "remove", globals.idcommande.toString(), "")
+                        .then((String result) async {
+                      print("quellll rsultttt");
+                      print(result);
+
+                      setState(() {
+                        visible = false;
+                      });
+                      if (result == "null") {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()),
+                            (Route<dynamic> route) => false);
+                      }
+
+                      // createMarker(context, value.latitude, value.longitude);
+                    });
+                    //
+                  },
+                  child: Text(
+                    "Annuler",
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 17),
+                  ),
+                ),
+                FlatButton(
+                  minWidth: 100.0,
+                  height: 30,
+                  color: Colors.green[400],
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                  child: Text(
+                    "Un autre",
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20),
+                  ),
+                ),
+              ],
+              elevation: 12.0,
+            ),
+          );
+        }
       }
       if (message["data"]["etat"] == "position") {
         sharedPreferences.setString('sql', "");
@@ -2323,6 +2393,42 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                   log("Cancel pressed");
                                                                   globals.active =
                                                                       "0";
+
+                                                                  setState(() {
+                                                                    visible =
+                                                                        true;
+                                                                  });
+                                                                  HttpPostRequest.processOperation(
+                                                                          "remove",
+                                                                          globals
+                                                                              .idcommande
+                                                                              .toString(),
+                                                                          "")
+                                                                      .then((String
+                                                                          result) async {
+                                                                    print(
+                                                                        "quellll rsultttt");
+                                                                    print(
+                                                                        result);
+
+                                                                    setState(
+                                                                        () {
+                                                                      visible =
+                                                                          false;
+                                                                    });
+                                                                    if (result ==
+                                                                        "null") {
+                                                                      Navigator.of(context).pushAndRemoveUntil(
+                                                                          MaterialPageRoute(
+                                                                              builder: (context) =>
+                                                                                  HomeScreen()),
+                                                                          (Route<dynamic> route) =>
+                                                                              false);
+                                                                    }
+
+                                                                    // createMarker(context, value.latitude, value.longitude);
+                                                                  });
+                                                                  //
                                                                 },
                                                                 color: Color
                                                                     .fromRGBO(

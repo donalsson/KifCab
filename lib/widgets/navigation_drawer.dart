@@ -5,6 +5,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../core/global.dart' as globals;
 import 'package:kifcab/locale/app_localization.dart';
 import 'package:kifcab/utils/colors.dart';
+import 'package:kifcab/screens/loader10.dart';
+import 'package:kifcab/screens/welcome_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationDrawer extends StatelessWidget {
   Widget createDrawerHeader(BuildContext context) {
@@ -182,9 +185,22 @@ class NavigationDrawer extends StatelessWidget {
                   icon: Icons.logout,
                   marginLeft: 25,
                   text: AppLocalization.of(context).logout,
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, '/about',
-                        arguments: <String, dynamic>{});
+                  onTap: () async {
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (_, __, ___) => new LoadingPage()));
+
+                    SharedPreferences sharedPreferences =
+                        await SharedPreferences.getInstance();
+
+//691779906    150754
+                    sharedPreferences.setString("userinfos", "");
+
+                    Navigator.pop(context);
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => WelcomeScreen()),
+                        (Route<dynamic> route) => false);
                   }),
             ],
           ),

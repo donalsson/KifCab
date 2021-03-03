@@ -18,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kifcab/core/preference.dart';
 import 'package:kifcab/utils/tcheckconnection.dart';
+import 'package:kifcab/main.dart' as app;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
@@ -662,7 +663,7 @@ class LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.green[400],
         textColor: Colors.white,
         fontSize: 16.0);
-
+    app.main();
     Navigator.of(context)
         .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
   }
