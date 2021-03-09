@@ -4,6 +4,7 @@ import 'package:kifcab/screens/course_screen.dart';
 import 'package:kifcab/screens/history_screen.dart';
 import 'package:kifcab/screens/location_car_screen.dart';
 import 'package:kifcab/screens/mapview.dart';
+import 'package:kifcab/screens/driversdetaild.dart';
 
 import 'package:kifcab/screens/drawers/about_screen.dart';
 import 'package:kifcab/screens/drawers/account_screen.dart';
@@ -157,6 +158,7 @@ class MyApp extends StatelessWidget {
           '/account': (context) => AccountScreen(),
           '/become-driver': (context) => BecomeDriverScreen(),
           '/history': (context) => HistoryScreen(),
+          '/driversdetails': (context) => DriverDetails(),
         },
       ),
     );

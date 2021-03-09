@@ -1,3 +1,115 @@
+
+  globals.active == "0"
+                        ? Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 209,
+                            padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                            decoration: new BoxDecoration(
+                              color: Color.fromRGBO(0, 0, 0, 0.1),
+                              image: new DecorationImage(
+                                fit: BoxFit.cover,
+                                colorFilter: new ColorFilter.mode(
+                                    Color.fromRGBO(0, 0, 0, 1),
+                                    BlendMode.dstATop),
+                                image: AssetImage(
+                                  "assets/pictures/2.jpg",
+                                ),
+                              ),
+                            ),
+                            child: Center(
+                              // Center is a layout widget. It takes a single child and positions it
+                              // in the middle of the parent.
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Container(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                  "Vous pouvez recevoir une commande",
+                                                  overflow: TextOverflow.clip,
+                                                  maxLines: 5,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontSize: 16,
+                                                        color: Colors.white,
+                                                      )),
+                                              SizedBox(
+                                                height: 07,
+                                              ),
+                                              Text(
+                                                  "Verifiez fréquemment votre téléphone",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .subtitle2
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                          color: Colors.white)),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                      ]),
+                                ],
+                              ),
+                            ),
+                          )
+                        : Container(),
+                    globals.active == "0"
+                        ? Container(
+                            margin: EdgeInsets.fromLTRB(0, 185, 0, 0),
+                            child: Divider(
+                              color: Colors.black,
+                              height: 50,
+                              indent: 00,
+                              thickness: 20,
+                            ),
+                          )
+                        : Container,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import 'dart:developer';
 import 'dart:io';
 import 'dart:ui' as ui;

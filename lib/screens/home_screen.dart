@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:kifcab/locale/app_localization.dart';
 import 'package:kifcab/widgets/navigation_drawer.dart';
-import 'package:kifcab/utils/Utils.dart';
 
 import 'package:geolocator/geolocator.dart';
 import '../core/global.dart' as globals;
@@ -20,7 +19,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kifcab/utils/tcheckconnection.dart';
 import '../models/GammesModel.dart';
 import 'package:kifcab/utils/getandsendpossition.dart';
-import 'package:kifcab/utils/tcheckifoperation.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -124,12 +122,13 @@ class HomeScreenState extends State<HomeScreen> {
                   depname: result["commande"]["depart"].toString(),
                   deplat: double.parse(result["commande"]["lat_d"]),
                   depln: double.parse(result["commande"]["long_d"]),
+                  prixt: int.parse(result["commande"]["cout"]),
                   arrivname: arr.toString(),
                   arrivlat: double.parse(result["commande"]["lat_a"]),
                   arrivln: double.parse(result["commande"]["long_a"]),
                 )));
       } else {
-        SharedPreferences sharedPreferences =
+        /*SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
 
         String result = sharedPreferences.getString("non_note");
@@ -137,14 +136,15 @@ class HomeScreenState extends State<HomeScreen> {
         if (result != "" && result != null) {
           Navigator.of(context).pushReplacement(PageRouteBuilder(
               pageBuilder: (_, __, ___) => new MapView(
-                    depname: "",
-                    deplat: 0,
-                    depln: 0,
-                    arrivname: "",
-                    arrivlat: 0,
-                    arrivln: 0,
+                    depname: "1",
+                    deplat: 10,
+                    depln: 10,
+                    prixt: 10,
+                    arrivname: "1",
+                    arrivlat: 10,
+                    arrivln: 10,
                   )));
-        }
+        }*/
       }
       /* if (result.toString() == "[]") {
         print("not current operation");

@@ -14,20 +14,17 @@ import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter/gestures.dart';
 import '../core/global.dart' as globals;
 import '../core/preference.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:kifcab/library/loader.dart';
-import 'package:kifcab/library/notechauf.dart';
+import 'package:kifcab/screens/driversdetaild.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 
@@ -36,7 +33,6 @@ import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'dart:math' show cos, sqrt, asin;
 import 'home_screen.dart';
 import 'package:kifcab/core/httpreq.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kifcab/utils/tcheckconnection.dart';
 import 'package:kifcab/utils/getandsendpossition.dart';
@@ -99,7 +95,9 @@ int minp = 0;
 int minr = 0;
 int secp = 0;
 int secrp = 0;
+bool isminus = false;
 
+bool noteerror = false;
 double latitude;
 double latch;
 String depart = "";
@@ -162,7 +160,8 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
   bool visible = false;
   bool visiblenote = false;
   bool visiblenoteload = false;
-
+  Locale locale;
+  var format;
   @override
   void initState() {
     if (globals.active == "3") {
@@ -175,6 +174,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
     if (globals.active == "1") {
       waitrefus();
     }
+    //locale = Localizations.localeOf(context);
     super.initState();
     //Timer.run(() => _calculateDistance());
   }
@@ -206,7 +206,15 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
       globals.active = "2";
 
       var offre = jsonDecode(message["data"]["commande"]);
-
+      /* 
+      var vehicule = jsonDecode(message["data"]["vehicule"][0]);
+      globals.vehicule = vehicule;
+      globals.images.add(vehicule["photo1"]);
+      globals.images.add(vehicule["photo2"]);
+      globals.images.add(vehicule["photo3"]);
+      globals.images.add(vehicule["photo4"]);
+      globals.images.add(vehicule["photo5"]);
+      */
       globals.offre = offre;
       globals.chaufprof = message["data"]["userpro"];
       latch = double.parse(message["data"]["userlat"]);
@@ -239,29 +247,51 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
     SharedPreferences shared = await SharedPreferences.getInstance();
 
     int tempdeb = shared.getInt("tempdeb");
-    int tempfinde = shared.getInt("tempfin");
-    log("tempfinnn  :" + tempfinde.toString());
+
     int tempnow = DateTime.now().millisecondsSinceEpoch;
     int durercom;
     if (globals.type == "COURSE") {
       durercom = int.parse(globals.commande["heure"]) * 60 * 60 * 1000;
       log("dureeeecom  " + durercom.toString());
-    } else {
-      durercom = tempfinde * 60 * 1000;
-    }
-    int temppasse = tempnow - tempdeb - 3600000;
-    int temprestant = durercom - temppasse - 3600000 - 3600000;
-    int h = 0;
-    if (globals.active == "3") {
-      const oneSec = const Duration(seconds: 1);
-      _timer = new Timer.periodic(oneSec, (Timer timer) async {
-        h = h + 1;
-        // log("tempfinnng  :" + globals.depodure.toString());
-        setState(() {
-          timesspass = inttohour(temppasse + (h * 1000));
-          timesrest = inttohour(temprestant - (h * 1000));
+
+      int temppasse = tempnow - tempdeb - 3600000;
+      int temprestant = durercom - temppasse - 3600000 - 3600000;
+      int h = 0;
+      if (globals.active == "3") {
+        const oneSec = const Duration(seconds: 1);
+        _timer = new Timer.periodic(oneSec, (Timer timer) async {
+          h = h + 1;
+          // log("tempfinnng  :" + globals.depodure.toString());
+          setState(() {
+            timesspass = inttohour(temppasse + (h * 1000));
+            timesrest = inttohour(temprestant - (h * 1000));
+          });
         });
-      });
+      }
+    } else {
+      int h = 0;
+      if (globals.active == "3") {
+        const oneSec = const Duration(seconds: 1);
+        _timer = new Timer.periodic(oneSec, (Timer timer) async {
+          h = h + 1;
+          durercom = _timess * 60 * 1000;
+          int temppasse = tempnow - tempdeb - 3600000;
+          int temppasse1 = tempnow - tempdeb;
+          int tempfin = tempdeb + durercom;
+          int temprestant = durercom - temppasse - 3600000 - 3600000;
+          // log("tempfinnng  :" + globals.depodure.toString());
+          setState(() {
+            timesspass = inttohour(temppasse + (h * 1000));
+            if ((tempdeb + temppasse1 + (h * 1000)) < (tempfin)) {
+              timesrest = inttohour(
+                  (durercom - temppasse - 3600000 - 3600000) - (h * 1000));
+            } else {
+              isminus = true;
+              timesrest = "- " + inttohour((temppasse + (h * 1000) - durercom));
+            }
+          });
+        });
+      }
     }
   }
 
@@ -417,7 +447,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
   }
 
   processNotificationM(message, BuildContext context) async {
-    log('processNotification');
+    log('processNotificationM');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     try {
@@ -500,12 +530,22 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
       if (message["data"]["etat"] == "position") {
         sharedPreferences.setString('sql', "");
 
+        var vehicule = jsonDecode(message["data"]["vehicule"]);
+        // log("gogogogo vehicule" + vehicule[0].toString());
+
+        globals.vehicule = vehicule[0];
+        /*  globals.images.add(vehicule[0]["photo1"]);
+        globals.images.add(vehicule[0]["photo2"]);
+        globals.images.add(vehicule[0]["photo3"]);
+        globals.images.add(vehicule[0]["photo4"]);
+        globals.images.add(vehicule[0]["photo5"]);
+*/
         setState(() {
           globals.chaufln = double.parse(message["data"]["userln"]);
           globals.chauflat = double.parse(message["data"]["userlat"]);
         });
-        /*createroutechaufclient(double.parse(message["data"]["userlat"]),
-            double.parse(message["data"]["userln"]));*/
+        createroutechaufclient(double.parse(message["data"]["userlat"]),
+            double.parse(message["data"]["userln"]));
         updatepositionChauffeur(double.parse(message["data"]["userlat"]),
             double.parse(message["data"]["userln"]));
       } else {
@@ -582,6 +622,15 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
 
         sharedPreferences.setString('last_message_id', currentMessageId);
         if (message["data"]["etat"] == "position") {
+          var vehicule = jsonDecode(message["data"]["vehicule"]);
+          log("gogogogo vehicule" + vehicule[0].toString());
+
+          globals.vehicule = vehicule[0];
+          globals.images.add(vehicule[0]["photo1"]);
+          globals.images.add(vehicule[0]["photo2"]);
+          globals.images.add(vehicule[0]["photo3"]);
+          globals.images.add(vehicule[0]["photo4"]);
+          globals.images.add(vehicule[0]["photo5"]);
           sharedPreferences.setString('sql', "");
           setState(() {
             globals.chaufln = double.parse(message["data"]["userln"]);
@@ -660,7 +709,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     idc = sharedPreferences.getString("non_note");
     idoffre = sharedPreferences.getString("offre");
-    if (idc != "" && idc != null) {
+    if (idc != "" && idc != null && globals.active == "4") {
       setState(() {
         visiblenote = true;
         globals.idcommande = idc;
@@ -1227,6 +1276,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
             }
             timed += _coordinateTimess(totalDistance);
             log("fdfdfdf  " + globals.active);
+            globals.depodure = timed;
             log(_timess.toString());
             setState(() {
               _placeDistance = totalDistance.toStringAsFixed(2);
@@ -1693,7 +1743,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width -
-                                              20,
+                                              36,
                                           height: 70.0,
                                           child: Center(
                                             child: Column(
@@ -1716,7 +1766,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,
-                                                                fontSize: 14,
+                                                                fontSize: 12,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w600),
@@ -1728,7 +1778,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                       context)
                                                                   .size
                                                                   .width -
-                                                              183,
+                                                              215,
                                                           padding: EdgeInsets
                                                               .symmetric(
                                                                   vertical: 4,
@@ -1769,15 +1819,15 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                               Marquee(
                                                 text:
                                                     'Bon déplacement avec KifCab, Noublier pas de noter le chauffeur a la fin.         Merci de faire confiance a KifCab ...                             ',
-                                                style: TextStyle(
-                                                    foreground: Paint()
-                                                      ..style =
-                                                          PaintingStyle.stroke
-                                                      ..strokeWidth = 1
-                                                      ..color = Colors.black,
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.normal),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 16,
+                                                      color: Colors.black,
+                                                    ),
                                               ),
                                             ].map(_wrapWithStuff).toList(),
                                           ),
@@ -1794,19 +1844,18 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                               MediaQuery.of(context).size.width,
                                           height: 70.0,
                                           child: Center(
-                                            child: Text(
-                                                "Bon déplacement avec KifCab, Noublier pas de noter le chauffeur a la fin. Merci de faire confiance a KifCab ...                             ",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    foreground: Paint()
-                                                      ..style =
-                                                          PaintingStyle.stroke
-                                                      ..strokeWidth = 1
-                                                      ..color = Colors.black,
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.normal)),
-                                          ),
+                                              child: Text(
+                                            "Bon déplacement avec KifCab, Noublier pas de noter le chauffeur a la fin. Merci de faire confiance a KifCab ...                             ",
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                ),
+                                          )),
                                         )
                                       : Container(),
                                   globals.active == "31" ||
@@ -1825,6 +1874,18 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                               255, 255, 255, 0.8),
                                           child: Column(
                                             children: [
+                                              /*  Container(
+                                                child: Carousel(
+                                                  images: [
+                                                    NetworkImage(
+                                                        'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg'),
+                                                    NetworkImage(
+                                                        'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg'),
+                                                    ExactAssetImage(
+                                                        "assets/images/LaunchImage.jpg")
+                                                  ],
+                                                ),
+                                              ),*/
                                               globals.type == "RESERVATION"
                                                   ? Padding(
                                                       padding:
@@ -1870,7 +1931,15 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                   _timess
                                                                       .toString() +
                                                                   " minutes / " +
-                                                                  prix.toString() +
+                                                                  NumberFormat.simpleCurrency(
+                                                                          locale:
+                                                                              "fr_FR",
+                                                                          name:
+                                                                              "",
+                                                                          decimalDigits:
+                                                                              0)
+                                                                      .format(
+                                                                          prix) +
                                                                   " Fcfa",
                                                               style: TextStyle(
                                                                   color: Colors
@@ -1926,10 +1995,16 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                           "heure"]
                                                                       .toString() +
                                                                   " heure / " +
-                                                                  globals
-                                                                      .commande[
-                                                                          "cout"]
-                                                                      .toString() +
+                                                                  NumberFormat.simpleCurrency(
+                                                                          locale:
+                                                                              "fr_FR",
+                                                                          name:
+                                                                              "",
+                                                                          decimalDigits:
+                                                                              0)
+                                                                      .format(int.parse(
+                                                                          globals
+                                                                              .commande["cout"])) +
                                                                   " Fcfa",
                                                               style: TextStyle(
                                                                   color: Colors
@@ -2043,7 +2118,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                         .bold,
                                                                 color: Colors
                                                                     .black,
-                                                                fontSize: 14,
+                                                                fontSize: 12,
                                                               )),
                                                           double.parse(globals.offre[
                                                                               "compte"]
@@ -2390,52 +2465,17 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                         .shrinkWrap,
                                                                 onPressed:
                                                                     () async {
-                                                                  log("Cancel pressed");
-                                                                  globals.active =
-                                                                      "0";
-
-                                                                  setState(() {
-                                                                    visible =
-                                                                        true;
-                                                                  });
-                                                                  HttpPostRequest.processOperation(
-                                                                          "remove",
-                                                                          globals
-                                                                              .idcommande
-                                                                              .toString(),
-                                                                          "")
-                                                                      .then((String
-                                                                          result) async {
-                                                                    print(
-                                                                        "quellll rsultttt");
-                                                                    print(
-                                                                        result);
-
-                                                                    setState(
-                                                                        () {
-                                                                      visible =
-                                                                          false;
-                                                                    });
-                                                                    if (result ==
-                                                                        "null") {
-                                                                      Navigator.of(context).pushAndRemoveUntil(
-                                                                          MaterialPageRoute(
-                                                                              builder: (context) =>
-                                                                                  HomeScreen()),
-                                                                          (Route<dynamic> route) =>
-                                                                              false);
-                                                                    }
-
-                                                                    // createMarker(context, value.latitude, value.longitude);
-                                                                  });
+                                                                  Navigator.of(context).push(PageRouteBuilder(
+                                                                      opaque:
+                                                                          false,
+                                                                      pageBuilder: (_,
+                                                                              __,
+                                                                              ___) =>
+                                                                          new DriverDetails()));
                                                                   //
                                                                 },
-                                                                color: Color
-                                                                    .fromRGBO(
-                                                                        191,
-                                                                        191,
-                                                                        191,
-                                                                        1),
+                                                                color: MyTheme
+                                                                    .button,
                                                                 shape:
                                                                     RoundedRectangleBorder(
                                                                   borderRadius:
@@ -2473,7 +2513,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                         child:
                                                                             Icon(
                                                                           Icons
-                                                                              .cancel_outlined,
+                                                                              .details,
                                                                           color:
                                                                               Colors.black,
                                                                           size:
@@ -2485,7 +2525,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                             Center(
                                                                           child:
                                                                               Text(
-                                                                            AppLocalization.of(context).cancel,
+                                                                            "Détails",
                                                                             style: TextStyle(
                                                                                 fontWeight: FontWeight.w400,
                                                                                 color: Colors.black,
@@ -2545,7 +2585,13 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                           " km / " +
                                                           _timess.toString() +
                                                           " minutes / " +
-                                                          prix.toString() +
+                                                          NumberFormat.simpleCurrency(
+                                                                  locale:
+                                                                      "fr_FR",
+                                                                  name: "",
+                                                                  decimalDigits:
+                                                                      0)
+                                                              .format(prix) +
                                                           " Fcfa",
                                                       style: TextStyle(
                                                           color: Colors.black,
@@ -2585,9 +2631,15 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                       globals.commande["heure"]
                                                               .toString() +
                                                           " heure / " +
-                                                          globals
-                                                              .commande["cout"]
-                                                              .toString() +
+                                                          NumberFormat.simpleCurrency(
+                                                                  locale:
+                                                                      "fr_FR",
+                                                                  name: "",
+                                                                  decimalDigits:
+                                                                      0)
+                                                              .format(int.parse(
+                                                                  globals.commande[
+                                                                      "cout"])) +
                                                           " Fcfa",
                                                       style: TextStyle(
                                                           color: Colors.black,
@@ -2646,7 +2698,14 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                               _timess
                                                                   .toString() +
                                                               " minutes / " +
-                                                              prix.toString() +
+                                                              NumberFormat.simpleCurrency(
+                                                                      locale:
+                                                                          "fr_FR",
+                                                                      name: "",
+                                                                      decimalDigits:
+                                                                          0)
+                                                                  .format(
+                                                                      prix) +
                                                               " Fcfa",
                                                           style: TextStyle(
                                                               color:
@@ -2739,9 +2798,15 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                       "heure"]
                                                                   .toString() +
                                                               " heure / " +
-                                                              globals.commande[
-                                                                      "cout"]
-                                                                  .toString() +
+                                                              NumberFormat.simpleCurrency(
+                                                                      locale:
+                                                                          "fr_FR",
+                                                                      name: "",
+                                                                      decimalDigits:
+                                                                          0)
+                                                                  .format(int.parse(
+                                                                      globals.commande[
+                                                                          "cout"])) +
                                                               " Fcfa",
                                                           style: TextStyle(
                                                               color:
@@ -2854,167 +2919,148 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: MyTheme.stripColor,
-                        height: 57,
+                        height: 60,
                         child: Row(
                           children: [
                             globals.active != "3"
-                                ? Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4,
-                                    child: NavigationButton(
-                                      backColor: MyTheme.primaryColor,
-                                      textColor: Colors.black,
-                                      icon: Icons.cancel,
-                                      text: AppLocalization.of(context).cancel,
-                                      onTap: () {
+                                ? NavigationButton(
+                                    backColor: MyTheme.primaryColor,
+                                    textColor: Colors.black,
+                                    icon: Icons.cancel,
+                                    text: AppLocalization.of(context).cancel,
+                                    onTap: () {
+                                      setState(() {
+                                        visible = true;
+                                      });
+                                      HttpPostRequest.processOperation("remove",
+                                              globals.idcommande.toString(), "")
+                                          .then((String result) async {
+                                        print("quellll rsultttt");
+                                        print(result);
+
                                         setState(() {
-                                          visible = true;
+                                          visible = false;
                                         });
-                                        HttpPostRequest.processOperation(
-                                                "remove",
-                                                globals.idcommande.toString(),
-                                                "")
-                                            .then((String result) async {
-                                          print("quellll rsultttt");
-                                          print(result);
+                                        if (result == "null") {
+                                          Navigator.of(context)
+                                              .pushAndRemoveUntil(
+                                                  MaterialPageRoute(
+                                                      builder:
+                                                          (context) =>
+                                                              HomeScreen()),
+                                                  (Route<dynamic> route) =>
+                                                      false);
+                                        }
 
-                                          setState(() {
-                                            visible = false;
-                                          });
-                                          if (result == "null") {
-                                            Navigator.of(context)
-                                                .pushAndRemoveUntil(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            HomeScreen()),
-                                                    (Route<dynamic> route) =>
-                                                        false);
-                                          }
-
-                                          // createMarker(context, value.latitude, value.longitude);
-                                        });
-                                        //
-                                      },
-                                    ),
+                                        // createMarker(context, value.latitude, value.longitude);
+                                      });
+                                      //
+                                    },
                                   )
                                 : Container(),
                             globals.active == "2"
-                                ? Container(
-                                    width: MediaQuery.of(context).size.width -
-                                        (MediaQuery.of(context).size.width / 2),
-                                    child: NavigationButton(
-                                      backColor: Color(0xFA0c1117),
-                                      textColor: Color(0xFAFFFFFF),
-                                      icon: Icons.call,
-                                      text: AppLocalization.of(context)
-                                          .callservice,
-                                      onTap: () {
-                                        //  Navigator.pop(context);
-                                        launch("tel://+237699244455");
-                                      },
-                                    ),
+                                ? NavigationButton(
+                                    backColor: Color(0xFA0c1117),
+                                    textColor: Color(0xFAFFFFFF),
+                                    icon: Icons.call,
+                                    text:
+                                        AppLocalization.of(context).callservice,
+                                    onTap: () {
+                                      //  Navigator.pop(context);
+                                      launch("tel://+237699244455");
+                                    },
                                   )
                                 : Container(),
                             globals.active == "3"
-                                ? Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: NavigationButton(
-                                      backColor: MyTheme.primaryColor,
-                                      textColor: Colors.black,
-                                      text: "En route avec KifCab ...",
-                                      onTap: () {
-                                        //  Navigator.pop(context);
-                                        // launch("tel://+237691779906");
-                                      },
-                                    ),
+                                ? NavigationButton(
+                                    backColor: MyTheme.primaryColor,
+                                    textColor: Colors.black,
+                                    text: "En route avec KifCab ...",
+                                    onTap: () {
+                                      //  Navigator.pop(context);
+                                      // launch("tel://+237691779906");
+                                    },
                                   )
                                 : Container(),
                             globals.active != "3"
-                                ? Container(
-                                    width:
-                                        (MediaQuery.of(context).size.width / 4),
-                                    child: NavigationButton(
-                                      backColor: Color(0xFA0c1133),
-                                      textColor: Color(0xFAFFFFFF),
-                                      icon: Icons.refresh_rounded,
-                                      text: "Actualiser",
-                                      onTap: () {
-                                        //  Navigator.pop(context);
-                                        setState(() {
-                                          visible = true;
-                                        });
-                                        HttpPostRequest.getCurrentOperation(
-                                                globals.userinfos.id_compte)
-                                            .then((dynamic result) async {
-                                          String arr;
-                                          print(result);
-                                          if (result.toString() != "null") {
-                                            setState(() {
-                                              int deparIndex =
-                                                  result["commande"]["depart"]
-                                                      .indexOf(',');
-                                              depart = result["commande"]
-                                                      ["depart"]
-                                                  .substring(0, deparIndex);
-                                              if (result["commande"]["type"] ==
-                                                  "RESERVATION") {
-                                                int arrivIndex =
-                                                    result["commande"]["arrive"]
-                                                        .indexOf(',');
-                                                arrive = result["commande"]
-                                                        ["arrive"]
-                                                    .substring(0, arrivIndex);
-                                                arr = result["commande"]
-                                                    ["arrive"];
-                                              } else {
-                                                arr = "a";
-                                              }
-                                              globals.commande =
-                                                  result["commande"];
-                                              globals.idcommande =
-                                                  result["commande"]
-                                                      ["id_commande"];
-                                              globals.active =
-                                                  result["commande"]["statut"];
-                                              globals.type =
-                                                  result["commande"]["type"];
-                                              if (result["offres"].toString() !=
-                                                  "[]") {
-                                                globals.offre =
-                                                    result["offres"][0];
-
-                                                log("goood");
-                                                globals.chauflat = double.parse(
-                                                    result["offres"][0]
-                                                        ["compte"]["latitude"]);
-                                                globals.chaufln = double.parse(
-                                                    result["offres"][0]
-                                                            ["compte"]
-                                                        ["longitude"]);
-                                                globals.chaufname =
-                                                    result["offres"][0]
-                                                        ["compte"]["nom"];
-                                                globals.chauffcmtoken =
-                                                    result["offres"][0]
-                                                            ["compte"]
-                                                        ["description"];
-                                                globals.chaufprof =
-                                                    result["offres"][0]
-                                                        ["compte"]["photo"];
-                                                globals.chauffeur =
-                                                    result["offres"][0]
-                                                        ["compte"];
-                                                log(result["offres"][0]
-                                                    ["compte"]["nom"]);
-                                              }
-                                            });
-                                          }
+                                ? NavigationButton(
+                                    backColor: Color(0xFA0c1133),
+                                    textColor: Color(0xFAFFFFFF),
+                                    icon: Icons.refresh_rounded,
+                                    text: "Actualiser",
+                                    onTap: () {
+                                      //  Navigator.pop(context);
+                                      setState(() {
+                                        visible = true;
+                                      });
+                                      HttpPostRequest.getCurrentOperation(
+                                              globals.userinfos.id_compte)
+                                          .then((dynamic result) async {
+                                        String arr;
+                                        print(result);
+                                        if (result.toString() != "null") {
                                           setState(() {
-                                            visible = false;
+                                            int deparIndex = result["commande"]
+                                                    ["depart"]
+                                                .indexOf(',');
+                                            depart = result["commande"]
+                                                    ["depart"]
+                                                .substring(0, deparIndex);
+                                            if (result["commande"]["type"] ==
+                                                "RESERVATION") {
+                                              int arrivIndex =
+                                                  result["commande"]["arrive"]
+                                                      .indexOf(',');
+                                              arrive = result["commande"]
+                                                      ["arrive"]
+                                                  .substring(0, arrivIndex);
+                                              arr =
+                                                  result["commande"]["arrive"];
+                                            } else {
+                                              arr = "a";
+                                            }
+                                            globals.commande =
+                                                result["commande"];
+                                            globals.idcommande =
+                                                result["commande"]
+                                                    ["id_commande"];
+                                            globals.active =
+                                                result["commande"]["statut"];
+                                            globals.type =
+                                                result["commande"]["type"];
+                                            if (result["offres"].toString() !=
+                                                "[]") {
+                                              globals.offre =
+                                                  result["offres"][0];
+
+                                              log("goood");
+                                              globals.chauflat = double.parse(
+                                                  result["offres"][0]["compte"]
+                                                      ["latitude"]);
+                                              globals.chaufln = double.parse(
+                                                  result["offres"][0]["compte"]
+                                                      ["longitude"]);
+                                              globals.chaufname =
+                                                  result["offres"][0]["compte"]
+                                                      ["nom"];
+                                              globals.chauffcmtoken =
+                                                  result["offres"][0]["compte"]
+                                                      ["description"];
+                                              globals.chaufprof =
+                                                  result["offres"][0]["compte"]
+                                                      ["photo"];
+                                              globals.chauffeur =
+                                                  result["offres"][0]["compte"];
+                                              log(result["offres"][0]["compte"]
+                                                  ["nom"]);
+                                            }
                                           });
+                                        }
+                                        setState(() {
+                                          visible = false;
                                         });
-                                      },
-                                    ),
+                                      });
+                                    },
                                   )
                                 : Container()
                           ],
@@ -3048,28 +3094,30 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                   Container(
                                     child: Text(
                                       "Opération terminée",
-                                      style: TextStyle(
-                                          foreground: Paint()
-                                            ..style = PaintingStyle.stroke
-                                            ..strokeWidth = 1
-                                            ..color = Colors.white,
-                                          fontSize: 26,
-                                          fontWeight: FontWeight.normal),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 26,
+                                            color: Colors.white,
+                                          ),
                                     ),
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(top: 30.0),
-                                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                     child: Text(
                                       "Afin d'optimiser notre plateforme pour mieux vous servir, merci de noter le client",
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          foreground: Paint()
-                                            ..style = PaintingStyle.stroke
-                                            ..strokeWidth = 1
-                                            ..color = Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                          ),
                                     ),
                                   ),
                                   Container(
@@ -3283,15 +3331,35 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                     child: Text(
                                       note.toString() + "  / 5",
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          foreground: Paint()
-                                            ..style = PaintingStyle.stroke
-                                            ..strokeWidth = 1
-                                            ..color = Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                          ),
                                     ),
                                   ),
+                                  noteerror
+                                      ? Container(
+                                          margin: EdgeInsets.only(bottom: 20.0),
+                                          padding:
+                                              EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                          child: Text(
+                                            "Veuillez sélectionner une étoile",
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 18,
+                                                  color: Colors.red,
+                                                ),
+                                          ),
+                                        )
+                                      : Container(),
                                   Container(
                                     width: 220,
                                     padding: EdgeInsets.fromLTRB(50, 0, 50, 0),
@@ -3299,37 +3367,43 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                       materialTapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
                                       onPressed: () async {
-                                        setState(() {
-                                          visiblenoteload = true;
-                                        });
-
-                                        HttpPostRequest.noteChauffeur(
-                                                val == 2
-                                                    ? idoffre
-                                                    : globals.offre["id_offre"],
-                                                val == 2
-                                                    ? idc
-                                                    : globals.offre["commande"],
-                                                note.toString())
-                                            .then((String result) async {
+                                        if (note > 0) {
                                           setState(() {
-                                            visible = false;
+                                            visiblenoteload = true;
                                           });
-                                          SharedPreferences sharedPreferences =
-                                              await SharedPreferences
-                                                  .getInstance();
-                                          sharedPreferences.setString(
-                                              "non_note", "");
-                                          log(result);
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                                  MaterialPageRoute(
-                                                      builder:
-                                                          (context) =>
-                                                              HomeScreen()),
-                                                  (Route<dynamic> route) =>
-                                                      false);
-                                        });
+
+                                          HttpPostRequest.noteChauffeur(
+                                                  val == 2
+                                                      ? idoffre
+                                                      : globals
+                                                          .offre["id_offre"],
+                                                  val == 2
+                                                      ? idc
+                                                      : globals
+                                                          .offre["commande"],
+                                                  note.toString())
+                                              .then((String result) async {
+                                            setState(() {
+                                              visible = false;
+                                            });
+                                            SharedPreferences
+                                                sharedPreferences =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            sharedPreferences.setString(
+                                                "non_note", "");
+                                            log(result);
+                                            Navigator.of(context)
+                                                .pushAndRemoveUntil(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            HomeScreen()),
+                                                    (Route<dynamic> route) =>
+                                                        false);
+                                          });
+                                        } else {
+                                          noteerror = true;
+                                        }
                                       },
                                       color: MyTheme.button,
                                       shape: RoundedRectangleBorder(
@@ -3411,13 +3485,14 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                   Container(
                                     child: Text(
                                       "Veuillez Patienter",
-                                      style: TextStyle(
-                                          foreground: Paint()
-                                            ..style = PaintingStyle.stroke
-                                            ..strokeWidth = 1
-                                            ..color = Colors.white,
-                                          fontSize: 26,
-                                          fontWeight: FontWeight.normal),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 26,
+                                            color: Colors.white,
+                                          ),
                                     ),
                                   ),
                                   Container(
@@ -3426,13 +3501,14 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                     child: Text(
                                       "Nous transmettons votre commande au chauffeur le plus proche de vous",
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          foreground: Paint()
-                                            ..style = PaintingStyle.stroke
-                                            ..strokeWidth = 1
-                                            ..color = Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                          ),
                                     ),
                                   ),
                                   Container(

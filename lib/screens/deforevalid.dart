@@ -92,6 +92,8 @@ class _BeforevaliState extends State<Beforevali> {
   int _selectedPayment = 0;
   int _timess = 0;
   bool visible = false;
+  Locale locale;
+  var format;
 /*  final _formKey = GlobalKey<FormBuilderState>();
   String _kGoogleApiKey = GOOGLE_API_KEY;
   final TextEditingController _textControllerFrom = new TextEditingController();
@@ -802,69 +804,6 @@ class _BeforevaliState extends State<Beforevali> {
                                               Row(
                                                 children: [
                                                   Icon(
-                                                    Icons.money_outlined,
-                                                    color: MyTheme.navBar,
-                                                    size: 18,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width -
-                                                              48,
-                                                      child: RichText(
-                                                        text: new TextSpan(
-                                                          // Note: Styles for TextSpans must be explicitly defined.
-                                                          // Child text spans will inherit styles from parent
-                                                          style: Theme.of(
-                                                                  context)
-                                                              .textTheme
-                                                              .bodyText1
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w300,
-                                                                  fontSize: 14,
-                                                                  color: Colors
-                                                                      .black),
-                                                          children: <TextSpan>[
-                                                            new TextSpan(
-                                                                text:
-                                                                    "Prix :   ",
-                                                                style: new TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold)),
-                                                            new TextSpan(
-                                                              text: widget.prix,
-                                                              style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: Colors
-                                                                    .black45,
-                                                              ),
-                                                            ),
-                                                            new TextSpan(
-                                                              text: " Fcfa",
-                                                              style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: Colors
-                                                                    .black45,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ))
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Icon(
                                                     Icons.mail,
                                                     color: MyTheme.navBar,
                                                     size: 18,
@@ -935,100 +874,7 @@ class _BeforevaliState extends State<Beforevali> {
                                 child: RaisedButton(
                                   materialTapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
-                                  onPressed: () async {
-                                    setState(() {
-                                      visible = true;
-                                    });
-
-                                    HttpPostRequest.saveoperations_request(
-                                            widget.type,
-                                            globals.userinfos.id_compte
-                                                .toString(),
-                                            widget.prix,
-                                            widget.depname,
-                                            widget.arrivname,
-                                            widget.gamme,
-                                            widget.depln.toString(),
-                                            widget.deplat.toString(),
-                                            widget.arrivln.toString(),
-                                            widget.arrivlat.toString(),
-                                            distance.toString(),
-                                            widget.heure,
-                                            widget.debu.toString(),
-                                            widget.fin.toString(),
-                                            widget.message.toString())
-                                        .then((dynamic result) async {
-                                      setState(() {
-                                        visible = false;
-                                      });
-                                      print(result);
-                                      if (result == "error") {
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                "Tous les chauffeurs de cette gamme ne sont pas disponibles; veuillez réessayer dans quelques minutes ou changer de gamme.",
-                                            toastLength: Toast.LENGTH_LONG,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor: Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                      } else {
-                                        globals.commande = result['commande'];
-                                        globals.chauffeur = result['chauffeur'];
-                                        globals.type = result['commande']
-                                                ['type']
-                                            .toString();
-                                        globals.idcommande = result['commande']
-                                                ['id_commande']
-                                            .toString();
-                                        globals.active = result['commande']
-                                                ['active']
-                                            .toString();
-                                        Fluttertoast.showToast(
-                                            msg: "Votre " +
-                                                widget.type +
-                                                " a été enregistrer avec succès",
-                                            toastLength: Toast.LENGTH_LONG,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor: Colors.green[400],
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                        if (widget.type != "LOCATION") {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          new MapView(
-                                                            depname:
-                                                                widget.depname,
-                                                            prixt: int.parse(
-                                                                widget.prix),
-                                                            deplat:
-                                                                widget.deplat,
-                                                            depln: widget.depln,
-                                                            arrivname: widget
-                                                                .arrivname,
-                                                            arrivlat:
-                                                                widget.arrivlat,
-                                                            arrivln:
-                                                                widget.arrivln,
-                                                          )),
-                                                  (Route<dynamic> route) =>
-                                                      false);
-                                        } else {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                                  MaterialPageRoute(
-                                                      builder:
-                                                          (context) =>
-                                                              new HomeScreen()),
-                                                  (Route<dynamic> route) =>
-                                                      false);
-                                        }
-                                      }
-                                    });
-                                  },
+                                  onPressed: () async {},
                                   color: MyTheme.button,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
@@ -1037,25 +883,33 @@ class _BeforevaliState extends State<Beforevali> {
                                   ),
                                   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                   child: Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
                                     child: Row(
                                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Container(
                                           //color: Color.fromRGBO(229, 188, 1, 1),
 
-                                          width: 5,
-                                          height: 60,
-                                          child: Icon(
-                                            Icons.check,
-                                            color: Colors.black,
-                                            size: 20,
+                                          width: 40,
+                                          height: 25,
+                                          child: Text(
+                                            "Prix :",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.black,
+                                                fontSize: 17.0),
                                           ),
                                         ),
                                         Expanded(
                                           child: Center(
                                             child: Text(
-                                              "Valider",
+                                              NumberFormat.simpleCurrency(
+                                                          locale: "fr_FR",
+                                                          name: "",
+                                                          decimalDigits: 0)
+                                                      .format(int.parse(
+                                                          widget.prix)) +
+                                                  " Fcfa",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   color: Colors.black,
@@ -1069,9 +923,137 @@ class _BeforevaliState extends State<Beforevali> {
                                 ),
                               ),
                             ),
+                            SizedBox(
+                              height: 20,
+                            )
                           ])))),
-              //Button zone
               Row(
+                children: [
+                  NavigationButton(
+                    backColor: Color(0xFA0c1117),
+                    textColor: Color(0xFAFFFFFF),
+                    icon: Icons.chevron_left,
+                    text: AppLocalization.of(context).previous,
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  NavigationButton(
+                    backColor: MyTheme.button,
+                    textColor: Colors.black,
+                    icon: Icons.check,
+                    text: "Valider",
+                    onTap: () {
+                      setState(() {
+                        visible = true;
+                      });
+
+                      HttpPostRequest.saveoperations_request(
+                              widget.type,
+                              globals.userinfos.id_compte.toString(),
+                              widget.prix,
+                              widget.depname,
+                              widget.arrivname,
+                              widget.gamme,
+                              widget.depln.toString(),
+                              widget.deplat.toString(),
+                              widget.arrivln.toString(),
+                              widget.arrivlat.toString(),
+                              distance.toString(),
+                              widget.heure,
+                              widget.debu.toString(),
+                              widget.fin.toString(),
+                              widget.message.toString())
+                          .then((dynamic result) async {
+                        setState(() {
+                          visible = false;
+                        });
+                        print(result);
+                        print(result);
+                        if (result == "error") {
+                          return showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (ctx) => AlertDialog(
+                              backgroundColor: Colors.white,
+                              content: Text(
+                                "Tous les chauffeurs de cette gamme ne sont pas disponibles; veuillez réessayer dans quelques minutes ou changer de gamme.",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 17),
+                              ),
+                              actions: <Widget>[
+                                FlatButton(
+                                  minWidth: 100.0,
+                                  height: 30,
+                                  color: MyTheme.button,
+                                  onPressed: () {
+                                    Navigator.of(ctx).pop();
+                                  },
+                                  child: Text(
+                                    "Ok",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .copyWith(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 17),
+                                  ),
+                                ),
+                              ],
+                              elevation: 12.0,
+                            ),
+                          );
+                        } else {
+                          globals.commande = result['commande'];
+                          globals.chauffeur = result['chauffeur'];
+                          globals.type = result['commande']['type'].toString();
+                          globals.idcommande =
+                              result['commande']['id_commande'].toString();
+                          globals.active =
+                              result['commande']['active'].toString();
+                          /* Fluttertoast.showToast(
+                              msg: "Votre " +
+                                  widget.type +
+                                  " a été enregistrer avec succès",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.green[400],
+                              textColor: Colors.white,
+                              fontSize: 16.0);*/
+                          if (widget.type != "LOCATION") {
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => new MapView(
+                                          depname: widget.depname,
+                                          prixt: int.parse(widget.prix),
+                                          deplat: widget.deplat,
+                                          depln: widget.depln,
+                                          arrivname: widget.arrivname,
+                                          arrivlat: widget.arrivlat,
+                                          arrivln: widget.arrivln,
+                                        )),
+                                (Route<dynamic> route) => false);
+                          } else {
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => new HomeScreen()),
+                                (Route<dynamic> route) => false);
+                          }
+                        }
+                      });
+                    },
+                  ),
+                ],
+              )
+              //Button zone
+              /*   Row(
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width / 2,
@@ -1098,7 +1080,7 @@ class _BeforevaliState extends State<Beforevali> {
                     ),
                   ),
                 ],
-              )
+              )*/
             ],
           ),
           visible ? Load.loadSubmit(context) : Container()

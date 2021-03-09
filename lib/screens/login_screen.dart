@@ -113,6 +113,27 @@ class LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  final _snackBar2 = SnackBar(
+    content: Text('Welcome to woolha.com'),
+    duration: const Duration(seconds: 10),
+    action: SnackBarAction(
+      label: 'Click',
+      onPressed: () {
+        print('Action is clicked');
+      },
+      textColor: Colors.white,
+      disabledTextColor: Colors.grey,
+    ),
+    onVisible: () {
+      print('Snackbar is visible');
+    },
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10))),
+    behavior: SnackBarBehavior.floating,
+    margin: EdgeInsets.all(30.0),
+    padding: EdgeInsets.all(15.0),
+  );
+
   @override
   Widget build(BuildContext context) {
     techkconnection(context);
@@ -334,6 +355,8 @@ class LoginScreenState extends State<LoginScreen> {
                                     setState(() {
                                       visible = false;
                                     });
+                                    Scaffold.of(context)
+                                        .showSnackBar(_snackBar2);
                                     Fluttertoast.showToast(
                                         msg: AppLocalization.of(context)
                                             .erroricorectcode,
@@ -655,14 +678,14 @@ class LoginScreenState extends State<LoginScreen> {
     //  Navigator.of(context).pop();
 //    If all data are correct then save data to out variables
 
-    Fluttertoast.showToast(
+    /*  Fluttertoast.showToast(
         msg: AppLocalization.of(context).succeswelcome,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.green[400],
         textColor: Colors.white,
-        fontSize: 16.0);
+        fontSize: 16.0);*/
     app.main();
     Navigator.of(context)
         .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);

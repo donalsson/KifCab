@@ -24,10 +24,12 @@ String depodistance;
 var commande;
 var offre;
 var chauffeur;
+var vehicule;
 var priceconst;
 List<GammesModel> coursegammes;
 List<GammesModel> depogammes;
 List<GammesModel> locagammes;
+List<String> images;
 String idcommande = "";
 String fcmtoken = "";
 String fcmtokenauto =

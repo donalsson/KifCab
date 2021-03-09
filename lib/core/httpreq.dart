@@ -163,7 +163,7 @@ class HttpPostRequest {
           "depart": depart,
           "heure": heure,
           "arrive": arriver,
-          "gamme": "8",
+          "gamme": gamme,
           "long_d": deplon,
           "lat_d": deplat,
           "long_a": arrivlon,
@@ -182,7 +182,7 @@ class HttpPostRequest {
         print(error.toString());
         return "error";
       } else {
-        log(jsonEncode(myresponse['commande']));
+        log(jsonEncode(myresponse));
         // print(myresponse['chauffeur']['description'].toString());
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString("getchauf", "1");

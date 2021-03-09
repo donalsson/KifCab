@@ -11,7 +11,7 @@ import 'package:kifcab/utils/Utils.dart';
 import 'package:kifcab/utils/colors.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/gestures.dart';
-
+import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kifcab/library/loader.dart';
 import '../core/global.dart' as globals;
@@ -395,7 +395,11 @@ class _CoursedetaiState extends State<Coursedetai> {
                             child: Text(
                               widget.dure.toString() +
                                   " Heures / " +
-                                  prix.toString() +
+                                  NumberFormat.simpleCurrency(
+                                          locale: "fr_FR",
+                                          name: "",
+                                          decimalDigits: 0)
+                                      .format(prix) +
                                   " Fcfa",
                               style: TextStyle(
                                   color: Colors.black,
@@ -731,7 +735,7 @@ class _CoursedetaiState extends State<Coursedetai> {
               )
             ],
           ),
-          visible ? Load.loadSubmit(context) : Container()
+          visible ? Load.loadSubmitPrix(context) : Container()
         ]));
     _calculateDistance();
   }
