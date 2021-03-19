@@ -193,7 +193,7 @@ class NavigationDrawer extends StatelessWidget {
                     SharedPreferences sharedPreferences =
                         await SharedPreferences.getInstance();
 
-//691779906    150754
+//691779906    849246
                     sharedPreferences.setString("userinfos", "");
 
                     Navigator.pop(context);

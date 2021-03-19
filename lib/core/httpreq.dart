@@ -24,7 +24,7 @@ class HttpPostRequest {
         (X509Certificate cert, String host, int port) => true;
     final httpp = new IOClient(ioc);
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/login',
+        'https://smartcab.carrymeandgo.com/index.php/webservice/login',
         body: {"telephone": phone});
     if (response.statusCode == 200) {
       var myresponse = jsonDecode(response.body);
@@ -60,7 +60,7 @@ class HttpPostRequest {
         (X509Certificate cert, String host, int port) => true;
     final httpp = new IOClient(ioc);
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/gammes',
+        'https://smartcab.carrymeandgo.com/index.php/webservice/gammes',
         body: {"type": "RESERVATION"});
 
     if (response.statusCode == 200) {
@@ -80,7 +80,7 @@ class HttpPostRequest {
         (X509Certificate cert, String host, int port) => true;
     final httpp = new IOClient(ioc);
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/gammes',
+        'https://smartcab.carrymeandgo.com/index.php/webservice/gammes',
         body: {"type": "COURSE"});
 
     if (response.statusCode == 200) {
@@ -99,7 +99,7 @@ class HttpPostRequest {
         (X509Certificate cert, String host, int port) => true;
     final httpp = new IOClient(ioc);
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/priceconst',
+        'https://smartcab.carrymeandgo.com/index.php/webservice/priceconst',
         body: {});
 
     if (response.statusCode == 200) {
@@ -117,7 +117,7 @@ class HttpPostRequest {
         (X509Certificate cert, String host, int port) => true;
     final httpp = new IOClient(ioc);
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/gammes',
+        'https://smartcab.carrymeandgo.com/index.php/webservice/gammes',
         body: {"type": "LOCATION"});
 
     if (response.statusCode == 200) {
@@ -155,7 +155,7 @@ class HttpPostRequest {
         (X509Certificate cert, String host, int port) => true;
     final httpp = new IOClient(ioc);
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/saveOperation',
+        'https://smartcab.carrymeandgo.com/index.php/webservice/saveOperation',
         body: {
           "type": type,
           "compte": iduser,
@@ -213,7 +213,7 @@ class HttpPostRequest {
         (X509Certificate cert, String host, int port) => true;
     final httpp = new IOClient(ioc);
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/getmindischauf',
+        'https://smartcab.carrymeandgo.com/index.php/webservice/getmindischauf',
         body: {
           "type": type,
           "sql": sql,
@@ -270,7 +270,7 @@ class HttpPostRequest {
         (X509Certificate cert, String host, int port) => true;
     final httpp = new IOClient(ioc);
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/getoperationprice',
+        'https://smartcab.carrymeandgo.com/index.php/webservice/getoperationprice',
         body: {
           "type": type,
           "distance": distance,
@@ -355,7 +355,7 @@ AAAA3OBUsXw:APA91bF7g_X1nsoT67A8quk4Rx49btZQvt3ACXGeetfVjxGzLvJuDoEkVjSlRiNkG48e
     final httpp = new IOClient(ioc);
     print(token);
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/SendPosition',
+        'https://smartcab.carrymeandgo.com/index.php/webservice/SendPosition',
         body: {
           "longitude": lat,
           "latitude": lon,
@@ -377,7 +377,7 @@ AAAA3OBUsXw:APA91bF7g_X1nsoT67A8quk4Rx49btZQvt3ACXGeetfVjxGzLvJuDoEkVjSlRiNkG48e
     final httpp = new IOClient(ioc);
 
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/currentOperation',
+        'https://smartcab.carrymeandgo.com/index.php/webservice/currentOperation',
         body: {"id": idcompte, "driver": "false"});
     if (response.statusCode == 200) {
       print("get current");
@@ -405,13 +405,14 @@ AAAA3OBUsXw:APA91bF7g_X1nsoT67A8quk4Rx49btZQvt3ACXGeetfVjxGzLvJuDoEkVjSlRiNkG48e
         (X509Certificate cert, String host, int port) => true;
     final httpp = new IOClient(ioc);
 
-    http.Response response = await httpp
-        .post('https://149.202.47.143/index.php/webservice/markUser', body: {
-      "pos": idoffre,
-      "cmd": idcommande,
-      "point": point,
-      "client": 'true'
-    });
+    http.Response response = await httpp.post(
+        'https://smartcab.carrymeandgo.com/index.php/webservice/markUser',
+        body: {
+          "pos": idoffre,
+          "cmd": idcommande,
+          "point": point,
+          "client": 'true'
+        });
     if (response.statusCode == 200) {
       print("get noteee");
       print(response.body);
@@ -433,7 +434,7 @@ AAAA3OBUsXw:APA91bF7g_X1nsoT67A8quk4Rx49btZQvt3ACXGeetfVjxGzLvJuDoEkVjSlRiNkG48e
     final httpp = new IOClient(ioc);
 
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/processOperation/' +
+        'https://smartcab.carrymeandgo.com/index.php/webservice/processOperation/' +
             action,
         body: {"id": id});
     if (response.statusCode == 200) {
@@ -464,7 +465,7 @@ AAAA3OBUsXw:APA91bF7g_X1nsoT67A8quk4Rx49btZQvt3ACXGeetfVjxGzLvJuDoEkVjSlRiNkG48e
         (X509Certificate cert, String host, int port) => true;
     final httpp = new IOClient(ioc);
     http.Response response = await httpp.post(
-        'https://149.202.47.143/index.php/webservice/loginrecup',
+        'https://smartcab.carrymeandgo.com/index.php/webservice/loginrecup',
         body: {"telephone": phone});
     if (response.statusCode == 200) {
       print(response.body);
@@ -499,13 +500,14 @@ AAAA3OBUsXw:APA91bF7g_X1nsoT67A8quk4Rx49btZQvt3ACXGeetfVjxGzLvJuDoEkVjSlRiNkG48e
     ioc.badCertificateCallback =
         (X509Certificate cert, String host, int port) => true;
     final httpp = new IOClient(ioc);
-    http.Response response = await httpp
-        .post('https://149.202.47.143/index.php/webservice/register', body: {
-      "nom": nom,
-      "telephone": tel,
-      "email": email,
-      "localisation": ville
-    });
+    http.Response response = await httpp.post(
+        'https://smartcab.carrymeandgo.com/index.php/webservice/register',
+        body: {
+          "nom": nom,
+          "telephone": tel,
+          "email": email,
+          "localisation": ville
+        });
     if (response.statusCode == 200) {
       print(response.body);
       var myresponse = jsonDecode(response.body);

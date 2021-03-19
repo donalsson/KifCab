@@ -392,7 +392,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                   Navigator.of(ctx).pop();
 
                   setState(() {
-                    visible = true;
+                    // visible = true;
                   });
                   HttpPostRequest.processOperation(
                           "remove", globals.idcommande.toString(), "")
@@ -1506,8 +1506,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                 children: [
                                   globals.active == "3"
                                       ? Container(
-                                          color: Color.fromRGBO(
-                                              255, 255, 255, 0.5),
+                                          color: Color.fromRGBO(0, 0, 0, 0.5),
                                           margin:
                                               EdgeInsets.fromLTRB(0, 100, 0, 0),
                                           width:
@@ -1522,8 +1521,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                           fontSize: 20,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          color: MyTheme
-                                                              .primaryDarkColor,
+                                                          color: MyTheme.button,
                                                         ),
                                                       ),
                                                       SizedBox(
@@ -1545,9 +1543,8 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                       TextStyle(
                                                                     fontSize:
                                                                         20,
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .primaryColor,
+                                                                    color: MyTheme
+                                                                        .button,
                                                                   ),
                                                                 ),
                                                                 SizedBox(
@@ -1559,7 +1556,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                       foreground: Paint()
                                                                         ..style = PaintingStyle.stroke
                                                                         ..strokeWidth = 1
-                                                                        ..color = Colors.black,
+                                                                        ..color = MyTheme.button,
                                                                       fontSize: 20,
                                                                       fontWeight: FontWeight.normal),
                                                                 ),
@@ -1583,9 +1580,8 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                       TextStyle(
                                                                     fontSize:
                                                                         20,
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .primaryColor,
+                                                                    color: MyTheme
+                                                                        .button,
                                                                   ),
                                                                 ),
                                                                 SizedBox(
@@ -1597,7 +1593,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                       foreground: Paint()
                                                                         ..style = PaintingStyle.stroke
                                                                         ..strokeWidth = 1
-                                                                        ..color = Colors.black,
+                                                                        ..color = MyTheme.button,
                                                                       fontSize: 20,
                                                                       fontWeight: FontWeight.normal),
                                                                 ),
@@ -1619,8 +1615,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                           fontSize: 20,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          color: MyTheme
-                                                              .primaryDarkColor,
+                                                          color: MyTheme.button,
                                                         ),
                                                       ),
                                                       SizedBox(
@@ -1642,9 +1637,8 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                       TextStyle(
                                                                     fontSize:
                                                                         20,
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .primaryColor,
+                                                                    color: MyTheme
+                                                                        .button,
                                                                   ),
                                                                 ),
                                                                 SizedBox(
@@ -1656,7 +1650,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                       foreground: Paint()
                                                                         ..style = PaintingStyle.stroke
                                                                         ..strokeWidth = 1
-                                                                        ..color = Colors.black,
+                                                                        ..color = MyTheme.button,
                                                                       fontSize: 20,
                                                                       fontWeight: FontWeight.normal),
                                                                 ),
@@ -1680,9 +1674,8 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                       TextStyle(
                                                                     fontSize:
                                                                         20,
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .primaryColor,
+                                                                    color: MyTheme
+                                                                        .button,
                                                                   ),
                                                                 ),
                                                                 SizedBox(
@@ -1694,7 +1687,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                       foreground: Paint()
                                                                         ..style = PaintingStyle.stroke
                                                                         ..strokeWidth = 1
-                                                                        ..color = Colors.black,
+                                                                        ..color = MyTheme.button,
                                                                       fontSize: 20,
                                                                       fontWeight: FontWeight.normal),
                                                                 ),
@@ -1939,7 +1932,8 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                           decimalDigits:
                                                                               0)
                                                                       .format(
-                                                                          prix) +
+                                                                          prix)
+                                                                      .toString() +
                                                                   " Fcfa",
                                                               style: TextStyle(
                                                                   color: Colors
@@ -1984,7 +1978,7 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                         context)
                                                                     .size
                                                                     .width -
-                                                                103,
+                                                                113,
                                                             padding: EdgeInsets
                                                                 .symmetric(
                                                                     vertical: 4,
@@ -2465,13 +2459,33 @@ class _MapViewState extends State<MapView> with TickerProviderStateMixin {
                                                                         .shrinkWrap,
                                                                 onPressed:
                                                                     () async {
-                                                                  Navigator.of(context).push(PageRouteBuilder(
-                                                                      opaque:
-                                                                          false,
-                                                                      pageBuilder: (_,
-                                                                              __,
-                                                                              ___) =>
-                                                                          new DriverDetails()));
+                                                                  //globals.offre["compte"]["noteChauffeur"]
+                                                                  log(globals
+                                                                      .offre[
+                                                                          "vehicules"]
+                                                                      .toString());
+                                                                  if (globals
+                                                                          .offre[
+                                                                              "vehicules"]
+                                                                          .toString() !=
+                                                                      "null") {
+                                                                    log("ddddd");
+                                                                    globals
+                                                                        .vehicule = globals
+                                                                            .offre[
+                                                                        "vehicules"];
+                                                                  }
+
+                                                                  globals
+                                                                      .chauffeur = globals
+                                                                          .offre[
+                                                                      "compte"];
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .push(PageRouteBuilder(
+                                                                          pageBuilder: (_, __, ___) =>
+                                                                              new DriverDetails()));
+
                                                                   //
                                                                 },
                                                                 color: MyTheme

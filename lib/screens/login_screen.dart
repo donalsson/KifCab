@@ -34,6 +34,8 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   LoginScreenState();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   String phoneNumber;
   String phoneIsoCode;
   String _name;
@@ -138,6 +140,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     techkconnection(context);
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: MyTheme.navBar,
       /* appBar: AppBar(
         leading: GestureDetector(
@@ -311,6 +314,7 @@ class LoginScreenState extends State<LoginScreen> {
                             setState(() {
                               visible = true;
                             });
+                            FocusScope.of(context).requestFocus(FocusNode());
                             //  await Future.delayed(Duration(seconds: 5));
 
                             /*  setState(() {
@@ -355,9 +359,26 @@ class LoginScreenState extends State<LoginScreen> {
                                     setState(() {
                                       visible = false;
                                     });
-                                    Scaffold.of(context)
-                                        .showSnackBar(_snackBar2);
-                                    Fluttertoast.showToast(
+
+                                    _scaffoldKey.currentState
+                                        .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                        AppLocalization.of(context)
+                                            .erroricorectcode,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6
+                                            .copyWith(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 15),
+                                      ),
+                                      duration: Duration(seconds: 3),
+                                    ));
+                                    /* Scaffold.of(context)
+                                        .showSnackBar(_snackBar2);*/
+                                    /*  Fluttertoast.showToast(
                                         msg: AppLocalization.of(context)
                                             .erroricorectcode,
                                         toastLength: Toast.LENGTH_LONG,
@@ -365,7 +386,7 @@ class LoginScreenState extends State<LoginScreen> {
                                         timeInSecForIosWeb: 1,
                                         backgroundColor: Colors.red,
                                         textColor: Colors.white,
-                                        fontSize: 16.0);
+                                        fontSize: 16.0);*/
                                   } else {
                                     setState(() {
                                       // code0 = int.parse(result);
